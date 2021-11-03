@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        ul {
+          list-style-type: none;
+          margin: 0;
+          padding: 0;
+          overflow: hidden;
+          background-color: #333333;
+        }
+        
+        li {
+          float: left;
+        }
+        
+        li a {
+          display: block;
+          color: white;
+          text-align: center;
+          padding: 16px;
+          text-decoration: none;
+        }
+        
+        li a:hover {
+          background-color: #111111;
+        }
+        </style>
+    <title>Clustering in Object Centric Event Logs</title>
+</head>
+
+<body>
+{% load static %} 
+<img src="{% static 'images/PADSLOGO.png' %}" alt="Logo">
+
+<ul>
+    <li><a href="/">Homepage</a></li>
+    <li><a href="/import">Import File</a></li>
+    <li><a href="/drawpage">Draw DFG</a></li>
+</ul>
+{% block content %} 
+{% endblock %}
+
+
+</body>
+</html>
