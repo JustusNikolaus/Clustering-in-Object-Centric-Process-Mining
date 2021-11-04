@@ -1,6 +1,15 @@
+{% load static %} 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap-->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}"/>
+    <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+
     <style>
         ul {
           list-style-type: none;
@@ -30,7 +39,7 @@
 </head>
 
 <body>
-{% load static %} 
+
 <img src="{% static 'images/PADSLOGO.png' %}" alt="Logo">
 
 <ul>
