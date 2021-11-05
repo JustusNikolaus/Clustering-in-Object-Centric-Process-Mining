@@ -10,46 +10,56 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}"/>
     <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
 
-    <style>
-        ul {
-          list-style-type: none;
-          margin: 0;
-          padding: 0;
-          overflow: hidden;
-          background-color: #333333;
-        }
-        
-        li {
-          float: left;
-        }
-        
-        li a {
-          display: block;
-          color: white;
-          text-align: center;
-          padding: 16px;
-          text-decoration: none;
-        }
-        
-        li a:hover {
-          background-color: #111111;
-        }
-        </style>
     <title>Clustering in Object Centric Event Logs</title>
 </head>
 
 <body>
 
-<img src="{% static 'images/PADSLOGO.png' %}" alt="Logo">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="{% static 'images/PADSLOGO.png' %}" alt="PADS Group" height="60">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" aria-current="page" href="/">Homepage</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" aria-current="page" href="/import">Import File</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/drawpage">Draw DFG</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
 
-<ul>
-    <li><a href="/">Homepage</a></li>
-    <li><a href="/import">Import File</a></li>
-    <li><a href="/drawpage">Draw DFG</a></li>
-</ul>
-{% block content %} 
-{% endblock %}
+<div class="container">
+  {% block content %} 
+  {% endblock %}
+</div>
 
+<div class="container position-absolute bottom-0 start-50 translate-middle-x">
+  <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+    <p class="col-md-4 mb-0 text-muted">© 2021 Company, Inc</p>
+
+    <a href="/" class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+      <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+    </a>
+
+    <ul class="nav col-md-4 justify-content-end">
+      <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Home</a></li>
+      <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Features</a></li>
+      <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">FAQs</a></li>
+      <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">About</a></li>
+    </ul>
+  </footer>
+</div>
 
 </body>
 </html>
