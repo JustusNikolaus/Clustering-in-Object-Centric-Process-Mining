@@ -20,13 +20,15 @@ from django.conf import settings
 
 from homepage.views import homepage_view
 from drawpage.views import drawpage_view
-from importpage.views import importpage_view
+from importpage.views import upload_log #, importpage_view
 
 urlpatterns = [
     path('', homepage_view),
-    path('import/', importpage_view),
+    #path('import/', importpage_view),
+    path('import/', upload_log),
     path('drawpage/', drawpage_view),
     path('admin/', admin.site.urls),
 ] 
+
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
