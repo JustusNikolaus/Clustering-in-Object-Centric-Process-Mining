@@ -10,8 +10,10 @@ def get_boolean_distances(list1: list, list2: list) -> list:
         # For each string within the second list, compare both the first string and the second string
         # The number of output booleans = the number of strings in the second list
         for secondStrings in list2:
+            # If both strings are equivalent, add 1 to the inner list
             if firstStrings == secondStrings: 
                 sub_distances.append(1)
+            # If both strings are not equivalent, add 0 to the inner list
             else:
                 sub_distances.append(0)
         distances.append(sub_distances)
