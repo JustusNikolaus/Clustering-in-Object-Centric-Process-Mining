@@ -22,4 +22,4 @@ def cluster_agglomerative(matrix):
 #[3.6, 3, 5, 2, 0, 4],
 #[3.6, 5, 3, 2, 4, 0]]
 
-#hierarchicalClustering(matrix)
+#cluster_agglomerative(matrix)
