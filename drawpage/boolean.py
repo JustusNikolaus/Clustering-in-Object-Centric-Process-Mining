@@ -17,7 +17,7 @@ def get_boolean_distances(list1: list, list2: list) -> list:
             else:
                 sub_distances.append(0)
         distances.append(sub_distances)
-    print(distances)
+    #print(distances)
     return distances 
 
 # Example for list1 and list2 to test
