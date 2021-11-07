@@ -3,6 +3,7 @@
 from sklearn.cluster import AgglomerativeClustering
 import numpy as np
 
+#input must be distance matrix
 def hierarchicalClustering(matrix):
 
     clustering = AgglomerativeClustering(affinity='precomputed', linkage='single').fit(matrix)
@@ -10,9 +11,10 @@ def hierarchicalClustering(matrix):
     clustering.labels_
     #print(clustering.labels_)
     return clustering.labels_
+#output is an array to tell in which cluster each object is
 
 
-
+#test:
 #matrix = [[0, 2, 2, 3, 3.6, 3.6],
 #[2, 1, 4, 3.6, 3, 5],
 #[2, 4, 0, 3.6, 5, 3],
