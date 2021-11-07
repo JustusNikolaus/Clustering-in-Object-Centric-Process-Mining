@@ -10,6 +10,58 @@
 {% block content %} 
 <h2>This is the Drawpage</h2>
 <p>Please select everything and press "Draw"</p>
+
+<!--<form action="" method='post' enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" name="document">
+    <button type="submit">Import Log</button>
+</form>-->
+    
+<div class="row g-3">
+    <!--Choose OCEL File Form-->
+    <form action="">
+        <div class="input-group">
+            <select class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon">
+              <option selected disabled>Choose OCEL</option>
+              {% for f in log_list %}
+              <option value="{{f}}">{{f}}</option>
+              {% endfor %}
+            </select>
+            <button class="btn btn-outline-secondary">Choose</button>
+        </div>
+    </form>
+
+    <!--Select object type-->
+    <form action="">
+        <div class="input-group">
+            <select class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon">
+              <option selected disabled>Select object type</option>
+              <option value="1">First object type</option>
+              <option value="2">Second object type</option>
+              <option value="3">Third object type</option>
+            </select>
+            <button class="btn btn-outline-secondary" type="button">Select</button>
+        </div>
+    </form>
+
+    <!--Select Clustering Method-->
+    <form action="">
+        <label class="form-label">Select Clustering method</label>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+            <label class="form-check-label" for="flexRadioDefault1">
+            K-Means
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
+            <label class="form-check-label" for="flexRadioDefault2">
+            Hierarchical
+            </label>
+        </div>
+    </form>
+</div>
+
 {% endblock %}
 
 </body>

@@ -10,11 +10,11 @@
 <h1>This is the Base Template</h1>
 
 {% block content %} 
-<h2>This is the Importpage</h2>
-<p>Please import a File and click on 'Draw DFG'</p>
+<h2>Import</h2>
+<p>Select and import an Object-Centric Eventlog from your local storage</p>
 <form action="" method='post' enctype="multipart/form-data">
     {% csrf_token %}
-    <input type="file" name="document">
+    <input type="file" name="log">
     <button type="submit">Import Log</button>
 </form>
 {% endblock %}
