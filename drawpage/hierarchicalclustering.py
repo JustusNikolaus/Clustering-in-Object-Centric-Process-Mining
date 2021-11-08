@@ -4,9 +4,7 @@ from sklearn.cluster import AgglomerativeClustering
 import numpy as np
 
 def hierarchicalClustering(matrix):
-
     clustering = AgglomerativeClustering(affinity='precomputed', linkage='single').fit(matrix)
-
     clustering.labels_
     #print(clustering.labels_)
     return clustering.labels_
