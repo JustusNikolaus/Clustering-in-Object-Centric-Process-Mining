@@ -22,5 +22,5 @@ def get_object_information(path_to_file: str) -> dict:
             "object_type": obj,
             "attributes": attributes
         }
-        object_information.append(dict)
+        object_information.append(dict)    
     return object_information

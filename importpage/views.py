@@ -8,8 +8,6 @@ def importpage_view(request):
 def upload_log(request):
     if request.method == 'POST':
         uploaded_file = request.FILES['log']
-        print(uploaded_file.name)
-        print(uploaded_file.size)
         fs = FileSystemStorage()
         fs.save(uploaded_file.name, uploaded_file)
     return render(request, 'importpage/importpage.html')

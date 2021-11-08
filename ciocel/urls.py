@@ -25,6 +25,7 @@ from importpage import views as importpage_views
 urlpatterns = [
     path('', homepage_views.homepage_view),
     path('import/', importpage_views.upload_log),
+    path('draw/select-object-type/', drawpage_views.fileselect_view),
     path('draw/', drawpage_views.drawpage_view),
     path('admin/', admin.site.urls),
 ] 
