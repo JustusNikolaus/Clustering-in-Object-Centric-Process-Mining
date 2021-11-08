@@ -1,11 +1,11 @@
 from sklearn.neighbors import DistanceMetric
 
-distance = DistanceMetric.get_metric('euclidean')
 
 # Return: Euclidean distances between all pairs of vectors in two lists of strings
 # Input: vectors = list of vectors
 def get_euclidean_distances(vectors: list) -> list:
     #print(distance.pairwise(vectors))
+    distance = DistanceMetric.get_metric('euclidean')
     return distance.pairwise(vectors)
 
 # For testing
