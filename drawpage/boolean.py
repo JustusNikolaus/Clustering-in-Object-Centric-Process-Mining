@@ -1,6 +1,5 @@
-# Return: distances[[]] between all pairs of strings in two lists of strings
-# Input: list1 = first list of strings
-#        list2 = second list of strings
+# Return: distances[[]] between all pairs of strings in a list of strings
+# Input: list = list of strings
 def get_boolean_distances(list: list) -> list:
     distances = []
     # First pointer, outer loop: traverse each word in the list once
@@ -17,11 +16,11 @@ def get_boolean_distances(list: list) -> list:
             else:
                 sub_distances.append(0)
         distances.append(sub_distances)
-    print(distances)
-    return distances 
+    #print(distances)
+    return distances
 
-# Example for list1 and list2 to test
-list = ["one", "two", "three", "six", "two", "five"]
+# Example list to test
+#list = ["one", "two", "three", "six", "two", "five"]
 
 # For testing
-get_boolean_distances(list)
+#get_boolean_distances(list)

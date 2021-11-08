@@ -13,7 +13,7 @@ def get_levenshtein_distances(list: list) -> list:
     for firstStrings in list:
         sub_distances = []
         # Second pointer, inner loop: traverse each word for each time it is traversed in the outer loop
-        # The number of output booleans = the number of strings in the second iteration
+        # The number of output integers = the number of strings in the second iteration
         for secondStrings in list:
             sub_distances.append(levdistance(firstStrings, secondStrings))
         distances.append(sub_distances)
