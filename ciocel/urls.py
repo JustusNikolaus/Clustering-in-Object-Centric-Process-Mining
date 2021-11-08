@@ -18,15 +18,14 @@ from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
 
-from homepage.views import homepage_view
-from drawpage.views import drawpage_view
-from importpage.views import upload_log #, importpage_view
+from homepage import views as homepage_views
+from drawpage import views as drawpage_views
+from importpage import views as importpage_views
 
 urlpatterns = [
-    path('', homepage_view),
-    #path('import/', importpage_view),
-    path('import/', upload_log),
-    path('drawpage/', drawpage_view),
+    path('', homepage_views.homepage_view),
+    path('import/', importpage_views.upload_log),
+    path('draw/', drawpage_views.drawpage_view),
     path('admin/', admin.site.urls),
 ] 
 
