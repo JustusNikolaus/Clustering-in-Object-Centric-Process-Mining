@@ -12,10 +12,14 @@
 {% block content %} 
 <h2>Import</h2>
 <p>Select and import an Object-Centric Eventlog from your local storage</p>
+
 <form action="" method='post' enctype="multipart/form-data">
     {% csrf_token %}
-    <input type="file" name="log">
-    <button type="submit">Import Log</button>
+    <div class="input-group">
+        <input type="file" name="log" class="form-control">
+        <button type="submit" class="btn btn-primary">Import Log</button>
+    </div>
+    <label class="form-label"><p class="text-{{ response_label.0 }}">{{ response_label.1 }}</p></label>
 </form>
 {% endblock %}
 

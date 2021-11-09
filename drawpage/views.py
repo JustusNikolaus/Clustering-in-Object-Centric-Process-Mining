@@ -5,11 +5,11 @@ import drawpage.readocel
 
 # Create your views here.
 def drawpage_view(request):
+    # initialize return lists
     log_list = []
     object_type_list = []
 
-    request.session['fav_color'] = 'blue'
-    #File Select
+    # File Select
     if request.method == 'POST':
         selected_file = request.POST['file_select']
 
@@ -19,6 +19,7 @@ def drawpage_view(request):
             object_type_list.append(ocel_object_dict_list[i].get('object_type'))
         
         request.session['filecookie'] = selected_file
+        
         log_list.insert(0, request.session['filecookie'])
     else:
         log_list.insert(0, "Choose OCEL")
