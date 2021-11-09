@@ -10,22 +10,19 @@
 {% block content %} 
 <h2>This is the Drawpage</h2>
 <p>Please select everything and press "Draw"</p>
-
-<!--<form action="" method='post' enctype="multipart/form-data">
-    {% csrf_token %}
-    <input type="file" name="document">
-    <button type="submit">Import Log</button>
-</form>-->
     
 <div class="row g-3">
     <!--Choose OCEL File Form-->
-    <form action="select-object-type/" id="file_select_form" method="post">
+    <form action="" id="file_select_form" method="post">
         {% csrf_token %}
+        <label class="form-label">Choose OCEL</label>
         <div class="input-group">
-            <select class="form-select" name="file_select" form="file_select_form" aria-label="Example select with button addon">
-                <option selected disabled>Choose OCEL</option>
+            <select class="form-select" id="dropdown_file" name="file_select" form="file_select_form" >
+                <option selected>{{ log_list.0 }}</option>
                 {% for f in log_list %}
+                    {% if not f == log_list.0 %}
                 <option value="{{f}}">{{f}}</option>
+                    {% endif %}    
                 {% endfor %}
             </select>
             <button class="btn btn-outline-secondary" type="submit">Choose</button>
@@ -36,7 +33,7 @@
     <form action="">
         <div class="row g-3">
             <div class="input-group">
-                <select class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon">
+                <select class="form-select">
                     <option selected disabled>Select object type</option>
                     {% for o in object_type_list %}
                     <option value="{{o}}">{{o}}</option>
