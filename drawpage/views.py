@@ -22,7 +22,7 @@ def drawpage_view(request):
         
         log_list.insert(0, request.session['filecookie'])
     else:
-        log_list.insert(0, "Choose OCEL")
+        log_list.insert(0, "Select OCEL")
 
     ext = ('.csv','.jsonocel')
     for files in os.listdir('media/'):
