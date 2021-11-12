@@ -18,9 +18,9 @@
         <label class="form-label">Select OCEL</label>
         <div class="input-group">
             <select class="form-select" name="file_select" form="file_select_form" >
-                <option selected>{{ log_list.0 }}</option>
-                {% for f in log_list %}
-                    {% if not f == log_list.0 %}
+                <option selected>{{ file_list.0 }}</option>
+                {% for f in file_list %}
+                    {% if not f == file_list.0 %}
                 <option value="{{f}}">{{f}}</option>
                     {% endif %}    
                 {% endfor %}
@@ -30,14 +30,16 @@
     </form>
 
     <!--Select object type-->
-    <form action="" id="object_type_select_form">
+    <form action="" id="object_type_select_form" method="post">
         {% csrf_token %}
         <label class="form-label">Select object type</label>
         <div class="input-group">
             <select class="form-select" name="object_type_select" form="object_type_select_form">
-                <option selected disabled>Select object type</option>
+                <option selected>{{ object_type_list.0 }}</option>
                 {% for o in object_type_list %}
+                    {% if not o == object_type_list.0 %}
                 <option value="{{o}}">{{o}}</option>
+                    {% endif %} 
                 {% endfor %}
             </select>
             <button class="btn btn-outline-secondary" type="submit">Select</button>
@@ -45,31 +47,34 @@
     </form>
 
     <!--Select clustering Method and object-->
-    <form action="">
+    <form action="" method="post">
+        {% csrf_token %}
         <div class="row g-3">
             <div class="">
                 <label class="form-label">Select Clustering method</label>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                    <input class="form-check-input" type="radio" name="clustering_method_select" id="flexRadioDefault1">
                     <label class="form-check-label" for="flexRadioDefault1">
                     K-Means
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
+                    <input class="form-check-input" type="radio" name="clustering_method_select" id="flexRadioDefault2">
                     <label class="form-check-label" for="flexRadioDefault2">
                     Hierarchical
                     </label>
                 </div>
             </div>
             <div class="input-group">
-                <select class="form-select">
-                    <option selected disabled>Select object</option>
-                    <!--{% for o in object_type_list %}
+                <select class="form-select" name="object_select">
+                    <option selected>{{ object_list.0 }}</option>
+                    {% for o in object_list %}
+                        {% if not o == object_list.0 %}
                     <option value="{{o}}">{{o}}</option>
-                    {% endfor %}-->
+                        {% endif %}
+                    {% endfor %}
                 </select>
-                <button class="btn btn-primary" type="button">Draw</button>
+                <button class="btn btn-primary" type="submit">Draw</button>
             </div>
         </div>
     </form>
