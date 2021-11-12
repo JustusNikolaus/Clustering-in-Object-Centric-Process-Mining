@@ -40,7 +40,7 @@
                     {% endfor %}
                 </select>
             </div>
-            <div class="">
+            <div>
                 <label class="form-label">Select Clustering method</label>
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
@@ -54,12 +54,18 @@
                     Hierarchical
                     </label>
                 </div>
-                <button class="btn btn-outline-secondary" type="button">Draw</button>
+                <button id="showImage" class="btn col-12 btn-outline-secondary" type="button">Draw</button>
             </div>
         </div>
     </form>
+    <img id="theImage" class="img-responsive col-12" src="yourImage.png" style="visibility: hidden;">
 </div>
 
+<script>
+    document.getElementById("showImage").onclick = function(){
+        document.getElementById("theImage").style.visibility = "visible";
+    }
+</script>
 {% endblock %}
 
 </body>
