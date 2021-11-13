@@ -53,13 +53,13 @@
             <div>
                 <label class="form-label">Select Clustering method</label>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="clustering_method_select" id="flexRadioDefault1">
+                    <input class="form-check-input" type="radio" name="clustering_method_select" value="kmeans" {{ clustering_method.0 }}>
                     <label class="form-check-label" for="flexRadioDefault1">
                     K-Means
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="clustering_method_select" id="flexRadioDefault2">
+                    <input class="form-check-input" type="radio" name="clustering_method_select" value="hierarchical" {{ clustering_method.1 }}>
                     <label class="form-check-label" for="flexRadioDefault2">
                     Hierarchical
                     </label>
