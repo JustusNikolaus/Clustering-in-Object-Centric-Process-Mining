@@ -50,14 +50,6 @@
     <form action="" method="post">
         {% csrf_token %}
         <div class="row g-3">
-            <div class="input-group">
-                <select class="form-select">
-                    <option selected disabled>Select object type</option>
-                    {% for o in object_type_list %}
-                    <option value="{{o}}">{{o}}</option>
-                    {% endfor %}
-                </select>
-            </div>
             <div>
                 <label class="form-label">Select Clustering method</label>
                 <div class="form-check">
