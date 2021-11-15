@@ -29,8 +29,8 @@ def map_labels_to_activities(labels: list, activities: list) -> list:
 def label_activities(list: list) -> list:
     #print(list)
     activity_labels = [] # array for the unique activity/object labels
-    unique_activities = unique_strings(list) # sorting throught the input and using only unique strings
-    labels_map = {} # dictionary to map out each activity by a 
+    unique_activities = unique_strings(list) # sorting through the input and using only unique strings
+    labels_map = {} # dictionary to map out each activity by a corresponding label
     #print(unique_activities)
     labels = string.ascii_letters + string.digits + string.punctuation # alphabet, digit and, punctuation labels
     label_counter = 0 # counter for traversing through the labels
@@ -38,8 +38,6 @@ def label_activities(list: list) -> list:
         activity_labels.append(labels[label_counter])
         label_counter += 1
     #print(activity_labels)
-    labels_map = map_labels_to_activities(activity_labels, unique_activities) # to see which labels belong to which activities
-    #print(labels_map)
     return activity_labels # return unique labels
 
 # Labelling test
@@ -48,7 +46,7 @@ def label_activities(list: list) -> list:
 
 # Return: concatenated control flow using the labels from label_activities
 # Input: list = list of control flows 
-def concatenate_labels(list: list) -> list:
+def label_control_flows(list: list) -> list:
     new_list = [] # new list to list out all items within the control flows list
     labelled_control_flows = [] # list of the concatenated strings for the control flows
     list_map = {} # new dictionary to map out the labels to the activities
@@ -84,14 +82,15 @@ def concatenate_labels(list: list) -> list:
 # Return: distances[[]] between all pairs of control flows (represented by strings) in a list of control flows
 # Input: list = list of control flows
 def get_levenshtein_distances(list: list) -> list:
+    labelled_list = label_control_flows(list)
     distances = []
     # First pointer, outer loop: traverse each word in the list once
     # The number of inner lists within distances = the number of strings in the first iteration
-    for firstStrings in list:
+    for firstStrings in labelled_list:
         sub_distances = []
         # Second pointer, inner loop: traverse each word for each time it is traversed in the outer loop
         # The number of output integers = the number of strings in the second iteration
-        for secondStrings in list:
+        for secondStrings in labelled_list:
             sub_distances.append(levdistance(firstStrings, secondStrings))
         distances.append(sub_distances)
     #print(distances)
@@ -102,3 +101,5 @@ def get_levenshtein_distances(list: list) -> list:
 
 # For testing
 #get_levenshtein_distances(list)
+
+#print(get_levenshtein_distances(con_activities))
