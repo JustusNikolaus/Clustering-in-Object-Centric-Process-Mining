@@ -1,6 +1,9 @@
-from Levenshtein import distance as levdistance # For the calculation of the Levenshtein distance 
-from sklearn.utils.multiclass import unique_labels as unique_strings # For filtering lists into unique strings
-import string # For the generation of ASCII characters
+# For the calculation of the Levenshtein distance 
+from Levenshtein import distance as levdistance 
+# For filtering lists into unique strings
+from sklearn.utils.multiclass import unique_labels as unique_strings 
+# For the generation of ASCII characters
+import string
 
 from sklearn.neighbors import DistanceMetric # For the calculation of the Euclidean distance
 
@@ -21,7 +24,6 @@ class LevenshteinDistance:
                 map[given_label] = labelled_activity # create key and add the corresponding activity
             else:
                 print(0) # needs to return an error if they are not unique
-        #print(map)
         return map
 
     # Return: alphabet labels for each activity/object within a control flow
@@ -37,8 +39,7 @@ class LevenshteinDistance:
         for items in unique_activities: 
             activity_labels.append(labels[label_counter])
             label_counter += 1
-        #print(activity_labels)
-        return activity_labels # return unique labels
+        return activity_labels 
 
     # Return: concatenated control flow using the labels from label_activities
     # Input: list = list of control flows 
@@ -63,9 +64,7 @@ class LevenshteinDistance:
                 else:
                     print(0) # should give an error if it is not a key
             labelled_control_flows.append(control_flow) # adds the labelled control flow to the list
-            #print(control_flow)
-            #print(labelled_control_flows)
-        return labelled_control_flows # returns the labelled control flows
+        return labelled_control_flows 
 
     # Return: distances[[]] between all pairs of control flows (represented by strings) in a list of control flows
     # Input: list = list of control flows
@@ -81,7 +80,6 @@ class LevenshteinDistance:
             for secondStrings in labelled_list:
                 sub_distances.append(levdistance(firstStrings, secondStrings))
             distances.append(sub_distances)
-        #print(distances)
         return distances
 
 # Levenshtein test
@@ -102,7 +100,6 @@ class EuclideanDistance:
     # Input: vectors = list of vectors
     def get_euclidean_distances(vectors: list) -> list:
         distance = DistanceMetric.get_metric('euclidean')
-        #print(distance.pairwise(vectors))
         return distance.pairwise(vectors)
 
 class BooleanDistance:
@@ -112,7 +109,7 @@ class BooleanDistance:
 
     # Return: distances[[]] between all pairs of strings in a list of strings
     # Input: list = list of strings
-    def get_boolean_distances(list: list) -> list:
+    def get_boolean_distances(self, list: list) -> list:
         distances = []
         # First pointer, outer loop: traverse each word in the list once
         # The number of inner lists within distances = the number of strings in the first iteration
@@ -128,5 +125,4 @@ class BooleanDistance:
                 else:
                     sub_distances.append(0)
             distances.append(sub_distances)
-        #print(distances)
         return distances
