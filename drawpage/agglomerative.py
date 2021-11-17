@@ -3,16 +3,11 @@
 from sklearn.cluster import AgglomerativeClustering
 import numpy as np
 
-#input must be distance matrix
-def cluster_agglomerative(matrix):
-
-    clustering = AgglomerativeClustering(affinity='precomputed', linkage='single').fit(matrix)
-
-    clustering.labels_
-    #print(clustering.labels_)
+# Return: this function returns the cluster labels after hierarchical clustering
+# Input: input a distance matrix
+def cluster_agglomerative(distance_matrix: list) -> list:
+    clustering = AgglomerativeClustering(affinity='precomputed', linkage='single').fit(distance_matrix)
     return clustering.labels_
-#output is an array to tell in which cluster each object is
-
 
 #test:
 #matrix = [[0, 2, 2, 3, 3.6, 3.6],

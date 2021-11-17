@@ -1,10 +1,62 @@
+from math import dist
 import matplotlib.pyplot as plt
+from sklearn import cluster
+from distance_techniques import LevenshteinDistance, BooleanDistance
+import numpy as np
 from kneed import KneeLocator
+from sklearn_extra.cluster import KMedoids
 from scipy.sparse.construct import random
 from sklearn.datasets import make_blobs
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 from sklearn.preprocessing import StandardScaler
+
+# Return: cluster labels after clustering with k-medoids
+# Input:  Two dimensional array of integers that defines a distance matrix
+
+def cluster_kmedoids(distance_matrix: list) -> list:
+    opt_n_clusters = len(distance_matrix)
+    #Format distance matrix to np.array of type float to avoid error message from silhouette_score
+    distance_matrix_as_array = np.asarray(distance_matrix, dtype=float)
+    # Calculate optimal number of clusters
+    max_silhouette_score = 0
+    # Iterate over length of distance matrix
+    for number_of_clusters in range(2, len(distance_matrix)):
+        # Create new kmedoids object
+        kmedoids = KMedoids(
+                n_clusters=number_of_clusters, 
+                metric='precomputed', 
+                method='pam', 
+                init='k-medoids++')
+        # Calculate cluster labels 
+        cluster_labels = kmedoids.fit_predict(distance_matrix)
+        silhouette_score_for_n = silhouette_score(X=distance_matrix_as_array, labels=cluster_labels, metric="precomputed")
+        # Check if the new silhouette score is higher than the maximum
+        if silhouette_score_for_n > max_silhouette_score:
+            max_silhouette_score = silhouette_score_for_n
+            opt_n_clusters = number_of_clusters
+        print("Silhouette Average for {} is: {}".format(number_of_clusters, silhouette_score_for_n))
+        print(cluster_labels)
+    # Create kmedoids Object with optimal number of clusters
+    print("Die optimale Anzahl an Clustern ist: {}".format(opt_n_clusters))
+    kmedoids = KMedoids(
+        n_clusters=opt_n_clusters, 
+        metric='precomputed', 
+        method='pam', 
+        init='k-medoids++')
+    kmedoids.fit(distance_matrix_as_array)
+    return kmedoids.labels_
+    
+
+# Test k_medoids
+# con_activities = [['eat', 'sleep', 'rave', 'repeat'],
+#                   ['eat', 'sleep', 'rave', 'Not repeat'],
+#                   ['eat', 'sleep', 'Not rave', 'Not repeat'],
+#                   ['eat', 'Not sleep', 'Not rave', 'Not repeat'],
+#                   ['Not eat', 'Not sleep', 'Not rave', 'Not repeat']]
+
+# test = LevenshteinDistance(con_activities).get_levenshtein_distances(con_activities)
+# print(cluster_kmedoids(distance_matrix=test))
 
 # Return: distance between two lists of strings based on jaccard similarity
 # Input: list1 = list of strings

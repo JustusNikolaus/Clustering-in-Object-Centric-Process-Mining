@@ -98,7 +98,7 @@ class EuclideanDistance:
 
     # Return: Euclidean distances between all pairs of vectors in two lists of strings
     # Input: vectors = list of vectors
-    def get_euclidean_distances(vectors: list) -> list:
+    def get_euclidean_distances(self, vectors: list) -> list:
         distance = DistanceMetric.get_metric('euclidean')
         return distance.pairwise(vectors)
 
