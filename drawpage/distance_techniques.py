@@ -4,6 +4,10 @@ from Levenshtein import distance as levdistance
 from sklearn.utils.multiclass import unique_labels as unique_strings
 # For the generation of ASCII characters
 import string
+# For arrays and the removal of diagonals
+import numpy as np
+# For the unpacking of nested lists
+from itertools import chain
 
 from sklearn.neighbors import DistanceMetric # For the calculation of the Euclidean distance
 
@@ -107,6 +111,18 @@ class BooleanDistance:
     def __init__(self, list):
         self.list = list
 
+    def flatten_list(self, _2d_list):
+        flat_list = []
+        # Iterate through the outer list
+        for element in _2d_list:
+            if type(element) is list:
+                # If the element is of type list, iterate through the sublist
+                for item in element:
+                    flat_list.append(item)
+            else:
+                flat_list.append(element)
+        return flat_list
+
     # Return: distances[[]] between all pairs of strings in a list of strings
     # Input: list = list of strings
     def get_boolean_distances(self, list: list) -> list:
@@ -125,4 +141,15 @@ class BooleanDistance:
                 else:
                     sub_distances.append(0)
             distances.append(sub_distances)
+        # This part is to normalise distance matrices with non-zero diagonals into zero diagonals
+        for i in range(0, len(distances)):
+            distances[i][i] = 0
         return distances
+
+#con_activities = [['eating', 'drinking', 'sleeping', 'drinking', 'drinking and sleeping', 'showering', 'eating'],
+#                 ['drinking', 'eating', 'drinking and eating', 'sleeping', 'doing nothing', 'eating', 'drinking and sleeping'],
+#                 ['sleeping', 'drinking', 'eating', 'eating', 'sleeping and eating', 'showering', 'drinking'],
+#                 ['eating', 'drinking', 'sleeping', 'drinking', 'drinking and sleeping', 'eating']]
+#bool_activites = ['hi', 'hi', 'hello', 'hello', 'hello', 'hi']
+#test = BooleanDistance(bool_activites).get_boolean_distances(bool_activites)
+#print(test)
