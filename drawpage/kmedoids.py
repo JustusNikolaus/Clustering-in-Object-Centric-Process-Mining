@@ -11,7 +11,6 @@ from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 #from sklearn.preprocessing import StandardScaler
 from distance_techniques import LevenshteinDistance, BooleanDistance, EuclideanDistance
-from itertools import chain
 
 # Return: cluster labels after clustering with k-medoids
 # Input:  Two dimensional array of integers that defines a distance matrix
@@ -66,12 +65,12 @@ euc_activities = np.random.randint(20, size=(3,35))
 test_lev = LevenshteinDistance(lev_activities).get_levenshtein_distances(lev_activities)
 test_bool = BooleanDistance(bool_activities).get_boolean_distances(bool_activities)
 test_euc = EuclideanDistance(euc_activities).get_euclidean_distances(euc_activities)
-#print(test_lev)
-print(cluster_kmedoids(distance_matrix=test_lev))
-#print(test_bool)
-print(cluster_kmedoids(distance_matrix=test_bool))
-#print(test_euc)
-print(cluster_kmedoids(distance_matrix=test_euc))
+#print(test_lev, "\n")
+print(cluster_kmedoids(distance_matrix=test_lev), "\n-----------")
+#print(test_bool, "\n")
+print(cluster_kmedoids(distance_matrix=test_bool), "\n-----------")
+#print(test_euc, "\n")
+print(cluster_kmedoids(distance_matrix=test_euc), "\n-----------")
 
 # Return: distance between two lists of strings based on jaccard similarity
 # Input: list1 = list of strings
