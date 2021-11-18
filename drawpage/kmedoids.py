@@ -10,7 +10,6 @@ from sklearn_extra.cluster import KMedoids
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 #from sklearn.preprocessing import StandardScaler
-from distance_techniques import LevenshteinDistance, BooleanDistance, EuclideanDistance
 
 # Return: cluster labels after clustering with k-medoids
 # Input:  Two dimensional array of integers that defines a distance matrix
@@ -47,30 +46,6 @@ def cluster_kmedoids(distance_matrix: list) -> list:
         init='k-medoids++')
     kmedoids.fit(distance_matrix_as_array)
     return kmedoids.labels_
-
-# Test k_medoids
-lev_activities = [['eat', 'sleep', 'rave', 'repeat'],
-                   ['eat', 'sleep', 'rave', 'Not repeat'],
-                   ['eat', 'sleep', 'Not rave', 'Not repeat'],
-                   ['eat', 'Not sleep', 'Not rave', 'Not repeat'],
-                   ['Not eat', 'Not sleep', 'Not rave', 'Not repeat']]
-
-bool_activities = ['Not eat', 'Not sleep', 'Not rave', 'Not repeat', 'eat', 
-                    'Not sleep', 'Not rave', 'Not repeat', 'Not eat', 'Not sleep', 
-                    'Not rave', 'Not repeat', 'eat', 'Not sleep', 'Not rave', 
-                    'Not repeat']
-
-euc_activities = np.random.randint(20, size=(3,35))
-
-test_lev = LevenshteinDistance(lev_activities).get_levenshtein_distances(lev_activities)
-test_bool = BooleanDistance(bool_activities).get_boolean_distances(bool_activities)
-test_euc = EuclideanDistance(euc_activities).get_euclidean_distances(euc_activities)
-#print(test_lev, "\n")
-print(cluster_kmedoids(distance_matrix=test_lev), "\n-----------")
-#print(test_bool, "\n")
-print(cluster_kmedoids(distance_matrix=test_bool), "\n-----------")
-#print(test_euc, "\n")
-print(cluster_kmedoids(distance_matrix=test_euc), "\n-----------")
 
 # Return: distance between two lists of strings based on jaccard similarity
 # Input: list1 = list of strings

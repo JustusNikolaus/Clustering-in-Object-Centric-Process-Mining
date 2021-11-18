@@ -6,8 +6,6 @@ from sklearn.utils.multiclass import unique_labels as unique_strings
 import string
 # For arrays and the removal of diagonals
 import numpy as np
-# For the unpacking of nested lists
-from itertools import chain
 
 from sklearn.neighbors import DistanceMetric # For the calculation of the Euclidean distance
 
