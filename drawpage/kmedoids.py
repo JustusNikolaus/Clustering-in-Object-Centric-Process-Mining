@@ -1,15 +1,15 @@
 from math import dist
-import matplotlib.pyplot as plt
-from sklearn import cluster
-from distance_techniques import LevenshteinDistance, BooleanDistance
+#import matplotlib.pyplot as plt
+#from sklearn import cluster
+#from distance_techniques import LevenshteinDistance, BooleanDistance
 import numpy as np
-from kneed import KneeLocator
+#from kneed import KneeLocator
 from sklearn_extra.cluster import KMedoids
-from scipy.sparse.construct import random
-from sklearn.datasets import make_blobs
+#from scipy.sparse.construct import random
+#from sklearn.datasets import make_blobs
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
-from sklearn.preprocessing import StandardScaler
+#from sklearn.preprocessing import StandardScaler
 
 # Return: cluster labels after clustering with k-medoids
 # Input:  Two dimensional array of integers that defines a distance matrix
@@ -24,11 +24,11 @@ def cluster_kmedoids(distance_matrix: list) -> list:
     for number_of_clusters in range(2, len(distance_matrix)):
         # Create new kmedoids object
         kmedoids = KMedoids(
-                n_clusters=number_of_clusters, 
-                metric='precomputed', 
-                method='pam', 
+                n_clusters=number_of_clusters,
+                metric='precomputed',
+                method='pam',
                 init='k-medoids++')
-        # Calculate cluster labels 
+        # Calculate cluster labels
         cluster_labels = kmedoids.fit_predict(distance_matrix)
         silhouette_score_for_n = silhouette_score(X=distance_matrix_as_array, labels=cluster_labels, metric="precomputed")
         # Check if the new silhouette score is higher than the maximum
@@ -40,13 +40,12 @@ def cluster_kmedoids(distance_matrix: list) -> list:
     # Create kmedoids Object with optimal number of clusters
     print("Die optimale Anzahl an Clustern ist: {}".format(opt_n_clusters))
     kmedoids = KMedoids(
-        n_clusters=opt_n_clusters, 
-        metric='precomputed', 
-        method='pam', 
+        n_clusters=opt_n_clusters,
+        metric='precomputed',
+        method='pam',
         init='k-medoids++')
     kmedoids.fit(distance_matrix_as_array)
     return kmedoids.labels_
-    
 
 # Test k_medoids
 # con_activities = [['eat', 'sleep', 'rave', 'repeat'],
@@ -81,9 +80,9 @@ def jaccard_similarity(events: list) -> list:
 #        max_n_clusters = maximum number of clusters
 #        init = type of how to initialise the centroids position
 #        n_init = number of initializations. Important because k-means is nondeterministic
-#        max_iter = number of iterations per initialization 
+#        max_iter = number of iterations per initialization
 def cluster_kmeans(event_list: list, max_n_clusters: int, init:str, n_init: int, max_iter: int) -> object:
-    # Calculate distance between control flows 
+    # Calculate distance between control flows
     data_points = jaccard_similarity(event_list)
     # Create dict for initialization of KMeans objects
     kmeans_kwargs = {

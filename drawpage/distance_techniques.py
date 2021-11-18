@@ -1,7 +1,7 @@
-# For the calculation of the Levenshtein distance 
-from Levenshtein import distance as levdistance 
+# For the calculation of the Levenshtein distance
+from Levenshtein import distance as levdistance
 # For filtering lists into unique strings
-from sklearn.utils.multiclass import unique_labels as unique_strings 
+from sklearn.utils.multiclass import unique_labels as unique_strings
 # For the generation of ASCII characters
 import string
 
@@ -36,13 +36,13 @@ class LevenshteinDistance:
         #print(unique_activities)
         labels = string.ascii_letters + string.digits + string.punctuation # alphabet, digit and, punctuation labels
         label_counter = 0 # counter for traversing through the labels
-        for items in unique_activities: 
+        for items in unique_activities:
             activity_labels.append(labels[label_counter])
             label_counter += 1
-        return activity_labels 
+        return activity_labels
 
     # Return: concatenated control flow using the labels from label_activities
-    # Input: list = list of control flows 
+    # Input: list = list of control flows
     def label_control_flows(self, list: list) -> list:
         new_list = [] # new list to list out all items within the control flows list
         labelled_control_flows = [] # list of the concatenated strings for the control flows
@@ -64,7 +64,7 @@ class LevenshteinDistance:
                 else:
                     print(0) # should give an error if it is not a key
             labelled_control_flows.append(control_flow) # adds the labelled control flow to the list
-        return labelled_control_flows 
+        return labelled_control_flows
 
     # Return: distances[[]] between all pairs of control flows (represented by strings) in a list of control flows
     # Input: list = list of control flows
@@ -83,7 +83,7 @@ class LevenshteinDistance:
         return distances
 
 # Levenshtein test
-#con_activities = [['eating', 'drinking', 'sleeping', 'drinking', 'drinking and sleeping', 'showering', 'eating'], 
+#con_activities = [['eating', 'drinking', 'sleeping', 'drinking', 'drinking and sleeping', 'showering', 'eating'],
 #                 ['drinking', 'eating', 'drinking and eating', 'sleeping', 'doing nothing', 'eating', 'drinking and sleeping'],
 #                 ['sleeping', 'drinking', 'eating', 'eating', 'sleeping and eating', 'showering', 'drinking'],
 #                 ['eating', 'drinking', 'sleeping', 'drinking', 'drinking and sleeping', 'eating']]
@@ -119,7 +119,7 @@ class BooleanDistance:
             # The number of output booleans = the number of strings in the second iteration
             for secondStrings in list:
                 # If both strings are equivalent, add 1 to the inner list
-                if firstStrings == secondStrings: 
+                if firstStrings == secondStrings:
                     sub_distances.append(1)
                 # If both strings are not equivalent, add 0 to the inner list
                 else:

@@ -1,7 +1,7 @@
 # Importing required libraries
 
 from sklearn.cluster import AgglomerativeClustering
-import numpy as np
+#import numpy as np
 
 # Return: this function returns the cluster labels after hierarchical clustering
 # Input: input a distance matrix
