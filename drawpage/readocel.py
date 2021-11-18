@@ -19,11 +19,11 @@ def get_object_information(path_to_file: str) -> dict:
                     if len(rows_of_obj.loc[rows_of_obj[column_name].notnull()]) > 0:
                         attributes.append(column_name)
             # Create a dict that stores the information for given object_type
-            dict = {
+            ocel_dict = {
                 "object_type": obj,
                 "attributes": attributes
             }
-            object_information.append(dict)   
+            object_information.append(ocel_dict)
     except:
-        print("File import failed.") 
+        print("File import failed.")
     return object_information

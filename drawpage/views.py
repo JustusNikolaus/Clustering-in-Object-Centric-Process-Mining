@@ -30,14 +30,14 @@ def drawpage_view(request):
                     clustering_method = ['checked', '']
                 elif request.session['clustering_method_cookie'] == "hierarchical":
                     clustering_method = ['', 'checked']
-            
+
             # Save file_cookie and write to top of file_list
             request.session['file_cookie'] = selected_file
             file_list.insert(0, request.session['file_cookie'])
         # If object_type_select_form
         elif 'object_type_select' in request.POST:
             selected_object_type = request.POST['object_type_select']
-            
+
             if 'file_cookie' in request.session:
                 # Create object_list and object_type_list
                 ocel_object_dict_list = drawpage.readocel.get_object_information('media/' + request.session['file_cookie'])
@@ -81,16 +81,14 @@ def drawpage_view(request):
             # Save object_cookie
             request.session['object_cookie'] = selected_object
             object_list.insert(0, request.session['object_cookie'])
-            
+
             if 'clustering_method_select' in request.POST:
                 selected_clustering_method = request.POST['clustering_method_select']
-                
+
                 if selected_clustering_method == "kmeans":
                     clustering_method = ['checked', '']
-                    print("----------------" + clustering_method[0])
                 elif selected_clustering_method == "hierarchical":
                     clustering_method = ['', 'checked']
-                    print(clustering_method[1])
                 
                 # Save clustering_method_cookie
                 request.session['clustering_method_cookie'] = selected_clustering_method
@@ -102,7 +100,7 @@ def drawpage_view(request):
             file_list.append(files)
         else:
             continue
-    
+
     # For Debugging: print all cookies
     if 'file_cookie' in request.session:
                 print("----->File: " + request.session['file_cookie'])
