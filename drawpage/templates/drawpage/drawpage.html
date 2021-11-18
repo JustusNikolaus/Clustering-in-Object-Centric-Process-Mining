@@ -7,22 +7,22 @@
 
 <body>
 
-{% block content %} 
+{% block content %}
 <h2>This is the Drawpage</h2>
 <p>Please select everything and press "Draw"</p>
-    
+
 <div class="row g-3">
     <!--Choose OCEL File Form-->
     <form action="" id="file_select_form" method="post">
         {% csrf_token %}
         <label class="form-label">Select OCEL</label>
         <div class="input-group">
-            <select class="form-select" name="file_select" form="file_select_form" >
+            <select class="form-select" name="file_select" form="file_select_form">
                 <option selected>{{ file_list.0 }}</option>
                 {% for f in file_list %}
                     {% if not f == file_list.0 %}
                 <option value="{{f}}">{{f}}</option>
-                    {% endif %}    
+                    {% endif %}
                 {% endfor %}
             </select>
             <button class="btn btn-outline-secondary" type="submit">Select</button>
@@ -39,7 +39,7 @@
                 {% for o in object_type_list %}
                     {% if not o == object_type_list.0 %}
                 <option value="{{o}}">{{o}}</option>
-                    {% endif %} 
+                    {% endif %}
                 {% endfor %}
             </select>
             <button class="btn btn-outline-secondary" type="submit">Select</button>
@@ -79,9 +79,9 @@
             </div>
         </div>
     </form>
-    <img id="theImage" class="img-responsive col-12" src="yourImage.png" style="visibility: hidden;">
+    
 </div>
-
+<img id="theImage" class="img-responsive col-12" src="yourImage.png" style="visibility: hidden;">
 <script>
     document.getElementById("showImage").onclick = function(){
         document.getElementById("theImage").style.visibility = "visible";

@@ -1,13 +1,14 @@
-
-from math import dist
-from scipy.spatial import distance
-from sklearn import cluster
+#from math import dist
+#from scipy.spatial import distance
+#from sklearn import cluster
 from sklearn_extra.cluster import KMedoids
-from sklearn.datasets import make_blobs
-from sklearn.metrics import silhouette_samples, silhouette_score
-from distance_techniques import LevenshteinDistance, EuclideanDistance
-import matplotlib.pyplot as plt
-import matplotlib.cm as cm
+#from sklearn.datasets import make_blobs
+from sklearn.metrics import silhouette_score
+#from sklearn.metrics import silhouette_samples
+from distance_techniques import LevenshteinDistance
+#from distance_techniques import EuclideanDistance
+#import matplotlib.pyplot as plt
+#import matplotlib.cm as cm
 import numpy as np
 
 def test():
@@ -21,9 +22,9 @@ def test():
     number = 1
     for number in range(2, len(distance_matrix)):
         kmedoids = KMedoids(
-                n_clusters=number, 
-                metric='precomputed', 
-                method='pam', 
+                n_clusters=number,
+                metric='precomputed',
+                method='pam',
                 init='k-medoids++')
         kmedoids.fit_predict(distance_matrix)
         cluster_labels = kmedoids.labels_
@@ -37,14 +38,14 @@ def test():
         # The silhouette_score gives the average value for all the samples.
         # This gives a perspective into the density and separation of the formed
         # clusters
-        
+
         # print(
         #     "For n_clusters =",
         #     n_clusters,
         #     "The average silhouette_score is :",
         #     silhouette_avg,
         # )
-       
+
     return opt_n_clusters
 
 test()
