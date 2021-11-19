@@ -151,3 +151,7 @@ class BooleanDistance:
 #bool_activites = ['hi', 'hi', 'hello', 'hello', 'hello', 'hi']
 #test = BooleanDistance(bool_activites).get_boolean_distances(bool_activites)
 #print(test)
+
+
+#def calculate_average_distance_matrix(attribute: str, data: list) -> list:
+    

@@ -1,19 +1,11 @@
 from math import dist
-#import matplotlib.pyplot as plt
-#from sklearn import cluster
-#from distance_techniques import LevenshteinDistance, BooleanDistance
 import numpy as np
-#from kneed import KneeLocator
 from sklearn_extra.cluster import KMedoids
-#from scipy.sparse.construct import random
-#from sklearn.datasets import make_blobs
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
-#from sklearn.preprocessing import StandardScaler
 
 # Return: cluster labels after clustering with k-medoids
 # Input:  Two dimensional array of integers that defines a distance matrix
-
 def cluster_kmedoids(distance_matrix: list) -> list:
     opt_n_clusters = len(distance_matrix)
     #Format distance matrix to np.array of type float to avoid error message from silhouette_score
@@ -46,6 +38,16 @@ def cluster_kmedoids(distance_matrix: list) -> list:
         init='k-medoids++')
     kmedoids.fit(distance_matrix_as_array)
     return kmedoids.labels_
+
+# Test k_medoids
+# con_activities = [['eat', 'sleep', 'rave', 'repeat'],
+#                   ['eat', 'sleep', 'rave', 'Not repeat'],
+#                   ['eat', 'sleep', 'Not rave', 'Not repeat'],
+#                   ['eat', 'Not sleep', 'Not rave', 'Not repeat'],
+#                   ['Not eat', 'Not sleep', 'Not rave', 'Not repeat']]
+
+# test = LevenshteinDistance(con_activities).get_levenshtein_distances(con_activities)
+# print(cluster_kmedoids(distance_matrix=test))
 
 # Return: distance between two lists of strings based on jaccard similarity
 # Input: list1 = list of strings
