@@ -2,7 +2,7 @@ from pm4pymdl.objects.ocel.importer import importer as ocel_importer
 
 # Return: dictionary containing the objects of OCEL and its not null attributes
 # Input: path_to_file = Path to selected OCEL file
-def get_object_information(path_to_file: str) -> dict:
+def get_object_types(path_to_file: str) -> dict:
     object_information = []
     try:
         event_df, object_df = ocel_importer.apply(path_to_file)

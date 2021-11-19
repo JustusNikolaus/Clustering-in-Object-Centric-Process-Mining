@@ -16,7 +16,7 @@ def drawpage_view(request):
         if 'file_select' in request.POST:
             selected_file = request.POST['file_select']
             # Create object_type_list
-            ocel_object_dict_list = drawpage.readocel.get_object_information('media/' + selected_file)
+            ocel_object_dict_list = drawpage.readocel.get_object_types('media/' + selected_file)
             for i in range(len(ocel_object_dict_list)):
                 object_type_list.append(ocel_object_dict_list[i].get('object_type'))
             # Clear old object_type_cookie and object_cookie
