@@ -6,8 +6,10 @@ from sklearn.utils.multiclass import unique_labels as unique_strings
 import string
 # For arrays and the removal of diagonals
 import numpy as np
-
-from sklearn.neighbors import DistanceMetric # For the calculation of the Euclidean distance
+# For the calculation of the Euclidean distance
+from sklearn.neighbors import DistanceMetric 
+# For error and exception handling
+from exceptions import DuplicatesError, UnequalListsError
 
 class LevenshteinDistance:
 
@@ -19,13 +21,24 @@ class LevenshteinDistance:
     #        activities = list of activities
     def map_labels_to_activities(self, labels: list, activities: list) -> list:
         map = {}
-        if len(labels) != len(activities):
-            print(0) # needs to return an error if they are not equal
-        for given_label, labelled_activity in zip(labels, activities): # for each given label
-            if (given_label not in map.keys()): # if the key is not already in the map
-                map[given_label] = labelled_activity # create key and add the corresponding activity
-            else:
-                print(0) # needs to return an error if they are not unique
+        try:
+            if not isinstance(labels, list) or not isinstance(activities, list):
+                raise TypeError # raise an error if one of the inputs is not a list
+            if len(labels) != len(activities):
+                raise UnequalListsError # raise an error if they are not equal in length
+            for given_label, labelled_activity in zip(labels, activities): # for each given label
+                if not isinstance(given_label, str) or not isinstance(labelled_activity, str):
+                    raise TypeError # raise an error if one of the values within the passed lists is not a string
+                if given_label in map.keys(): # if the key is not already in the map
+                    raise DuplicatesError # raise an error if they are not unique
+                elif given_label not in map.keys():
+                    map[given_label] = labelled_activity # create key and add the corresponding activity
+        except UnequalListsError:
+            print("The labels and activities do not map one-to-one")
+        except DuplicatesError:
+            print("One of the given labels is duplicated")
+        except:
+            print("Something went wrong mapping the labels to the activities!")
         return map
 
     # Return: alphabet labels for each activity/object within a control flow
@@ -49,23 +62,28 @@ class LevenshteinDistance:
         new_list = [] # new list to list out all items within the control flows list
         labelled_control_flows = [] # list of the concatenated strings for the control flows
         list_map = {} # new dictionary to map out the labels to the activities
-        for sublist in list: # going through the sublists to add them to the new list
-            new_list += sublist
-        #print(new_list)
-        given_labels = self.label_activities(new_list) # giving unique labels to all items within the passed control flows list
-        #print(given_labels) 
-        list_map = self.map_labels_to_activities(given_labels, unique_strings(new_list)) # creating a dict of the labels and the unique list items
-        #print(list_map)
-        # creating the concatenation of characters for each sublist
-        list_map_rev = {v: k for k, v in list_map.items()} # reverse the dictionary so that the characters are the values instead of keys
-        for sublist in list: # going through the control flows within the original list
-            control_flow = "" # string for the control flow labels
-            for given_activity in sublist:
-                if given_activity in list_map_rev.keys():
-                    control_flow += list_map_rev[given_activity] # adds the character label to the control flow label
-                else:
-                    print(0) # should give an error if it is not a key
-            labelled_control_flows.append(control_flow) # adds the labelled control flow to the list
+        try:
+            for sublist in list: # going through the sublists to add them to the new list
+                new_list += sublist
+            #print(new_list)
+            given_labels = self.label_activities(new_list) # giving unique labels to all items within the passed control flows list
+            #print(given_labels) 
+            list_map = self.map_labels_to_activities(given_labels, unique_strings(new_list)) # creating a dict of the labels and the unique list items
+            #print(list_map)
+            # creating the concatenation of characters for each sublist
+            list_map_rev = {v: k for k, v in list_map.items()} # reverse the dictionary so that the characters are the values instead of keys
+            for sublist in list: # going through the control flows within the original list
+                control_flow = "" # string for the control flow labels
+                for given_activity in sublist:
+                    if given_activity in list_map_rev.keys():
+                        control_flow += list_map_rev[given_activity] # adds the character label to the control flow label
+                    else:
+                        raise KeyError # key corresponding to given_activity not found within the list
+                labelled_control_flows.append(control_flow) # adds the labelled control flow to the list
+        except KeyError:
+            print("There was a problem finding one of the labels")
+        except: 
+            print("Something went wrong with concatenation!")
         return labelled_control_flows
 
     # Return: distances[[]] between all pairs of control flows (represented by strings) in a list of control flows

@@ -25,6 +25,7 @@ matrix_size_y = np.random.randint(low = 2, high = 500)
 euc_activities = np.random.randint(20, size=(matrix_size_x, matrix_size_y))
 
 
+
 test_lev = LevenshteinDistance(lev_activities).get_levenshtein_distances(lev_activities)
 print("Calculated Levenshtein distances:\n", test_lev, "\n-----------")
 test_bool = BooleanDistance(bool_activities).get_boolean_distances(bool_activities)
