@@ -153,5 +153,55 @@ class BooleanDistance:
 #print(test)
 
 
-#def calculate_average_distance_matrix(attribute: str, data: list) -> list:
+# Return: The average distance matrix for the objects of selected object type
+# Input:  List with all the necessary object information of selected object type
+def calculate_average_dist_matr(objects: list) -> list:
+    # List holds all distinct distance matrices
+    distance_matrices = []
+
+    # Iterate over every attribute and calculate the distance matrix with the right technique
+    for key, value in objects[0]["attributes"][0].items():
+        # If the attribute is type float or int, then calculate the Euclidean distance
+        if isinstance(value, float) or isinstance(value, int):
+            # Iterate over all objects and save the attribute value into list
+            # Use this list to calculate the distance matrix
+            values_euclidean = []
+            for obj in objects:
+                val = []
+                val.append(obj["attributes"][0][key])
+                values_euclidean.append(val)
+            euclidean = EuclideanDistance(values_euclidean)
+            distance_matrices.append(euclidean.get_euclidean_distances(values_euclidean))
+
+        # If the attribute is type list, then calculate the Levenshtein distance
+        elif isinstance(value, list):
+            values_levenshtein = []
+            # Iterate over all objects and save the attribute value into list
+            # Use this list to calculate the distance matrix
+            for obj in objects:
+                values_levenshtein.append(obj["attributes"][0][key])
+            levenshtein = LevenshteinDistance(values_levenshtein)
+            distance_matrices.append(levenshtein.get_levenshtein_distances(values_levenshtein))
+
+        # If the attribute is type string, then calculate the Boolean distance
+        elif isinstance(value, str):
+            values_boolean = []
+            # Iterate over all objects and save the attribute value into list
+            # Use this list to calculate the distance matrix
+            for obj in objects:
+                values_boolean.append(obj["attributes"][0][key])
+            boolean = BooleanDistance(values_boolean)
+            distance_matrices.append(boolean.get_boolean_distances(values_boolean))
+
+    # Calculate the average of all distance matrices by summing the matrices up and dividing them by the number of matrices
+    avg_distance_matrix = []
+    for i in distance_matrices:
+        avg_distance_matrix += i
+    new_avg_distance = []
+    for x in avg_distance_matrix:
+        test = []
+        for y in x:
+            test.append(y/len(distance_matrices))
+        new_avg_distance.append(x)
+    return new_avg_distance
     
