@@ -1,11 +1,14 @@
+# Library imports 
 from pm4pymdl.objects.ocel.importer import importer as ocel_importer
 from pm4pymdl.algo.mvp.utils import succint_mdl_to_exploded_mdl
-from readocel import *
-from distance_techniques import calculate_average_dist_matr
-from kmedoids import cluster_kmedoids
-from agglomerative import cluster_agglomerative
 from pm4pymdl.visualization.mvp.gen_framework3 import visualizer as visualizer
 import json
+
+# Local imports
+from drawpage.readocel import *
+from drawpage.distance_techniques import calculate_average_dist_matr
+from drawpage.kmedoids import cluster_kmedoids
+from drawpage.agglomerative import cluster_agglomerative
 
 
 # Returns all drawn DFG`s
@@ -24,7 +27,7 @@ def main_draw(path_to_file: str, object_information: list, object_type: str, clu
     print(json.dumps(objects, indent=4, sort_keys=True))
     
     # Flatten the event dataframe
-    flattened_event_df =succint_mdl_to_exploded_mdl.apply(event_df)
+    flattened_event_df = succint_mdl_to_exploded_mdl.apply(event_df)
 
     # Calculate the average distance matrix
     print("We now create the average distance matrix: ")
@@ -32,11 +35,11 @@ def main_draw(path_to_file: str, object_information: list, object_type: str, clu
     avg_distance_matrix = calculate_average_dist_matr(objects)
     
     # Cluster based on the selected technique
-    if cluster_type == "K-Means": 
+    if cluster_type == "kmeans": 
         print("\n")
-        print("We use K-Medois for clustering")
+        print("We use K-Medoids for clustering")
         cluster_labels = cluster_kmedoids(avg_distance_matrix)
-    elif cluster_type == "Hierarchical":
+    elif cluster_type == "hierarchical":
         print("\n")
         print("We use Hierarchical for clustering")
         cluster_labels = cluster_agglomerative(avg_distance_matrix)

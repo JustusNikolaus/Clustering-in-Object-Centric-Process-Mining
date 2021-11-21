@@ -1,8 +1,12 @@
+# Library imports
 #from django.test import TestCase
-from kmedoids import cluster_kmedoids
-from agglomerative import cluster_agglomerative
-from distance_techniques import LevenshteinDistance, BooleanDistance, EuclideanDistance
 import numpy as np
+
+# Local imports
+from drawpage.kmedoids import cluster_kmedoids
+from drawpage.agglomerative import cluster_agglomerative
+from drawpage.distance_techniques import LevenshteinDistance, BooleanDistance, EuclideanDistance
+
 
 # Create your tests here.
 

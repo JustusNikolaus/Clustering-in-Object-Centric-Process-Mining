@@ -1,4 +1,4 @@
-from math import dist
+# Library imports
 import numpy as np
 from sklearn_extra.cluster import KMedoids
 from sklearn.cluster import KMeans

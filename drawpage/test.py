@@ -1,15 +1,18 @@
-#from math import dist
+# Library imports
 #from scipy.spatial import distance
 #from sklearn import cluster
 from sklearn_extra.cluster import KMedoids
 #from sklearn.datasets import make_blobs
 from sklearn.metrics import silhouette_score
 #from sklearn.metrics import silhouette_samples
-from distance_techniques import LevenshteinDistance
-#from distance_techniques import EuclideanDistance
 #import matplotlib.pyplot as plt
 #import matplotlib.cm as cm
 import numpy as np
+
+# Local imports
+from distance_techniques import LevenshteinDistance
+#from distance_techniques import EuclideanDistance
+
 
 def test():
     con_activities = [['eat', 'sleep', 'rave', 'repeat']]

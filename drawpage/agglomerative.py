@@ -1,5 +1,4 @@
-# Importing required libraries
-
+# Library imports
 from sklearn.cluster import AgglomerativeClustering
 #import numpy as np
 

@@ -1,3 +1,4 @@
+# Library imports
 import pandas
 import matplotlib.pyplot as plt
 from PIL import Image

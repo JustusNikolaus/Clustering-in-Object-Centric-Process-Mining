@@ -1,3 +1,4 @@
+# Library imports
 # For the calculation of the Levenshtein distance
 from Levenshtein import distance as levdistance
 # For filtering lists into unique strings
@@ -8,8 +9,10 @@ import string
 import numpy as np
 # For the calculation of the Euclidean distance
 from sklearn.neighbors import DistanceMetric 
+
+# Local imports
 # For error and exception handling
-from exceptions import DuplicatesError, UnequalListsError
+from drawpage.exceptions import DuplicatesError, UnequalListsError
 
 class LevenshteinDistance:
 

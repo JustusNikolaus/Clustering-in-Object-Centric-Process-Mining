@@ -1,6 +1,9 @@
+# Library imports
 from django.shortcuts import render
 import os
-import drawpage.readocel
+
+# Local imports
+from drawpage import main, readocel
 
 
 def drawpage_view(request):
@@ -16,7 +19,8 @@ def drawpage_view(request):
         if 'file_select' in request.POST:
             selected_file = request.POST['file_select']
             # Create object_type_list
-            ocel_object_dict_list = drawpage.readocel.get_object_types('media/' + selected_file)
+            ocel_object_dict_list = readocel.get_object_types('media/' + selected_file)
+            #print(ocel_object_dict_list)
             for i in range(len(ocel_object_dict_list)):
                 object_type_list.append(ocel_object_dict_list[i].get('object_type'))
             # Clear old object_type_cookie and object_cookie
@@ -40,7 +44,7 @@ def drawpage_view(request):
 
             if 'file_cookie' in request.session:
                 # Create object_list and object_type_list
-                ocel_object_dict_list = drawpage.readocel.get_object_information('media/' + request.session['file_cookie'])
+                ocel_object_dict_list = readocel.get_object_information('media/' + request.session['file_cookie'])
                 for i in ocel_object_dict_list:
                     object_type_list.append(i.get('object_type'))
                     #print(i.get('object_type'))
@@ -67,11 +71,12 @@ def drawpage_view(request):
         elif 'object_select' in request.POST:
             selected_object = request.POST['object_select']
 
-            ## TODO: Handle behaviour of 'Draw' button
+            path_to_file = 'media/' + request.session['file_cookie']
+            main.main_draw(path_to_file, )
 
             # Create object_list and object_type_list
             if 'object_type_cookie' in request.session and 'file_cookie' in request.session:
-                ocel_object_dict_list = drawpage.readocel.get_object_information('media/' + request.session['file_cookie'])
+                ocel_object_dict_list = readocel.get_object_information('media/' + request.session['file_cookie'])
                 for i in ocel_object_dict_list:
                     object_type_list.append(i.get('object_type'))
                     if i.get('object_type') == request.session['object_type_cookie']:
@@ -92,6 +97,12 @@ def drawpage_view(request):
                 
                 # Save clustering_method_cookie
                 request.session['clustering_method_cookie'] = selected_clustering_method
+            
+            # Call main_draw
+            if 'file_cookie' in request.session and 'object_type_cookie' in request.session and 'clustering_method_cookie' in request.session:
+                path_to_file = 'media/' + request.session['file_cookie']
+                object_information = readocel.get_object_information(path_to_file)
+                main.main_draw(path_to_file, object_information, request.session['object_type_cookie'], request.session['clustering_method_cookie'])
 
     # Refresh file_list
     ext = ('.csv','.jsonocel')

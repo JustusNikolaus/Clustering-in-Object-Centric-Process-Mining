@@ -1,4 +1,4 @@
-
+# Local imports
 from exceptions import UnequalListsError, DuplicatesError
 
 def map_labels_to_activities(labels: list, activities: list) -> list:
