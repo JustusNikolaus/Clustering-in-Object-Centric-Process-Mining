@@ -12,31 +12,36 @@ def cluster_kmedoids(distance_matrix: list) -> list:
     distance_matrix_as_array = np.asarray(distance_matrix, dtype=float)
     # Calculate optimal number of clusters
     max_silhouette_score = 0
-    # Iterate over length of distance matrix
-    for number_of_clusters in range(2, len(distance_matrix)):
-        # Create new kmedoids object
+    try:
+        # Iterate over length of distance matrix
+        for number_of_clusters in range(2, len(distance_matrix)):
+            # Create new kmedoids object
+            kmedoids = KMedoids(
+                    n_clusters=number_of_clusters,
+                    metric='precomputed',
+                    method='pam',
+                    init='k-medoids++')
+            # Calculate cluster labels
+            cluster_labels = kmedoids.fit_predict(distance_matrix)
+            silhouette_score_for_n = silhouette_score(X=distance_matrix_as_array, labels=cluster_labels, metric="precomputed")
+            # Check if the new silhouette score is higher than the maximum
+            if silhouette_score_for_n > max_silhouette_score:
+                max_silhouette_score = silhouette_score_for_n
+                opt_n_clusters = number_of_clusters
+            print("Silhouette average for {} is: {}".format(number_of_clusters, silhouette_score_for_n))
+            print(cluster_labels)
+        # Create kmedoids Object with optimal number of clusters
+        print("The optimal number of clusters is: {}".format(opt_n_clusters))
         kmedoids = KMedoids(
-                n_clusters=number_of_clusters,
-                metric='precomputed',
-                method='pam',
-                init='k-medoids++')
-        # Calculate cluster labels
-        cluster_labels = kmedoids.fit_predict(distance_matrix)
-        silhouette_score_for_n = silhouette_score(X=distance_matrix_as_array, labels=cluster_labels, metric="precomputed")
-        # Check if the new silhouette score is higher than the maximum
-        if silhouette_score_for_n > max_silhouette_score:
-            max_silhouette_score = silhouette_score_for_n
-            opt_n_clusters = number_of_clusters
-        print("Silhouette Average for {} is: {}".format(number_of_clusters, silhouette_score_for_n))
-        print(cluster_labels)
-    # Create kmedoids Object with optimal number of clusters
-    print("Die optimale Anzahl an Clustern ist: {}".format(opt_n_clusters))
-    kmedoids = KMedoids(
-        n_clusters=opt_n_clusters,
-        metric='precomputed',
-        method='pam',
-        init='k-medoids++')
-    kmedoids.fit(distance_matrix_as_array)
+            n_clusters=opt_n_clusters,
+            metric='precomputed',
+            method='pam',
+            init='k-medoids++')
+        kmedoids.fit(distance_matrix_as_array)
+    except TypeError:
+        print("Incorrect type for the kmedoids input; list needed")
+    except: 
+        print("There was an error in the kmedoids clustering")
     return kmedoids.labels_
 
 # Test k_medoids
@@ -109,7 +114,7 @@ def cluster_kmeans(event_list: list, max_n_clusters: int, init:str, n_init: int,
         kmeans.fit(data_points)
         return kmeans
     except:
-        print("ERROR! No Elbow found. The maximum number of clusters is used")
+        print("ERROR! No elbow found. The maximum number of clusters is used.")
         kmeans = KMeans(
             init=init,
             n_clusters = max_n_clusters,
