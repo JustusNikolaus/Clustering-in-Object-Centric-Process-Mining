@@ -104,7 +104,7 @@ def drawpage_view(request):
                 print("Path to file is: {}".format(path_to_file))
                 object_information = readocel.get_object_types(path_to_file)
                 print("Object information is: {}".format(object_information))
-                main.main_draw(path_to_file, object_information, request.session['object_type_cookie'], request.session['clustering_method_cookie'])
+                dfg = main.main_draw(path_to_file, object_information, request.session['object_type_cookie'], request.session['clustering_method_cookie'])
 
     # Refresh file_list
     ext = ('.csv','.jsonocel')
