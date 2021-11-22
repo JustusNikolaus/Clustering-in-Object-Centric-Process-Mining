@@ -80,7 +80,7 @@ def main_draw(path_to_file: str, object_information: list, object_type: str, clu
         # Draw DFG for the clustered dataframe
         model = discovery.apply(clustered_df, parameters={"epsilon": 0, "noise_threshold": 0})
         gviz = visualizer.apply(model, parameters={"min_act_freq": 100, "min_edge_freq": 100})
-        path_to_image = "./media/Frequency-{}-Cluster-{}.png".format(object_type, label)
+        path_to_image = "./media/tmp/Frequency-{}-Cluster-{}.png".format(object_type, label)
         visualizer.save(gviz, path_to_image)
         # Append the graphviz object to list of all graphviz objects
         dfg_filepaths.append(path_to_image)

@@ -75,21 +75,33 @@
                     {% endfor %}
                 </select>
                 <button class="btn btn-primary" type="submit">Draw</button>
-                <button id="showImage" class="btn col-12 btn-outline-secondary" type="button">Draw</button>
+                <!--<button id="showImage" class="btn col-12 btn-outline-secondary" type="button">Draw</button>-->
             </div>
         </div>
     </form>
     
+    <!--Draw DFG Clusters-->
+    <div class="container">
+        {% for i in dfg_file_path_list %}
+        <div class="card border-secondary">
+            <div class="card-body">
+                <img src="{{ i }}" class="img-fluid" alt="{{ i }}">
+            </div>
+            <div class="card-footer text-white bg-secondary">
+                <p class="card-text">{{ i }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
 </div>
-{% for i in dfg_file_path_list %}
-<img class="img-responsive col-12" src="{{ i }}" alt="{{ i }}">
-{% endfor %}
-<img id="theImage" class="img-responsive col-12" src="yourImage.png" style="visibility: hidden;">
+
+<!--<img id="theImage" class="img-responsive col-12" src="yourImage.png" style="visibility: hidden;">
 <script>
     document.getElementById("showImage").onclick = function(){
         document.getElementById("theImage").style.visibility = "visible";
     }
-</script>
+</script>-->
 {% endblock %}
 
 </body>
