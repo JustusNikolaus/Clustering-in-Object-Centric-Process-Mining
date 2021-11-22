@@ -25,8 +25,6 @@ class LevenshteinDistance:
     def map_labels_to_activities(self, labels: list, activities: list) -> list:
         map = {}
         #try:
-        if not isinstance(labels, list) or not isinstance(activities, list):
-            raise TypeError # raise an error if one of the inputs is not a list
         if len(labels) != len(activities):
             raise UnequalListsError(labels, "Error") # raise an error if they are not equal in length
         for given_label, labelled_activity in zip(labels, activities): # for each given label
@@ -87,7 +85,7 @@ class LevenshteinDistance:
         #     print("There was a problem finding one of the labels")
         # except: 
         #     print("Something went wrong with concatenation!")
-        # return labelled_control_flows
+        return labelled_control_flows
 
     # Return: distances[[]] between all pairs of control flows (represented by strings) in a list of control flows
     # Input: list = list of control flows
