@@ -59,7 +59,7 @@ def main_draw(path_to_file: str, object_information: list, object_type: str, clu
         counter += 1
         print("{}: {}".format(obj["object_id"], obj["cluster"]))
     
-    dfg_visuals = []
+    dfg_filepaths = []
     # Iterate over every cluster and create the dataframe based on the event ids of each cluster
     clustered_dataframes = []
     for label in unique_clusters:
@@ -80,15 +80,16 @@ def main_draw(path_to_file: str, object_information: list, object_type: str, clu
         # Draw DFG for the clustered dataframe
         model = discovery.apply(clustered_df, parameters={"epsilon": 0, "noise_threshold": 0})
         gviz = visualizer.apply(model, parameters={"min_act_freq": 100, "min_edge_freq": 100})
-        visualizer.save(gviz, "./media/Frequency-{}-Cluster-{}.png".format(object_type, label))
+        path_to_image = "./media/Frequency-{}-Cluster-{}.png".format(object_type, label)
+        visualizer.save(gviz, path_to_image)
         # Append the graphviz object to list of all graphviz objects
-        dfg_visuals.append(gviz)
+        dfg_filepaths.append(path_to_image)
 
         # Save dataframe into list of all dataframes
         clustered_dataframes.append(clustered_df)
 
     # Return the list of all graphviz objects to views.py
-    return dfg_visuals
+    return dfg_filepaths
 
 
 
