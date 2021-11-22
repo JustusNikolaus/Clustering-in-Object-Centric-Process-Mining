@@ -44,7 +44,7 @@ def drawpage_view(request):
 
             if 'file_cookie' in request.session:
                 # Create object_list and object_type_list
-                ocel_object_dict_list = readocel.get_object_information('media/' + request.session['file_cookie'])
+                ocel_object_dict_list = readocel.get_object_types('media/' + request.session['file_cookie'])
                 for i in ocel_object_dict_list:
                     object_type_list.append(i.get('object_type'))
                     #print(i.get('object_type'))
@@ -72,11 +72,11 @@ def drawpage_view(request):
             selected_object = request.POST['object_select']
 
             path_to_file = 'media/' + request.session['file_cookie']
-            main.main_draw(path_to_file, )
+            #main.main_draw(path_to_file, )
 
             # Create object_list and object_type_list
             if 'object_type_cookie' in request.session and 'file_cookie' in request.session:
-                ocel_object_dict_list = readocel.get_object_information('media/' + request.session['file_cookie'])
+                ocel_object_dict_list = readocel.get_object_types('media/' + request.session['file_cookie'])
                 for i in ocel_object_dict_list:
                     object_type_list.append(i.get('object_type'))
                     if i.get('object_type') == request.session['object_type_cookie']:
@@ -101,7 +101,9 @@ def drawpage_view(request):
             # Call main_draw
             if 'file_cookie' in request.session and 'object_type_cookie' in request.session and 'clustering_method_cookie' in request.session:
                 path_to_file = 'media/' + request.session['file_cookie']
-                object_information = readocel.get_object_information(path_to_file)
+                print("Path to file is: {}".format(path_to_file))
+                object_information = readocel.get_object_types(path_to_file)
+                print("Object information is: {}".format(object_information))
                 main.main_draw(path_to_file, object_information, request.session['object_type_cookie'], request.session['clustering_method_cookie'])
 
     # Refresh file_list

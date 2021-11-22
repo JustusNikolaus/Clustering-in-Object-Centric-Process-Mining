@@ -7,6 +7,9 @@ from sklearn.metrics import silhouette_score
 # Return: cluster labels after clustering with k-medoids
 # Input:  Two dimensional array of integers that defines a distance matrix
 def cluster_kmedoids(distance_matrix: list) -> list:
+    print("K-Medoids is started with distance matrix: ")
+    for i in range(len(distance_matrix)):
+        print(distance_matrix[i])
     opt_n_clusters = len(distance_matrix)
     #Format distance matrix to np.array of type float to avoid error message from silhouette_score
     distance_matrix_as_array = np.asarray(distance_matrix, dtype=float)

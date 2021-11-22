@@ -3,6 +3,8 @@ from pm4pymdl.objects.ocel.importer import importer as ocel_importer
 from pm4pymdl.algo.mvp.utils import succint_mdl_to_exploded_mdl
 from pm4pymdl.visualization.mvp.gen_framework3 import visualizer as visualizer
 import json
+from pm4pymdl.algo.mvp.gen_framework3 import discovery
+import pandas as pd
 
 # Local imports
 from drawpage.readocel import *
@@ -43,6 +45,9 @@ def main_draw(path_to_file: str, object_information: list, object_type: str, clu
         print("\n")
         print("We use Hierarchical for clustering")
         cluster_labels = cluster_agglomerative(avg_distance_matrix)
+    else:
+        print("The input of the clustering technique is not correct!")
+        return
     unique_clusters = list(set(cluster_labels))
     counter = 0
     # Assign every object the clustered label
@@ -53,6 +58,7 @@ def main_draw(path_to_file: str, object_information: list, object_type: str, clu
         counter += 1
         print("{}: {}".format(obj["object_id"], obj["cluster"]))
     
+    dfg_visuals = []
     # Iterate over every cluster and create the dataframe based on the event ids of each cluster
     clustered_dataframes = []
     for label in unique_clusters:
@@ -64,17 +70,19 @@ def main_draw(path_to_file: str, object_information: list, object_type: str, clu
         event_ids.append(flattened_event_df.loc[flattened_event_df[object_type].isin(object_ids_in_cluster)]['event_id'].unique())
         print("The Event IDs for Cluster {} are {}".format(label,event_ids[0]))
         clustered_df = event_df.loc[event_df["event_id"].isin(event_ids[0])]
+        clustered_df.type = event_df.type
+        if isinstance(clustered_df, pd.DataFrame):
+            print("Cluster {} is of type dataframe!".format(label))
         clustered_dataframes.append(clustered_df)
-        
-
-    print(clustered_dataframes)
+        model = discovery.apply(clustered_df, parameters={"epsilon": 0, "noise_threshold": 0})
+        gviz = visualizer.apply(model, parameters={"min_act_freq": 100, "min_edge_freq": 100})
+        #visualizer.save(gviz, "/media/{}-Cluster-{}.png".format(object_type, label))
+        dfg_visuals.append(gviz)
     
-# model = discovery.apply(event_df, parameters={"epsilon": 0, "noise_threshold": 0})
-# gviz = visualizer.apply(model, parameters={"min_act_freq": 1, "min_edge_freq": 1})
-# visualizer.save(gviz, "model.png")
+    return dfg_visuals
 
 
 
 
     
-main_draw("./media/running-example.jsonocel", get_object_types("./media/running-example.jsonocel"), "customers", "K-Means")
+#main_draw("./media/running-example.jsonocel", get_object_types("./media/running-example.jsonocel"), "customers", "kmeans")

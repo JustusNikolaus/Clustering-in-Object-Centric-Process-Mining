@@ -196,21 +196,23 @@ def calculate_average_dist_matr(objects: list) -> list:
             euclidean = EuclideanDistance(values_euclidean)
             print("The distance matrix is: ")
             print(euclidean.get_euclidean_distances(values_euclidean))
-            distance_matrices.append(euclidean.get_euclidean_distances(values_euclidean))
-
+            try: 
+                distance_matrices.append(euclidean.get_euclidean_distances(values_euclidean).tolist())
+            except: 
+                distance_matrices.append(euclidean.get_euclidean_distances(values_euclidean))
         # If the attribute is type list, then calculate the Levenshtein distance
-        elif isinstance(value, list):
-            values_levenshtein = []
-            # Iterate over all objects and save the attribute value into list
-            # Use this list to calculate the distance matrix
-            for obj in objects:
-                values_levenshtein.append(obj["attributes"][0][key])
-            print("{} is an attribute of type control-flow".format(key))
-            print("We calculate the distance matrix with the Levenshtein distance")
-            levenshtein = LevenshteinDistance(values_levenshtein)
-            print("The distance matrix is: ")
-            print(levenshtein.get_levenshtein_distances(values_levenshtein))
-            distance_matrices.append(levenshtein.get_levenshtein_distances(values_levenshtein))
+        # elif isinstance(value, list):
+        #     values_levenshtein = []
+        #     # Iterate over all objects and save the attribute value into list
+        #     # Use this list to calculate the distance matrix
+        #     for obj in objects:
+        #         values_levenshtein.append(obj["attributes"][0][key])
+        #     print("{} is an attribute of type control-flow".format(key))
+        #     print("We calculate the distance matrix with the Levenshtein distance")
+        #     levenshtein = LevenshteinDistance(values_levenshtein)
+        #     print("The distance matrix is: ")
+        #     print(levenshtein.get_levenshtein_distances(values_levenshtein))
+        #     distance_matrices.append(levenshtein.get_levenshtein_distances(values_levenshtein).tolist())
 
         # If the attribute is type string, then calculate the Boolean distance
         elif isinstance(value, str):
@@ -224,19 +226,19 @@ def calculate_average_dist_matr(objects: list) -> list:
             boolean = BooleanDistance(values_boolean)
             print("The distance matrix is: ")
             print(boolean.get_boolean_distances(values_boolean))
-            distance_matrices.append(boolean.get_boolean_distances(values_boolean))
+            try:
+                distance_matrices.append(boolean.get_boolean_distances(values_boolean).tolist())
+            except:
+                distance_matrices.append(boolean.get_boolean_distances(values_boolean))
 
-    # Calculate the average of all distance matrices by summing the matrices up and dividing them by the number of matrices
-    avg_distance_matrix = []
-    for i in distance_matrices:
-        avg_distance_matrix += i
-    new_avg_distance = []
-    for x in avg_distance_matrix:
-        test = []
-        for y in x:
-            test.append(y/len(distance_matrices))
-        new_avg_distance.append(x)
-    print("The average distance matrix is: ")
-    print(new_avg_distance)
-    return new_avg_distance
+    numpy_distance_matrix = np.array(distance_matrices)
+    summed_distance_matrix = numpy_distance_matrix.sum(axis=0)
+    print("The summed array is: ")
+    print(summed_distance_matrix)
+       
+    avg_distance_matrix = summed_distance_matrix / len(distance_matrices)
+
+    print("We divide the summed distance matrix by {} and get the new average distance matrix: ".format(len(distance_matrices)))
+    print(avg_distance_matrix)
+    return avg_distance_matrix
     
