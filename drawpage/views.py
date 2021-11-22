@@ -12,6 +12,7 @@ def drawpage_view(request):
     object_type_list = []
     object_list = []
     clustering_method = ['', '']
+    dfg_file_path_list = []
 
     # If a form got posted
     if request.method == 'POST':
@@ -104,7 +105,7 @@ def drawpage_view(request):
                 print("Path to file is: {}".format(path_to_file))
                 object_information = readocel.get_object_types(path_to_file)
                 print("Object information is: {}".format(object_information))
-                dfg = main.main_draw(path_to_file, object_information, request.session['object_type_cookie'], request.session['clustering_method_cookie'])
+                dfg_file_path_list = main.main_draw(path_to_file, object_information, request.session['object_type_cookie'], request.session['clustering_method_cookie'])
 
     # Refresh file_list
     ext = ('.csv','.jsonocel')
@@ -124,4 +125,4 @@ def drawpage_view(request):
     if 'clustering_method_cookie' in request.session:
                 print("----->Clustering Method: " + request.session['clustering_method_cookie'])
 
-    return render(request, 'drawpage/drawpage.html', {'file_list':file_list, 'object_type_list':object_type_list, 'object_list':object_list, 'clustering_method':clustering_method})
+    return render(request, 'drawpage/drawpage.html', {'file_list':file_list, 'object_type_list':object_type_list, 'object_list':object_list, 'clustering_method':clustering_method, 'dfg_file_path_list':dfg_file_path_list})

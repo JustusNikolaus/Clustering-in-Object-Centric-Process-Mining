@@ -1,2 +1,5 @@
 # Ignore all .pyc files
 *.pyc
+
+#Ignore db.sqlite3
+db.sqlite3

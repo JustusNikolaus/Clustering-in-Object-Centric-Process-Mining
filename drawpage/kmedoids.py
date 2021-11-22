@@ -3,7 +3,11 @@ import numpy as np
 from sklearn_extra.cluster import KMedoids
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
-from distance_techniques import *
+
+# Local imports 
+from drawpage.distance_techniques import *
+
+
 # Return: cluster labels after clustering with k-medoids
 # Input:  Two dimensional array of integers that defines a distance matrix
 def cluster_kmedoids(distance_matrix: list) -> list:
