@@ -24,24 +24,24 @@ class LevenshteinDistance:
     #        activities = list of activities
     def map_labels_to_activities(self, labels: list, activities: list) -> list:
         map = {}
-        try:
-            if not isinstance(labels, list) or not isinstance(activities, list):
-                raise TypeError # raise an error if one of the inputs is not a list
-            if len(labels) != len(activities):
-                raise UnequalListsError(labels, "Error") # raise an error if they are not equal in length
-            for given_label, labelled_activity in zip(labels, activities): # for each given label
-                if not isinstance(given_label, str) or not isinstance(labelled_activity, str):
-                    raise TypeError # raise an error if one of the values within the passed lists is not a string
-                if given_label not in map.keys():
-                    map[given_label] = labelled_activity # create key and add the corresponding activity
-                else: # if the key is already in the map, then it is a duplicate
-                    raise DuplicatesError(given_label, "Error") # raise an error if they are not unique
-        except UnequalListsError:
-            print("The labels and activities do not map one-to-one")
-        except DuplicatesError:
-            print("One of the given labels is duplicated")
-        except:
-            print("Something went wrong mapping the labels to the activities!")
+        #try:
+        if not isinstance(labels, list) or not isinstance(activities, list):
+            raise TypeError # raise an error if one of the inputs is not a list
+        if len(labels) != len(activities):
+            raise UnequalListsError(labels, "Error") # raise an error if they are not equal in length
+        for given_label, labelled_activity in zip(labels, activities): # for each given label
+            if not isinstance(given_label, str) or not isinstance(labelled_activity, str):
+                raise TypeError # raise an error if one of the values within the passed lists is not a string
+            if given_label not in map.keys():
+                map[given_label] = labelled_activity # create key and add the corresponding activity
+            else: # if the key is already in the map, then it is a duplicate
+                raise DuplicatesError(given_label, "Error") # raise an error if they are not unique
+        # except UnequalListsError:
+        #     print("The labels and activities do not map one-to-one")
+        # except DuplicatesError:
+        #     print("One of the given labels is duplicated")
+        # except:
+        #     print("Something went wrong mapping the labels to the activities!")
         return map
 
     # Return: alphabet labels for each activity/object within a control flow
@@ -65,29 +65,29 @@ class LevenshteinDistance:
         new_list = [] # new list to list out all items within the control flows list
         labelled_control_flows = [] # list of the concatenated strings for the control flows
         list_map = {} # new dictionary to map out the labels to the activities
-        try:
-            for sublist in list: # going through the sublists to add them to the new list
-                new_list += sublist
-            #print(new_list)
-            given_labels = self.label_activities(new_list) # giving unique labels to all items within the passed control flows list
-            #print(given_labels) 
-            list_map = self.map_labels_to_activities(given_labels, unique_strings(new_list)) # creating a dict of the labels and the unique list items
-            #print(list_map)
-            # creating the concatenation of characters for each sublist
-            list_map_rev = {v: k for k, v in list_map.items()} # reverse the dictionary so that the characters are the values instead of keys
-            for sublist in list: # going through the control flows within the original list
-                control_flow = "" # string for the control flow labels
-                for given_activity in sublist:
-                    if given_activity in list_map_rev.keys():
-                        control_flow += list_map_rev[given_activity] # adds the character label to the control flow label
-                    else:
-                        raise KeyError # key corresponding to given_activity not found within the list
-                labelled_control_flows.append(control_flow) # adds the labelled control flow to the list
-        except KeyError:
-            print("There was a problem finding one of the labels")
-        except: 
-            print("Something went wrong with concatenation!")
-        return labelled_control_flows
+        #try:
+        for sublist in list: # going through the sublists to add them to the new list
+            new_list += sublist
+        #print(new_list)
+        given_labels = self.label_activities(new_list) # giving unique labels to all items within the passed control flows list
+        #print(given_labels) 
+        list_map = self.map_labels_to_activities(given_labels, unique_strings(new_list)) # creating a dict of the labels and the unique list items
+        #print(list_map)
+        # creating the concatenation of characters for each sublist
+        list_map_rev = {v: k for k, v in list_map.items()} # reverse the dictionary so that the characters are the values instead of keys
+        for sublist in list: # going through the control flows within the original list
+            control_flow = "" # string for the control flow labels
+            for given_activity in sublist:
+                if given_activity in list_map_rev.keys():
+                    control_flow += list_map_rev[given_activity] # adds the character label to the control flow label
+                else:
+                    raise KeyError # key corresponding to given_activity not found within the list
+            labelled_control_flows.append(control_flow) # adds the labelled control flow to the list
+        # except KeyError:
+        #     print("There was a problem finding one of the labels")
+        # except: 
+        #     print("Something went wrong with concatenation!")
+        # return labelled_control_flows
 
     # Return: distances[[]] between all pairs of control flows (represented by strings) in a list of control flows
     # Input: list = list of control flows
@@ -212,8 +212,10 @@ def calculate_average_dist_matr(objects: list) -> list:
         #     levenshtein = LevenshteinDistance(values_levenshtein)
         #     print("The distance matrix is: ")
         #     print(levenshtein.get_levenshtein_distances(values_levenshtein))
-        #     distance_matrices.append(levenshtein.get_levenshtein_distances(values_levenshtein).tolist())
-
+        #     try:
+        #         distance_matrices.append(levenshtein.get_levenshtein_distances(values_levenshtein).tolist())
+        #     except:
+        #         distance_matrices.append(levenshtein.get_levenshtein_distances(values_levenshtein))
         # If the attribute is type string, then calculate the Boolean distance
         elif isinstance(value, str):
             values_boolean = []

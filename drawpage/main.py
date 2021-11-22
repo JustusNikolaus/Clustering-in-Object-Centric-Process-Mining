@@ -13,11 +13,12 @@ from drawpage.kmedoids import cluster_kmedoids
 from drawpage.agglomerative import cluster_agglomerative
 
 
-# Returns all drawn DFG`s
+# Returns list of all graphviz objects in order to draw the DFGs
 # Input: Path_to_file is the path to the file of the ocel
 #        object_information is the dict that returns the object types and the attributes
 #        object_type is the object which will be clustered
-def main_draw(path_to_file: str, object_information: list, object_type: str, cluster_type: str):
+#        cluster_type is the clustering technique
+def main_draw(path_to_file: str, object_information: list, object_type: str, cluster_type: str) -> list:
     # Import selected OCEL
     event_df, object_df = ocel_importer.apply(file_path=path_to_file)
 
@@ -64,21 +65,29 @@ def main_draw(path_to_file: str, object_information: list, object_type: str, clu
     for label in unique_clusters:
         object_ids_in_cluster = []
         event_ids = []
+        # Save all object ids that belong to the given cluster
         for obj in objects:
             if obj["cluster"] == label:
                 object_ids_in_cluster.append(obj["object_id"])
+        # Save all event ids that are in at least one of the objects of the given cluster
         event_ids.append(flattened_event_df.loc[flattened_event_df[object_type].isin(object_ids_in_cluster)]['event_id'].unique())
         print("The Event IDs for Cluster {} are {}".format(label,event_ids[0]))
+
+        # Create a new dataframe with all the event ids 
         clustered_df = event_df.loc[event_df["event_id"].isin(event_ids[0])]
         clustered_df.type = event_df.type
-        if isinstance(clustered_df, pd.DataFrame):
-            print("Cluster {} is of type dataframe!".format(label))
-        clustered_dataframes.append(clustered_df)
+
+        # Draw DFG for the clustered dataframe
         model = discovery.apply(clustered_df, parameters={"epsilon": 0, "noise_threshold": 0})
         gviz = visualizer.apply(model, parameters={"min_act_freq": 100, "min_edge_freq": 100})
-        #visualizer.save(gviz, "/media/{}-Cluster-{}.png".format(object_type, label))
+        visualizer.save(gviz, "./media/Frequency-{}-Cluster-{}.png".format(object_type, label))
+        # Append the graphviz object to list of all graphviz objects
         dfg_visuals.append(gviz)
-    
+
+        # Save dataframe into list of all dataframes
+        clustered_dataframes.append(clustered_df)
+
+    # Return the list of all graphviz objects to views.py
     return dfg_visuals
 
 
