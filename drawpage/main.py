@@ -18,7 +18,7 @@ from drawpage.agglomerative import cluster_agglomerative
 #        object_information is the dict that returns the object types and the attributes
 #        object_type is the object which will be clustered
 #        cluster_type is the clustering technique
-def main_draw(path_to_file: str, object_information: list, object_type: str, cluster_type: str) -> list:
+def main_draw(path_to_file: str, object_information: list, object_type: str, cluster_type: str, event_assignment: str) -> list:
     # Import selected OCEL
     event_df, object_df = ocel_importer.apply(file_path=path_to_file)
 
@@ -70,9 +70,28 @@ def main_draw(path_to_file: str, object_information: list, object_type: str, clu
             if obj["cluster"] == label:
                 object_ids_in_cluster.append(obj["object_id"])
         # Save all event ids that are in at least one of the objects of the given cluster
-        event_ids.append(flattened_event_df.loc[flattened_event_df[object_type].isin(object_ids_in_cluster)]['event_id'].unique())
+        if event_assignment == "All":
+            id_in_cluster = flattened_event_df.loc[flattened_event_df[object_type].isin(object_ids_in_cluster)]['event_id'].unique().tolist()
+            print(len(id_in_cluster))
+            id_notin_cluster = flattened_event_df.loc[~flattened_event_df[object_type].isin(object_ids_in_cluster)]['event_id'].unique().tolist()
+            print(len(id_notin_cluster))
+            for id_in in id_in_cluster:
+                if id_in in id_notin_cluster:
+                    id_in_cluster.remove(id_in)  
+            print(len(id_in_cluster))
+            # for id_in in id_in_cluster:
+            #     for id_notin in id_notin_cluster:
+            #         if id_in == id_notin:
+            #             id_in_cluster.remove(id_in)
+            event_ids.append(id_in_cluster)
+        elif event_assignment == "Existence":
+            event_ids.append(flattened_event_df.loc[flattened_event_df[object_type].isin(object_ids_in_cluster)]['event_id'].unique().tolist())
+        else:
+            print("The given event assignment is neither all nor existence.")
+            print("As default, we do existence")
+            event_ids.append(flattened_event_df.loc[flattened_event_df[object_type].isin(object_ids_in_cluster)]['event_id'].unique().tolist())
+        
         print("The Event IDs for Cluster {} are {}".format(label,event_ids[0]))
-
         # Create a new dataframe with all the event ids 
         clustered_df = event_df.loc[event_df["event_id"].isin(event_ids[0])]
         clustered_df.type = event_df.type
@@ -95,4 +114,4 @@ def main_draw(path_to_file: str, object_information: list, object_type: str, clu
 
 
     
-#main_draw("./media/running-example.jsonocel", get_object_types("./media/running-example.jsonocel"), "customers", "kmeans")
+#main_draw("./media/running-example.jsonocel", get_object_types("./media/running-example.jsonocel"), "customers", "kmeans", "All")

@@ -199,21 +199,21 @@ def calculate_average_dist_matr(objects: list) -> list:
             except: 
                 distance_matrices.append(euclidean.get_euclidean_distances(values_euclidean))
         # If the attribute is type list, then calculate the Levenshtein distance
-        # elif isinstance(value, list):
-        #     values_levenshtein = []
-        #     # Iterate over all objects and save the attribute value into list
-        #     # Use this list to calculate the distance matrix
-        #     for obj in objects:
-        #         values_levenshtein.append(obj["attributes"][0][key])
-        #     print("{} is an attribute of type control-flow".format(key))
-        #     print("We calculate the distance matrix with the Levenshtein distance")
-        #     levenshtein = LevenshteinDistance(values_levenshtein)
-        #     print("The distance matrix is: ")
-        #     print(levenshtein.get_levenshtein_distances(values_levenshtein))
-        #     try:
-        #         distance_matrices.append(levenshtein.get_levenshtein_distances(values_levenshtein).tolist())
-        #     except:
-        #         distance_matrices.append(levenshtein.get_levenshtein_distances(values_levenshtein))
+        elif isinstance(value, list):
+            values_levenshtein = []
+            # Iterate over all objects and save the attribute value into list
+            # Use this list to calculate the distance matrix
+            for obj in objects:
+                values_levenshtein.append(obj["attributes"][0][key])
+            print("{} is an attribute of type control-flow".format(key))
+            print("We calculate the distance matrix with the Levenshtein distance")
+            levenshtein = LevenshteinDistance(values_levenshtein)
+            print("The distance matrix is: ")
+            print(levenshtein.get_levenshtein_distances(values_levenshtein))
+            try:
+                distance_matrices.append(levenshtein.get_levenshtein_distances(values_levenshtein).tolist())
+            except:
+                distance_matrices.append(levenshtein.get_levenshtein_distances(values_levenshtein))
         # If the attribute is type string, then calculate the Boolean distance
         elif isinstance(value, str):
             values_boolean = []
