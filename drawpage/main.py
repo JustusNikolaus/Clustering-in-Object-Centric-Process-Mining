@@ -70,7 +70,7 @@ def main_draw(path_to_file: str, object_information: list, object_type: str, clu
             if obj["cluster"] == label:
                 object_ids_in_cluster.append(obj["object_id"])
         # Save all event ids that are in at least one of the objects of the given cluster
-        if event_assignment == "All":
+        if event_assignment == "all":
             id_in_cluster = flattened_event_df.loc[flattened_event_df[object_type].isin(object_ids_in_cluster)]['event_id'].unique().tolist()
             print(len(id_in_cluster))
             id_notin_cluster = flattened_event_df.loc[~flattened_event_df[object_type].isin(object_ids_in_cluster)]['event_id'].unique().tolist()
@@ -84,7 +84,7 @@ def main_draw(path_to_file: str, object_information: list, object_type: str, clu
             #         if id_in == id_notin:
             #             id_in_cluster.remove(id_in)
             event_ids.append(id_in_cluster)
-        elif event_assignment == "Existence":
+        elif event_assignment == "existence":
             event_ids.append(flattened_event_df.loc[flattened_event_df[object_type].isin(object_ids_in_cluster)]['event_id'].unique().tolist())
         else:
             print("The given event assignment is neither all nor existence.")

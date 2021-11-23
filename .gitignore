@@ -4,5 +4,5 @@
 #Ignore db.sqlite3
 db.sqlite3
 
-# Ignore media/tmp/ folder
-media/tmp/ 
+# Ignore contents of media/tmp/ folder
+media/tmp/*

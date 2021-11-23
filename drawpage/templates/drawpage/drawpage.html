@@ -50,33 +50,37 @@
     <form action="" method="post">
         {% csrf_token %}
         <div class="row g-3">
-            <div>
+            <div class="col">
                 <label class="form-label">Select Clustering method</label>
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="clustering_method_select" value="kmeans" {{ clustering_method.0 }}>
-                    <label class="form-check-label" for="flexRadioDefault1">
+                    <label class="form-check-label">
                     K-Means
                     </label>
                 </div>
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="clustering_method_select" value="hierarchical" {{ clustering_method.1 }}>
-                    <label class="form-check-label" for="flexRadioDefault2">
+                    <label class="form-check-label">
                     Hierarchical
                     </label>
                 </div>
             </div>
-            <div class="input-group">
-                <select class="form-select" name="object_select">
-                    <option selected>{{ object_list.0 }}</option>
-                    {% for o in object_list %}
-                        {% if not o == object_list.0 %}
-                    <option value="{{o}}">{{o}}</option>
-                        {% endif %}
-                    {% endfor %}
-                </select>
-                <button class="btn btn-primary" type="submit">Draw</button>
-                <!--<button id="showImage" class="btn col-12 btn-outline-secondary" type="button">Draw</button>-->
+            <div class="col">
+                <label class="form-label">Select Event assignment</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="event_assignment_select" value="all" {{ event_assignment.0 }}>
+                    <label class="form-check-label">
+                        All
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="event_assignment_select" value="existence" {{ event_assignment.1 }}>
+                    <label class="form-check-label">
+                        Existence
+                    </label>
+                </div>
             </div>
+            <button class="btn btn-primary" type="submit">Draw</button>
         </div>
     </form>
     
