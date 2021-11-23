@@ -92,7 +92,14 @@
                 <img src="{{ i }}" class="img-fluid" alt="{{ i }}">
             </div>
             <div class="card-footer text-white bg-secondary">
-                <p class="card-text">{{ i }}</p>
+                <div class="row">
+                    <div class="col card-text">
+                        {{ i }}
+                    </div>
+                    <div class="col text-end">
+                        <a class="btn btn-light text-end" href="{{ i }}" role="button"><i class="bi bi-download"></i></a>
+                    </div>
+                </div>
             </div>
         </div>
         {% endfor %}
