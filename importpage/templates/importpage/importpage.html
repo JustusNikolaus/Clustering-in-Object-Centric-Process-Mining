@@ -16,11 +16,28 @@
 <form action="" method='post' enctype="multipart/form-data">
     {% csrf_token %}
     <div class="input-group">
-        <input type="file" name="log" class="form-control">
+        <input id="file" type="file" name="log" class="form-control" onchange="javascript:updateList()" />
         <button type="submit" class="btn btn-primary">Import Log</button>
     </div>
     <label class="form-label"><p class="text-{{ response_label.0 }}">{{ response_label.1 }}</p></label>
 </form>
+
+<br/>Uploaded files:
+<div id="fileList"></div> 
+
+{% comment %} Fuction for showing uploaded files. {% endcomment %}
+<script>
+    updateList = function() {
+        var input = document.getElementById('file');
+        var output = document.getElementById('fileList');
+
+        output.innerHTML = '<ul>';
+        for (var i = 0; i < input.files.length; ++i) {
+            output.innerHTML += '<li>' + input.files.item(i).name + '</li>';
+        }
+        output.innerHTML += '</ul>'; 
+    }
+</script>
 {% endblock %}
 
 </body>
