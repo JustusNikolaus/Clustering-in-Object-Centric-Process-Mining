@@ -22,11 +22,19 @@
     <label class="form-label"><p class="text-{{ response_label.0 }}">{{ response_label.1 }}</p></label>
 </form>
 
+{% comment %} Button leads to Clustering DFG page. {% endcomment %}
+<form method="get" action="/draw">
+    <button class="btn btn-primary" type="submit">Clustering DFG page</button>
+</form>
+
+{% comment %} List of uploaded files. {% endcomment %}
 <br/>Uploaded files:
 <div id="fileList"></div> 
 
-{% comment %} Fuction for showing uploaded files. {% endcomment %}
+
+
 <script>
+    {% comment %} Fuction for showing uploaded files. {% endcomment %}
     updateList = function() {
         var input = document.getElementById('file');
         var output = document.getElementById('fileList');
