@@ -24,22 +24,22 @@ class LevenshteinDistance:
     #        activities = list of activities
     def map_labels_to_activities(self, labels: list, activities: list) -> list:
         map = {}
-        #try:
-        if len(labels) != len(activities):
-            raise UnequalListsError(labels, "Error") # raise an error if they are not equal in length
-        for given_label, labelled_activity in zip(labels, activities): # for each given label
-            if not isinstance(given_label, str) or not isinstance(labelled_activity, str):
-                raise TypeError # raise an error if one of the values within the passed lists is not a string
-            if given_label not in map.keys():
-                map[given_label] = labelled_activity # create key and add the corresponding activity
-            else: # if the key is already in the map, then it is a duplicate
-                raise DuplicatesError(given_label, "Error") # raise an error if they are not unique
-        # except UnequalListsError:
-        #     print("The labels and activities do not map one-to-one")
-        # except DuplicatesError:
-        #     print("One of the given labels is duplicated")
-        # except:
-        #     print("Something went wrong mapping the labels to the activities!")
+        try:
+            if len(labels) != len(activities):
+                raise UnequalListsError(labels, "Error") # raise an error if they are not equal in length
+            for given_label, labelled_activity in zip(labels, activities): # for each given label
+                if not isinstance(given_label, str) or not isinstance(labelled_activity, str):
+                    raise TypeError # raise an error if one of the values within the passed lists is not a string
+                if given_label not in map.keys():
+                    map[given_label] = labelled_activity # create key and add the corresponding activity
+                else: # if the key is already in the map, then it is a duplicate
+                    raise DuplicatesError(given_label, "Error") # raise an error if they are not unique
+        except UnequalListsError:
+            print("The labels and activities do not map one-to-one")
+        except DuplicatesError:
+            print("One of the given labels is duplicated")
+        except:
+            print("Something went wrong mapping the labels to the activities!")
         return map
 
     # Return: alphabet labels for each activity/object within a control flow
@@ -63,28 +63,28 @@ class LevenshteinDistance:
         new_list = [] # new list to list out all items within the control flows list
         labelled_control_flows = [] # list of the concatenated strings for the control flows
         list_map = {} # new dictionary to map out the labels to the activities
-        #try:
-        for sublist in list: # going through the sublists to add them to the new list
-            new_list += sublist
-        #print(new_list)
-        given_labels = self.label_activities(new_list) # giving unique labels to all items within the passed control flows list
-        #print(given_labels) 
-        list_map = self.map_labels_to_activities(given_labels, unique_strings(new_list)) # creating a dict of the labels and the unique list items
-        #print(list_map)
-        # creating the concatenation of characters for each sublist
-        list_map_rev = {v: k for k, v in list_map.items()} # reverse the dictionary so that the characters are the values instead of keys
-        for sublist in list: # going through the control flows within the original list
-            control_flow = "" # string for the control flow labels
-            for given_activity in sublist:
-                if given_activity in list_map_rev.keys():
-                    control_flow += list_map_rev[given_activity] # adds the character label to the control flow label
-                else:
-                    raise KeyError # key corresponding to given_activity not found within the list
-            labelled_control_flows.append(control_flow) # adds the labelled control flow to the list
-        # except KeyError:
-        #     print("There was a problem finding one of the labels")
-        # except: 
-        #     print("Something went wrong with concatenation!")
+        try:
+            for sublist in list: # going through the sublists to add them to the new list
+                new_list += sublist
+            #print(new_list)
+            given_labels = self.label_activities(new_list) # giving unique labels to all items within the passed control flows list
+            #print(given_labels) 
+            list_map = self.map_labels_to_activities(given_labels, unique_strings(new_list)) # creating a dict of the labels and the unique list items
+            #print(list_map)
+            # creating the concatenation of characters for each sublist
+            list_map_rev = {v: k for k, v in list_map.items()} # reverse the dictionary so that the characters are the values instead of keys
+            for sublist in list: # going through the control flows within the original list
+                control_flow = "" # string for the control flow labels
+                for given_activity in sublist:
+                    if given_activity in list_map_rev.keys():
+                        control_flow += list_map_rev[given_activity] # adds the character label to the control flow label
+                    else:
+                        raise KeyError # key corresponding to given_activity not found within the list
+                labelled_control_flows.append(control_flow) # adds the labelled control flow to the list
+        except KeyError:
+            print("There was a problem finding one of the labels")
+        except: 
+            print("Something went wrong with concatenation!")
         return labelled_control_flows
 
     # Return: distances[[]] between all pairs of control flows (represented by strings) in a list of control flows
@@ -94,14 +94,20 @@ class LevenshteinDistance:
         distances = []
         # First pointer, outer loop: traverse each word in the list once
         # The number of inner lists within distances = the number of strings in the first iteration
-        for firstStrings in labelled_list:
-            sub_distances = []
-            # Second pointer, inner loop: traverse each word for each time it is traversed in the outer loop
-            # The number of output integers = the number of strings in the second iteration
-            for secondStrings in labelled_list:
-                sub_distances.append(levdistance(firstStrings, secondStrings))
-            distances.append(sub_distances)
-        return distances
+        try:
+            for firstStrings in labelled_list:
+                sub_distances = []
+                # Second pointer, inner loop: traverse each word for each time it is traversed in the outer loop
+                # The number of output integers = the number of strings in the second iteration
+                for secondStrings in labelled_list:
+                    sub_distances.append(levdistance(firstStrings, secondStrings))
+                distances.append(sub_distances)
+            return distances
+        except TypeError:
+            print("Invalid input for the Levenshtein distance function, please enter a list with control flows")
+        except Exception as exception_type:
+            print("An error/exception occured while trying to calculate the Levenshtein distance of type {0}. Arguments:\n{1!r}".format(type(exception_type).__name__, exception_type.args))
+
 
 # Levenshtein test
 #con_activities = [['eating', 'drinking', 'sleeping', 'drinking', 'drinking and sleeping', 'showering', 'eating'],
@@ -120,8 +126,13 @@ class EuclideanDistance:
     # Return: Euclidean distances between all pairs of vectors in two lists of strings
     # Input: vectors = list of vectors
     def get_euclidean_distances(self, vectors: list) -> list:
-        distance = DistanceMetric.get_metric('euclidean')
-        return distance.pairwise(vectors)
+        try:
+            distance = DistanceMetric.get_metric('euclidean')
+            return distance.pairwise(vectors)
+        except TypeError:
+            print("Invalid input for the Euclidean distance function, please enter a list with numerical values")
+        except Exception as exception_type:
+            print("An error/exception occured while trying to calculate the Euclidean distance of type {0}. Arguments:\n{1!r}".format(type(exception_type).__name__, exception_type.args))
 
 class BooleanDistance:
 
@@ -144,23 +155,28 @@ class BooleanDistance:
     # Input: list = list of strings
     def get_boolean_distances(self, list: list) -> list:
         distances = []
-        # First pointer, outer loop: traverse each word in the list once
-        # The number of inner lists within distances = the number of strings in the first iteration
-        for firstStrings in list:
-            sub_distances = []
-            # Second pointer, inner loop: traverse each word for each time it is traversed in the outer loop
-            # The number of output booleans = the number of strings in the second iteration
-            for secondStrings in list:
-                # If both strings are equivalent, add 1 to the inner list
-                if firstStrings == secondStrings:
-                    sub_distances.append(1)
-                # If both strings are not equivalent, add 0 to the inner list
-                else:
-                    sub_distances.append(0)
-            distances.append(sub_distances)
-        # This part is to normalise distance matrices with non-zero diagonals into zero diagonals
-        for i in range(0, len(distances)):
-            distances[i][i] = 0
+        try:
+            # First pointer, outer loop: traverse each word in the list once
+            # The number of inner lists within distances = the number of strings in the first iteration
+            for firstStrings in list:
+                sub_distances = []
+                # Second pointer, inner loop: traverse each word for each time it is traversed in the outer loop
+                # The number of output booleans = the number of strings in the second iteration
+                for secondStrings in list:
+                    # If both strings are equivalent, add 1 to the inner list
+                    if firstStrings == secondStrings:
+                        sub_distances.append(1)
+                    # If both strings are not equivalent, add 0 to the inner list
+                    else:
+                        sub_distances.append(0)
+                distances.append(sub_distances)
+            # This part is to normalise distance matrices with non-zero diagonals into zero diagonals
+            for i in range(0, len(distances)):
+                distances[i][i] = 0
+        except TypeError:
+            print("Invalid input for the Boolean distance function, please enter a list with control flows")
+        except Exception as exception_type:
+            print("An error/exception occured while trying to calculate the Boolean distance of type {0}. Arguments:\n{1!r}".format(type(exception_type).__name__, exception_type.args))
         return distances
 
 #con_activities = [['eating', 'drinking', 'sleeping', 'drinking', 'drinking and sleeping', 'showering', 'eating'],
