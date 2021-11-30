@@ -1,0 +1,1 @@
+{"version":3,"sources":["../src/index.ts"],"names":["WebGLEngine","WebGPUEngine"],"mappings":"AAAA,SAASA,WAAT,QAA4B,SAA5B;AACA,SAASC,YAAT,QAA6B,UAA7B;AAEA,SAASD,WAAT,EAAsBC,YAAtB","sourcesContent":["import { WebGLEngine } from './webgl';\nimport { WebGPUEngine } from './webgpu';\n\nexport { WebGLEngine, WebGPUEngine };\n"],"file":"index.js"}

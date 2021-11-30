@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../src/components/index.ts"],"names":["GeometryComponent","GeometrySystem"],"mappings":"AAAA,SAASA,iBAAT,QAAkC,8BAAlC;AACA,SAASC,cAAT,QAA+B,mBAA/B","sourcesContent":["export { GeometryComponent } from './geometry/GeometryComponent';\nexport { GeometrySystem } from './geometry/System';\n"],"file":"index.js"}

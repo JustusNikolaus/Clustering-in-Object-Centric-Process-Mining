@@ -1,0 +1,2 @@
+
+//# sourceMappingURL=IAttribute.js.map

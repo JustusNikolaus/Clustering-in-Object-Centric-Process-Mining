@@ -62,6 +62,14 @@ def main_draw(path_to_file: str, object_information: list, object_type: str, clu
     dfg_filepaths = []
     # Iterate over every cluster and create the dataframe based on the event ids of each cluster
     clustered_dataframes = []
+
+    # Append the not clustered DFG
+    model = discovery.apply(event_df, parameters={"epsilon": 0, "noise_threshold": 0})
+    gviz = visualizer.apply(model, parameters={"min_act_freq": 100, "min_edge_freq": 100})
+    path_to_image = "./media/tmp/Frequency-{}-Unclustered.png".format(object_type)
+    visualizer.save(gviz, path_to_image)
+    dfg_filepaths.append(path_to_image)
+
     for label in unique_clusters:
         object_ids_in_cluster = []
         event_ids = []
@@ -70,21 +78,20 @@ def main_draw(path_to_file: str, object_information: list, object_type: str, clu
             if obj["cluster"] == label:
                 object_ids_in_cluster.append(obj["object_id"])
         # Save all event ids that are in at least one of the objects of the given cluster
-        if event_assignment == "all":
+        # Assign all events, that are only in objects from given cluster
+        if event_assignment == "All":
+            # Save all event ids of objects in the cluster
             id_in_cluster = flattened_event_df.loc[flattened_event_df[object_type].isin(object_ids_in_cluster)]['event_id'].unique().tolist()
-            print(len(id_in_cluster))
+            # Save all event ids of objects that are not in cluster
             id_notin_cluster = flattened_event_df.loc[~flattened_event_df[object_type].isin(object_ids_in_cluster)]['event_id'].unique().tolist()
-            print(len(id_notin_cluster))
+            # Remove all event ids that are in both lists
             for id_in in id_in_cluster:
                 if id_in in id_notin_cluster:
-                    id_in_cluster.remove(id_in)  
-            print(len(id_in_cluster))
-            # for id_in in id_in_cluster:
-            #     for id_notin in id_notin_cluster:
-            #         if id_in == id_notin:
-            #             id_in_cluster.remove(id_in)
+                    id_in_cluster.remove(id_in) 
+            # Append the ones that remain to the list that is used to filter the dataframe 
             event_ids.append(id_in_cluster)
-        elif event_assignment == "existence":
+        # Assign event if the object from given cluster is inside that event
+        elif event_assignment == "Existence":
             event_ids.append(flattened_event_df.loc[flattened_event_df[object_type].isin(object_ids_in_cluster)]['event_id'].unique().tolist())
         else:
             print("The given event assignment is neither all nor existence.")
@@ -92,6 +99,7 @@ def main_draw(path_to_file: str, object_information: list, object_type: str, clu
             event_ids.append(flattened_event_df.loc[flattened_event_df[object_type].isin(object_ids_in_cluster)]['event_id'].unique().tolist())
         
         print("The Event IDs for Cluster {} are {}".format(label,event_ids[0]))
+
         # Create a new dataframe with all the event ids 
         clustered_df = event_df.loc[event_df["event_id"].isin(event_ids[0])]
         clustered_df.type = event_df.type
@@ -101,6 +109,7 @@ def main_draw(path_to_file: str, object_information: list, object_type: str, clu
         gviz = visualizer.apply(model, parameters={"min_act_freq": 100, "min_edge_freq": 100})
         path_to_image = "./media/tmp/Frequency-{}-Cluster-{}.png".format(object_type, label)
         visualizer.save(gviz, path_to_image)
+        
         # Append the graphviz object to list of all graphviz objects
         dfg_filepaths.append(path_to_image)
 
@@ -115,3 +124,6 @@ def main_draw(path_to_file: str, object_information: list, object_type: str, clu
 
     
 #main_draw("./media/running-example.jsonocel", get_object_types("./media/running-example.jsonocel"), "customers", "kmeans", "All")
+
+
+

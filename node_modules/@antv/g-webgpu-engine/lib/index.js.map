@@ -1,0 +1,1 @@
+{"version":3,"sources":["../src/index.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;AAAA;;AACA","sourcesContent":["import { WebGLEngine } from './webgl';\nimport { WebGPUEngine } from './webgpu';\n\nexport { WebGLEngine, WebGPUEngine };\n"],"file":"index.js"}

@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../src/components/index.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;AAAA;;AACA","sourcesContent":["export { GeometryComponent } from './geometry/GeometryComponent';\nexport { GeometrySystem } from './geometry/System';\n"],"file":"index.js"}
