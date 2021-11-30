@@ -5,9 +5,9 @@ import unittest
 import numpy as np
 
 # Local imports
-from kmedoids import cluster_kmedoids
-from agglomerative import cluster_agglomerative
-from distance_techniques import LevenshteinDistance, BooleanDistance, EuclideanDistance
+from drawpage.kmedoids import cluster_kmedoids
+from drawpage.agglomerative import cluster_agglomerative
+from drawpage.distance_techniques import LevenshteinDistance, BooleanDistance, EuclideanDistance
 
 class MyTestCase(unittest.TestCase):
 
