@@ -190,62 +190,63 @@ class BooleanDistance:
 
 # Return: The average distance matrix for the objects of selected object type
 # Input:  List with all the necessary object information of selected object type
-def calculate_average_dist_matr(objects: list) -> list:
+def calculate_average_dist_matr(objects: list, attributes: list) -> list:
     # List holds all distinct distance matrices
     distance_matrices = []
 
     # Iterate over every attribute and calculate the distance matrix with the right technique
     for key, value in objects[0]["attributes"][0].items():
-        # If the attribute is type float or int, then calculate the Euclidean distance
-        if isinstance(value, float) or isinstance(value, int):
-            # Iterate over all objects and save the attribute value into list
-            # Use this list to calculate the distance matrix
-            values_euclidean = []
-            for obj in objects:
-                val = []
-                val.append(obj["attributes"][0][key])
-                values_euclidean.append(val)
-            print("{} is an attribute of type float".format(key))
-            print("We calculate the distance matrix with the Euclidean distance")
-            euclidean = EuclideanDistance(values_euclidean)
-            print("The distance matrix is: ")
-            print(euclidean.get_euclidean_distances(values_euclidean))
-            try: 
-                distance_matrices.append(euclidean.get_euclidean_distances(values_euclidean).tolist())
-            except: 
-                distance_matrices.append(euclidean.get_euclidean_distances(values_euclidean))
-        # If the attribute is type list, then calculate the Levenshtein distance
-        elif isinstance(value, list):
-            values_levenshtein = []
-            # Iterate over all objects and save the attribute value into list
-            # Use this list to calculate the distance matrix
-            for obj in objects:
-                values_levenshtein.append(obj["attributes"][0][key])
-            print("{} is an attribute of type control-flow".format(key))
-            print("We calculate the distance matrix with the Levenshtein distance")
-            levenshtein = LevenshteinDistance(values_levenshtein)
-            print("The distance matrix is: ")
-            print(levenshtein.get_levenshtein_distances(values_levenshtein))
-            try:
-                distance_matrices.append(levenshtein.get_levenshtein_distances(values_levenshtein).tolist())
-            except:
-                distance_matrices.append(levenshtein.get_levenshtein_distances(values_levenshtein))
-        # If the attribute is type string, then calculate the Boolean distance
-        elif isinstance(value, str):
-            values_boolean = []
-            # Iterate over all objects and save the attribute value into list
-            # Use this list to calculate the distance matrix
-            for obj in objects:
-                values_boolean.append(obj["attributes"][0][key])
-            print("{} is an attribute of type string".format(key))
-            print("We calculate the distance matrix with the Boolean distance")
-            boolean = BooleanDistance(values_boolean)
-            print("The distance matrix is: ")
-            print(boolean.get_boolean_distances(values_boolean))
-            try:
-                distance_matrices.append(boolean.get_boolean_distances(values_boolean).tolist())
-            except:
-                distance_matrices.append(boolean.get_boolean_distances(values_boolean))
+        if key in attributes or len(attributes) == 0:
+            # If the attribute is type float or int, then calculate the Euclidean distance
+            if isinstance(value, float) or isinstance(value, int):
+                # Iterate over all objects and save the attribute value into list
+                # Use this list to calculate the distance matrix
+                values_euclidean = []
+                for obj in objects:
+                    val = []
+                    val.append(obj["attributes"][0][key])
+                    values_euclidean.append(val)
+                print("{} is an attribute of type float".format(key))
+                print("We calculate the distance matrix with the Euclidean distance")
+                euclidean = EuclideanDistance(values_euclidean)
+                print("The distance matrix is: ")
+                print(euclidean.get_euclidean_distances(values_euclidean))
+                try: 
+                    distance_matrices.append(euclidean.get_euclidean_distances(values_euclidean).tolist())
+                except: 
+                    distance_matrices.append(euclidean.get_euclidean_distances(values_euclidean))
+            # If the attribute is type list, then calculate the Levenshtein distance
+            elif isinstance(value, list):
+                values_levenshtein = []
+                # Iterate over all objects and save the attribute value into list
+                # Use this list to calculate the distance matrix
+                for obj in objects:
+                    values_levenshtein.append(obj["attributes"][0][key])
+                print("{} is an attribute of type control-flow".format(key))
+                print("We calculate the distance matrix with the Levenshtein distance")
+                levenshtein = LevenshteinDistance(values_levenshtein)
+                print("The distance matrix is: ")
+                print(levenshtein.get_levenshtein_distances(values_levenshtein))
+                try:
+                    distance_matrices.append(levenshtein.get_levenshtein_distances(values_levenshtein).tolist())
+                except:
+                    distance_matrices.append(levenshtein.get_levenshtein_distances(values_levenshtein))
+            # If the attribute is type string, then calculate the Boolean distance
+            elif isinstance(value, str):
+                values_boolean = []
+                # Iterate over all objects and save the attribute value into list
+                # Use this list to calculate the distance matrix
+                for obj in objects:
+                    values_boolean.append(obj["attributes"][0][key])
+                print("{} is an attribute of type string".format(key))
+                print("We calculate the distance matrix with the Boolean distance")
+                boolean = BooleanDistance(values_boolean)
+                print("The distance matrix is: ")
+                print(boolean.get_boolean_distances(values_boolean))
+                try:
+                    distance_matrices.append(boolean.get_boolean_distances(values_boolean).tolist())
+                except:
+                    distance_matrices.append(boolean.get_boolean_distances(values_boolean))
 
     numpy_distance_matrix = np.array(distance_matrices)
     summed_distance_matrix = numpy_distance_matrix.sum(axis=0)

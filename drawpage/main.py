@@ -1,4 +1,5 @@
 # Library imports 
+from numpy import string_
 from pm4pymdl.objects.ocel.importer import importer as ocel_importer
 from pm4pymdl.algo.mvp.utils import succint_mdl_to_exploded_mdl
 from pm4pymdl.visualization.mvp.gen_framework3 import visualizer as visualizer
@@ -18,7 +19,7 @@ from drawpage.agglomerative import cluster_agglomerative
 #        object_information is the dict that returns the object types and the attributes
 #        object_type is the object which will be clustered
 #        cluster_type is the clustering technique
-def main_draw(path_to_file: str, object_information: list, object_type: str, cluster_type: str, event_assignment: str) -> list:
+def main_draw(path_to_file: str, object_information: list, object_type: str, cluster_type: str, event_assignment: str, attributes = []) -> list:
     # Import selected OCEL
     event_df, object_df = ocel_importer.apply(file_path=path_to_file)
 
@@ -35,7 +36,7 @@ def main_draw(path_to_file: str, object_information: list, object_type: str, clu
     # Calculate the average distance matrix
     print("We now create the average distance matrix: ")
     print("\n")
-    avg_distance_matrix = calculate_average_dist_matr(objects)
+    avg_distance_matrix = calculate_average_dist_matr(objects, attributes)
     
     # Cluster based on the selected technique
     if cluster_type == "kmeans": 
@@ -69,6 +70,7 @@ def main_draw(path_to_file: str, object_information: list, object_type: str, clu
     path_to_image = "./media/tmp/Frequency-{}-Unclustered.png".format(object_type)
     visualizer.save(gviz, path_to_image)
     dfg_filepaths.append(path_to_image)
+    clustered_dataframes.append(event_df)
 
     for label in unique_clusters:
         object_ids_in_cluster = []
@@ -120,7 +122,20 @@ def main_draw(path_to_file: str, object_information: list, object_type: str, clu
     return dfg_filepaths
 
 
-
+def draw(clustered_dataframes: list, object_type: str, min_act_freq: int, min_edge_freq: int):
+    dfg_filepaths = []
+    i = 0
+    for clustered_df in clustered_dataframes:
+        model = discovery.apply(clustered_df, parameters={"epsilon": 0, "noise_threshold": 0})
+        gviz = visualizer.apply(model, parameters={"min_act_freq": min_act_freq, "min_edge_freq": min_edge_freq})
+        if i == 0:
+            path_to_image = "./media/tmp/Frequency-{}-Unclustered.png".format(object_type)
+        else:
+            path_to_image = "./media/tmp/Frequency-{}-Cluster-{}.png".format(object_type, i)
+        visualizer.save(gviz, path_to_image)
+        dfg_filepaths.append(path_to_image)
+        i = i + 1
+    return dfg_filepaths
 
     
 #main_draw("./media/running-example.jsonocel", get_object_types("./media/running-example.jsonocel"), "customers", "kmeans", "All")
