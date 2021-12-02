@@ -20,9 +20,9 @@ def draw(clustered_dataframes: list, object_type: str, min_act_freq: int, min_ed
         model = discovery.apply(clustered_df, parameters={"epsilon": 0, "noise_threshold": 0})
         gviz = visualizer.apply(model, parameters={"min_act_freq": min_act_freq, "min_edge_freq": min_edge_freq})
         if i == 0:
-            path_to_image = "./media/tmp/Frequency-{}-Unclustered.png".format(object_type)
+            path_to_image = "./media/tmp/Frequency-{}-Unclustered-minactivity-{}-minedge-{}.png".format(object_type, min_act_freq, min_edge_freq)
         else:
-            path_to_image = "./media/tmp/Frequency-{}-Cluster-{}.png".format(object_type, i)
+            path_to_image = "./media/tmp/Frequency-{}-Cluster-{}-minactivity-{}-minedge-{}.png".format(object_type, i, min_act_freq, min_edge_freq)
         visualizer.save(gviz, path_to_image)
         dfg_filepaths.append(path_to_image)
         i = i + 1
@@ -119,7 +119,7 @@ def main_draw(path_to_file: str, object_information: list, object_type: str, clu
         clustered_dataframes.append(clustered_df)
 
     dfg_filepaths = draw(clustered_dataframes, object_type, min_act_freq, min_edge_freq)
-    
+
     # Return the list of all graphviz objects to views.py
     return dfg_filepaths, clustered_dataframes, object_and_cluster
 
