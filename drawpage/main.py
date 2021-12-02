@@ -13,13 +13,27 @@ from drawpage.distance_techniques import calculate_average_dist_matr
 from drawpage.kmedoids import cluster_kmedoids
 from drawpage.agglomerative import cluster_agglomerative
 
+def draw(clustered_dataframes: list, object_type: str, min_act_freq: int, min_edge_freq: int):
+    dfg_filepaths = []
+    i = 0
+    for clustered_df in clustered_dataframes:
+        model = discovery.apply(clustered_df, parameters={"epsilon": 0, "noise_threshold": 0})
+        gviz = visualizer.apply(model, parameters={"min_act_freq": min_act_freq, "min_edge_freq": min_edge_freq})
+        if i == 0:
+            path_to_image = "./media/tmp/Frequency-{}-Unclustered.png".format(object_type)
+        else:
+            path_to_image = "./media/tmp/Frequency-{}-Cluster-{}.png".format(object_type, i)
+        visualizer.save(gviz, path_to_image)
+        dfg_filepaths.append(path_to_image)
+        i = i + 1
+    return dfg_filepaths
 
 # Returns list of all graphviz objects in order to draw the DFGs
 # Input: Path_to_file is the path to the file of the ocel
 #        object_information is the dict that returns the object types and the attributes
 #        object_type is the object which will be clustered
 #        cluster_type is the clustering technique
-def main_draw(path_to_file: str, object_information: list, object_type: str, cluster_type: str, event_assignment: str, attributes = []) -> list:
+def main_draw(path_to_file: str, object_information: list, object_type: str, cluster_type: str, event_assignment: str, attributes = [], min_act_freq = 0, min_edge_freq = 0) -> list:
     # Import selected OCEL
     event_df, object_df = ocel_importer.apply(file_path=path_to_file)
 
@@ -52,6 +66,8 @@ def main_draw(path_to_file: str, object_information: list, object_type: str, clu
         return
     unique_clusters = list(set(cluster_labels))
     counter = 0
+
+    object_and_cluster = []
     # Assign every object the clustered label
     print("\n")
     print("The result of clustering is: ")
@@ -59,17 +75,11 @@ def main_draw(path_to_file: str, object_information: list, object_type: str, clu
         obj["cluster"] = cluster_labels[counter]
         counter += 1
         print("{}: {}".format(obj["object_id"], obj["cluster"]))
-    
-    dfg_filepaths = []
+        object_and_cluster.append({obj["object_id"]: obj["cluster"]})
+
+    #dfg_filepaths = []
     # Iterate over every cluster and create the dataframe based on the event ids of each cluster
     clustered_dataframes = []
-
-    # Append the not clustered DFG
-    model = discovery.apply(event_df, parameters={"epsilon": 0, "noise_threshold": 0})
-    gviz = visualizer.apply(model, parameters={"min_act_freq": 100, "min_edge_freq": 100})
-    path_to_image = "./media/tmp/Frequency-{}-Unclustered.png".format(object_type)
-    visualizer.save(gviz, path_to_image)
-    dfg_filepaths.append(path_to_image)
     clustered_dataframes.append(event_df)
 
     for label in unique_clusters:
@@ -105,37 +115,16 @@ def main_draw(path_to_file: str, object_information: list, object_type: str, clu
         # Create a new dataframe with all the event ids 
         clustered_df = event_df.loc[event_df["event_id"].isin(event_ids[0])]
         clustered_df.type = event_df.type
-
-        # Draw DFG for the clustered dataframe
-        model = discovery.apply(clustered_df, parameters={"epsilon": 0, "noise_threshold": 0})
-        gviz = visualizer.apply(model, parameters={"min_act_freq": 100, "min_edge_freq": 100})
-        path_to_image = "./media/tmp/Frequency-{}-Cluster-{}.png".format(object_type, label)
-        visualizer.save(gviz, path_to_image)
-        
-        # Append the graphviz object to list of all graphviz objects
-        dfg_filepaths.append(path_to_image)
-
         # Save dataframe into list of all dataframes
         clustered_dataframes.append(clustered_df)
 
+    dfg_filepaths = draw(clustered_dataframes, object_type, min_act_freq, min_edge_freq)
+    
     # Return the list of all graphviz objects to views.py
-    return dfg_filepaths
+    return dfg_filepaths, clustered_dataframes, object_and_cluster
 
 
-def draw(clustered_dataframes: list, object_type: str, min_act_freq: int, min_edge_freq: int):
-    dfg_filepaths = []
-    i = 0
-    for clustered_df in clustered_dataframes:
-        model = discovery.apply(clustered_df, parameters={"epsilon": 0, "noise_threshold": 0})
-        gviz = visualizer.apply(model, parameters={"min_act_freq": min_act_freq, "min_edge_freq": min_edge_freq})
-        if i == 0:
-            path_to_image = "./media/tmp/Frequency-{}-Unclustered.png".format(object_type)
-        else:
-            path_to_image = "./media/tmp/Frequency-{}-Cluster-{}.png".format(object_type, i)
-        visualizer.save(gviz, path_to_image)
-        dfg_filepaths.append(path_to_image)
-        i = i + 1
-    return dfg_filepaths
+
 
     
 #main_draw("./media/running-example.jsonocel", get_object_types("./media/running-example.jsonocel"), "customers", "kmeans", "All")

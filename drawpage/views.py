@@ -1,5 +1,7 @@
 # Library imports
 from django.shortcuts import render
+from django.conf import settings
+import json
 import os
 
 # Local imports
@@ -59,7 +61,11 @@ def drawpage_view(request):
                     print("Path to file is: {}".format(path_to_file))
                     object_information = readocel.get_object_types(path_to_file)
                     print("Object information is: {}".format(object_information))
-                    dfg_file_path_list = main.main_draw(path_to_file, object_information, request.session['object_type_cookie'], selected_clustering_method, selected_event_assignment)
+                    dfg_file_path_list, clustered_dataframes, object_and_cluster = main.main_draw(path_to_file, object_information, request.session['object_type_cookie'], selected_clustering_method, selected_event_assignment)
+                    print("The clustered dataframes are: \n")
+                    print(clustered_dataframes)
+                    print("The results of the clustering are: \n")
+                    print(object_and_cluster)
                     # Remove leading '.' from file paths
                     dfg_file_path_list = [sub[1 : ] for sub in dfg_file_path_list]
 
@@ -111,3 +117,5 @@ def drawpage_view(request):
         'event_assignment':event_assignment,
         'dfg_file_path_list':dfg_file_path_list
     })
+
+
