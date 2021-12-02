@@ -8,59 +8,95 @@
 <body>
 
 {% block content %}
-<h2>This is the Drawpage</h2>
-<p>Please select everything and press "Draw"</p>
+    <h2>This is the Drawpage</h2>
+    <p>Please select everything and press "Draw"</p>
 
-    <!--Choose OCEL File Form-->
-    <form action="" id="file_select_form" method="post">
-        {% csrf_token %}
-        <label class="form-label">Select OCEL</label>
-        <div class="input-group">
-            <select class="form-select" name="file_select" form="file_select_form">
-                <option selected>{{ file_list.0 }}</option>
-                {% for file in file_list %}
-                    {% if not file == file_list.0 %}
-                <option value="{{ file }}">{{ file }}</option>
-                    {% endif %}
-                {% endfor %}
-            </select>
-            <button class="btn btn-outline-secondary" type="submit">Select</button>
-        </div>
-    </form>
+    <div class="card">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <!--Choose OCEL File Form-->
+                <form action="" id="file_select_form" method="post">
+                    {% csrf_token %}
+                    <label class="form-label">Select OCEL</label>
+                    <div class="input-group">
+                        <select class="form-select" name="file_select" form="file_select_form">
+                            <option selected>{{ file_list.0 }}</option>
+                            {% for file in file_list %}
+                                {% if not file == file_list.0 %}
+                            <option value="{{ file }}">{{ file }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                        <button class="btn btn-outline-secondary" type="submit">Select</button>
+                    </div>
+                </form>
+            </li>
+            <li class="list-group-item">
+                <!--Select object type-->
+                <form action="" id="object_type_select_form" method="post">
+                    {% csrf_token %}
+                    <label class="form-label">Select object type</label>
+                    <div class="input-group">
+                        <select class="form-select" name="object_type_select" form="object_type_select_form">
+                            <option selected>{{ object_type_list.0 }}</option>
+                            {% for object in object_type_list %}
+                                {% if not object == object_type_list.0 %}
+                            <option value="{{ object }}">{{ object }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                        <button class="btn btn-outline-secondary" type="submit">Select</button>
+                    </div>
+                </form>
+            </li>
+            <li class="list-group-item">
+                <!--Select attributes-->
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <fieldset>
+                        <label class="form-label">Select attributes</label>
+                        {% for attribute, checked in attribute_dict.items %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="attribute_select" value="{{ attribute }}" {{ checked }}>
+                            <label class="form-check-label">{{ attribute }}</label>
+                        </div>
+                        {% endfor %}
+                        <div>
+                            <button class="btn btn-outline-secondary" type="submit">Select</button>
+                        </div>
+                    </fieldset>
+                </form>
+            </li>
+        </ul>
+    </div>
 
-    <!--Select object type-->
-    <form action="" id="object_type_select_form" method="post">
-        {% csrf_token %}
-        <label class="form-label">Select object type</label>
-        <div class="input-group">
-            <select class="form-select" name="object_type_select" form="object_type_select_form">
-                <option selected>{{ object_type_list.0 }}</option>
-                {% for object in object_type_list %}
-                    {% if not object == object_type_list.0 %}
-                <option value="{{ object }}">{{ object }}</option>
-                    {% endif %}
-                {% endfor %}
-            </select>
-            <button class="btn btn-outline-secondary" type="submit">Select</button>
-        </div>
-    </form>
+    <p></p>
 
-    <!--Select attributes-->
-    <form action="" method="post">
-        {% csrf_token %}
-        <fieldset>
-            <label class="form-label">Select attributes</label>
-            {% for attribute, checked in attribute_dict.items %}
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="attribute_select" value="{{ attribute }}" {{ checked }}>
-                <label class="form-check-label">{{ attribute }}</label>
-            </div>
-            {% endfor %}
-            <div>
-                <button class="btn btn-outline-secondary" type="submit">Select</button>
-            </div>
-        </fieldset>       
-    </form>
+    <div class="card">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+              <!--Select Minactivity and minedge-->
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col">
+                        <label class="form-label">Minactivity:</label>
+                        <output for="slider-activity" name="result-activity" id="result-activity"></output>
+                        <input id="slider-activity" class="form-range" type="range" min="0" max="100" step="1" value="50">
+                    </div>
+                    <div class="col">
+                        <label class="form-label">Minedge:</label>
+                        <output for="slider-edge" name="result-edge" id="result-edge"></output>
+                        <input id="slider-edge" class="form-range" type="range" min="0" max="100" step="1" value="50">
+                    </div>
+                    <button class="btn btn-primary" type="submit">Confirm</button>
+                </div>
+            </form>
+          </li>
+        </ul>
+    </div>
+
+    <p></p>
 
     <!--Select clustering Method and object-->
     <form action="" method="post">
@@ -124,6 +160,24 @@
     
 </div>
 
+
+<script>
+    const slider_activity = document.querySelector("#slider-activity");
+    const output_activity = document.querySelector("#result-activity");
+    const slider_edge = document.querySelector("#slider-edge");
+    const output_edge = document.querySelector("#result-edge");
+    document.addEventListener('DOMContentLoaded', function() {
+        output_activity.value = slider_activity.value;
+        output_edge.value = slider_edge.value;
+    });
+
+    slider_activity.addEventListener ("input", function () {
+        output_activity.value = this.value;
+    });
+    slider_edge.addEventListener ("input", function () {
+        output_edge.value = this.value;
+    });
+</script>
 <!--<img id="theImage" class="img-responsive col-12" src="yourImage.png" style="visibility: hidden;">
 <script>
     document.getElementById("showImage").onclick = function(){
