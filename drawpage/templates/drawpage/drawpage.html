@@ -11,7 +11,6 @@
 <h2>This is the Drawpage</h2>
 <p>Please select everything and press "Draw"</p>
 
-<div class="row g-3">
     <!--Choose OCEL File Form-->
     <form action="" id="file_select_form" method="post">
         {% csrf_token %}
@@ -19,9 +18,9 @@
         <div class="input-group">
             <select class="form-select" name="file_select" form="file_select_form">
                 <option selected>{{ file_list.0 }}</option>
-                {% for f in file_list %}
-                    {% if not f == file_list.0 %}
-                <option value="{{f}}">{{f}}</option>
+                {% for file in file_list %}
+                    {% if not file == file_list.0 %}
+                <option value="{{ file }}">{{ file }}</option>
                     {% endif %}
                 {% endfor %}
             </select>
@@ -36,14 +35,31 @@
         <div class="input-group">
             <select class="form-select" name="object_type_select" form="object_type_select_form">
                 <option selected>{{ object_type_list.0 }}</option>
-                {% for o in object_type_list %}
-                    {% if not o == object_type_list.0 %}
-                <option value="{{o}}">{{o}}</option>
+                {% for object in object_type_list %}
+                    {% if not object == object_type_list.0 %}
+                <option value="{{ object }}">{{ object }}</option>
                     {% endif %}
                 {% endfor %}
             </select>
             <button class="btn btn-outline-secondary" type="submit">Select</button>
         </div>
+    </form>
+
+    <!--Select attributes-->
+    <form action="" method="post">
+        {% csrf_token %}
+        <fieldset>
+            <label class="form-label">Select attributes</label>
+            {% for attribute, checked in attribute_dict.items %}
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="attribute_select" value="{{ attribute }}" {{ checked }}>
+                <label class="form-check-label">{{ attribute }}</label>
+            </div>
+            {% endfor %}
+            <div>
+                <button class="btn btn-outline-secondary" type="submit">Select</button>
+            </div>
+        </fieldset>       
     </form>
 
     <!--Select clustering Method and object-->
@@ -83,7 +99,7 @@
             <button class="btn btn-primary" type="submit">Draw</button>
         </div>
     </form>
-    
+
     <!--Draw DFG Clusters-->
     <div class="container">
         {% for i in dfg_file_path_list %}

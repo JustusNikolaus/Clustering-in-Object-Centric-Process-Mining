@@ -1,17 +1,15 @@
 # Library imports
 from django.shortcuts import render
-from django.conf import settings
-import json
 import os
 
 # Local imports
 from drawpage import main, readocel
 
-
 def drawpage_view(request):
     # Initialize returns
     file_list = []
     object_type_list = []
+    attribute_dict = {}
     clustering_method = ['', '']
     event_assignment = ['', '']
     dfg_file_path_list = []
@@ -22,9 +20,11 @@ def drawpage_view(request):
         if 'file_select' in request.POST:
             selected_file = request.POST['file_select']
 
-            # Clear old object_type_cookie
+            # Clear old object_type_cookie and attribute_cookie
             if 'object_type_cookie' in request.session:
                 del request.session['object_type_cookie']
+            if 'attributes_cookie' in request.session:
+                del request.session['attributes_cookie']
 
             # Save file_cookie
             request.session['file_cookie'] = selected_file
@@ -32,8 +32,20 @@ def drawpage_view(request):
         elif 'object_type_select' in request.POST:
             selected_object_type = request.POST['object_type_select']
 
+            # Clear old attribute_cookie
+            if 'attributes_cookie' in request.session:
+                del request.session['attributes_cookie']
+
             # Save object_type_cookie
             request.session['object_type_cookie'] = selected_object_type
+        # If attribute_select_form
+        elif 'attribute_select' in request.POST:
+            selected_attributes = request.POST.getlist('attribute_select')
+
+            # TODO: Attribute_select_handling
+
+            # Save attribute_cookie
+            request.session['attributes_cookie'] = selected_attributes
         # If clustering_method_select and event_assignment_select
         elif 'clustering_method_select' in request.POST and 'event_assignment_select' in request.POST:
             selected_clustering_method = request.POST['clustering_method_select']
@@ -70,12 +82,11 @@ def drawpage_view(request):
                     dfg_file_path_list = [sub[1 : ] for sub in dfg_file_path_list]
 
     # Refresh file_list
-    ext = ('.csv','.jsonocel')
+    ext = ('.xmlocel','.jsonocel')
     for files in os.listdir('media/'):
         if files.endswith(ext):
             file_list.append(files)
-        else:
-            continue
+
     if 'file_cookie' in request.session:
         file_list.insert(0, request.session['file_cookie'])
 
@@ -86,25 +97,31 @@ def drawpage_view(request):
         if 'object_type_cookie' in request.session:
             object_type_list.insert(0, request.session['object_type_cookie'])
 
+            # Refresh attribute_list
+            for i in ocel_object_dict_list:
+                if i.get('object_type') == request.session['object_type_cookie']:
+                    for j in range(len(i.get('attributes'))):
+                        if 'attributes_cookie' in request.session and i.get('attributes')[j] in request.session['attributes_cookie']:
+                            print(i.get('attributes')[j])
+                            print(request.session['attributes_cookie'])
+                            if i.get('attributes')[j] in request.session['attributes_cookie']:
+                                attribute_dict.update({i.get('attributes')[j] : 'checked'})
+                        else:
+                            attribute_dict.update({i.get('attributes')[j] : ''})                    
+
     # Keep clustering_method
-    if 'clustering_method_cookie' in request.session:
-        if request.session['clustering_method_cookie'] == "kmeans":
-            clustering_method = ['checked', '']
-        elif request.session['clustering_method_cookie'] == "hierarchical":
-            clustering_method = ['', 'checked']
+    clustering_method = refresh_clustering_method(request)
 
     # Keep event_assignment
-    if 'event_assignment_cookie' in request.session:
-        if request.session['event_assignment_cookie'] == "all":
-            event_assignment = ['checked', '']
-        elif request.session['event_assignment_cookie'] == "existence":
-            event_assignment = ['', 'checked']
+    event_assignment = refresh_event_assignment(request)
 
     # FOR DEBUGGING: print all cookies
     if 'file_cookie' in request.session:
         print("----->File: " + request.session['file_cookie'])
     if 'object_type_cookie' in request.session:
         print("----->Object Type: " + request.session['object_type_cookie'])
+    if 'attributes_cookie' in request.session:
+        print("----->Attributes: ".join(request.session['attributes_cookie']))
     if 'clustering_method_cookie' in request.session:
         print("----->Clustering Method: " + request.session['clustering_method_cookie'])
     if 'event_assignment_cookie' in request.session:
@@ -113,9 +130,35 @@ def drawpage_view(request):
     return render(request, 'drawpage/drawpage.html', {
         'file_list':file_list,
         'object_type_list':object_type_list,
+        'attribute_dict':attribute_dict,
         'clustering_method':clustering_method,
         'event_assignment':event_assignment,
         'dfg_file_path_list':dfg_file_path_list
     })
 
+# Helper functions
+def refresh_clustering_method(request):
+    clustering_method = ['', '']
+    if 'clustering_method_cookie' in request.session:
+        if request.session['clustering_method_cookie'] == "kmeans":
+            clustering_method = ['checked', '']
+        elif request.session['clustering_method_cookie'] == "hierarchical":
+            clustering_method = ['', 'checked']
+    return clustering_method
 
+def refresh_event_assignment(request):
+    event_assignment = ['', '']
+    if 'event_assignment_cookie' in request.session:
+        if request.session['event_assignment_cookie'] == "all":
+            event_assignment = ['checked', '']
+        elif request.session['event_assignment_cookie'] == "existence":
+            event_assignment = ['', 'checked']
+    return event_assignment
+
+def refresh_forms(request):
+    file_list = []
+    object_type_list = []
+    attribute_list = []
+    attribute_checked_list = []
+    
+    return file_list, object_type_list, attribute_list, attribute_checked_list
