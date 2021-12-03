@@ -61,6 +61,7 @@
                             <label class="form-check-label">{{ attribute }}</label>
                         </div>
                         {% endfor %}
+                        <p></p>
                         <div>
                             <button class="btn btn-outline-secondary" type="submit">Select</button>
                         </div>
@@ -82,14 +83,14 @@
                     <div class="col">
                         <label class="form-label">Minactivity:</label>
                         <output for="slider-activity" name="result-activity" id="result-activity"></output>
-                        <input id="slider-activity" class="form-range" type="range" min="0" max="100" step="1" value="50">
+                        <input id="slider-activity" class="form-range" type="range" name="minactivity_select" min="0" max="5000" step="10" value="{{ minactivity }}">
                     </div>
                     <div class="col">
                         <label class="form-label">Minedge:</label>
                         <output for="slider-edge" name="result-edge" id="result-edge"></output>
-                        <input id="slider-edge" class="form-range" type="range" min="0" max="100" step="1" value="50">
+                        <input id="slider-edge" class="form-range" type="range" name="minedge_select" min="0" max="5000" step="10" value="{{ minedge }}">
                     </div>
-                    <button class="btn btn-primary" type="submit">Confirm</button>
+                    <button class="btn btn-primary" type="submit">Filter</button>
                 </div>
             </form>
           </li>

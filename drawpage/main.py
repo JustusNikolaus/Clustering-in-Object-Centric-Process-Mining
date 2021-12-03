@@ -33,7 +33,7 @@ def draw(clustered_dataframes: list, object_type: str, min_act_freq: int, min_ed
 #        object_information is the dict that returns the object types and the attributes
 #        object_type is the object which will be clustered
 #        cluster_type is the clustering technique
-def main_draw(path_to_file: str, object_information: list, object_type: str, cluster_type: str, event_assignment: str, attributes = [], min_act_freq = 0, min_edge_freq = 0) -> list:
+def main_draw(path_to_file: str, object_information: list, object_type: str, cluster_type: str, event_assignment: str, attributes: list, min_act_freq = 0, min_edge_freq = 0) -> list:
     # Import selected OCEL
     event_df, object_df = ocel_importer.apply(file_path=path_to_file)
 

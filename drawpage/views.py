@@ -10,6 +10,8 @@ def drawpage_view(request):
     file_list = []
     object_type_list = []
     attribute_dict = {}
+    minactivity = '0'
+    minedge = '0'
     clustering_method = ['', '']
     event_assignment = ['', '']
     dfg_file_path_list = []
@@ -18,66 +20,62 @@ def drawpage_view(request):
     if request.method == 'POST':
         # If file_select_form
         if 'file_select' in request.POST:
-            selected_file = request.POST['file_select']
-
+            request.session['file_cookie'] = request.POST['file_select']
+            
             # Clear old object_type_cookie and attribute_cookie
             if 'object_type_cookie' in request.session:
                 del request.session['object_type_cookie']
             if 'attributes_cookie' in request.session:
                 del request.session['attributes_cookie']
-
-            # Save file_cookie
-            request.session['file_cookie'] = selected_file
         # If object_type_select_form
         elif 'object_type_select' in request.POST:
-            selected_object_type = request.POST['object_type_select']
+            request.session['object_type_cookie'] = request.POST['object_type_select']
 
             # Clear old attribute_cookie
             if 'attributes_cookie' in request.session:
                 del request.session['attributes_cookie']
-
-            # Save object_type_cookie
-            request.session['object_type_cookie'] = selected_object_type
         # If attribute_select_form
         elif 'attribute_select' in request.POST:
-            selected_attributes = request.POST.getlist('attribute_select')
-
-            # TODO: Attribute_select_handling
-
             # Save attribute_cookie
-            request.session['attributes_cookie'] = selected_attributes
-        # If clustering_method_select and event_assignment_select
+            request.session['attributes_cookie'] = request.POST.getlist('attribute_select')
+        # If filter
+        elif 'minactivity_select' in request.POST and 'minedge_select' in request.POST:
+            request.session['minactivity_cookie'] = request.POST['minactivity_select']
+            request.session['minedge_cookie'] = request.POST['minedge_select']
+        # If draw
         elif 'clustering_method_select' in request.POST and 'event_assignment_select' in request.POST:
-            selected_clustering_method = request.POST['clustering_method_select']
-            selected_event_assignment = request.POST['event_assignment_select']
+            request.session['clustering_method_cookie'] = request.POST['clustering_method_select']
+            request.session['event_assignment_cookie'] = request.POST['event_assignment_select']
 
-            if selected_clustering_method == "kmeans":
+            if request.session['clustering_method_cookie'] == "kmeans":
                 clustering_method = ['checked', '']
-            elif selected_clustering_method == "hierarchical":
+            elif request.session['clustering_method_cookie'] == "hierarchical":
                 clustering_method = ['', 'checked']
 
-            if selected_event_assignment == "all":
+            if request.session['event_assignment_cookie'] == "all":
                 event_assignment = ['checked', '']
-            elif selected_event_assignment == "existence":
+            elif request.session['event_assignment_cookie'] == "existence":
                 event_assignment = ['', 'checked']
 
-            # Save clustering_method_cookie
-            request.session['clustering_method_cookie'] = selected_clustering_method
-            # Save event_assignment_cookie
-            request.session['event_assignment_cookie'] = selected_event_assignment
-
-            if 'file_cookie' in request.session:                 
-                # Call main_draw
-                if 'object_type_cookie' in request.session:
+            # Call main_draw
+            if 'file_cookie' in request.session and 'object_type_cookie' in request.session and 'attributes_cookie' in request.session:              
                     path_to_file = 'media/' + request.session['file_cookie']
-                    print("Path to file is: {}".format(path_to_file))
                     object_information = readocel.get_object_types(path_to_file)
-                    print("Object information is: {}".format(object_information))
-                    dfg_file_path_list, clustered_dataframes, object_and_cluster = main.main_draw(path_to_file, object_information, request.session['object_type_cookie'], selected_clustering_method, selected_event_assignment)
-                    print("The clustered dataframes are: \n")
-                    print(clustered_dataframes)
-                    print("The results of the clustering are: \n")
-                    print(object_and_cluster)
+
+                    if 'minactivity_cookie' in request.session and 'minedge_cookie' in request.session:
+                        dfg_file_path_list, clustered_dataframes, object_and_cluster = main.main_draw(path_to_file, object_information, 
+                            request.session['object_type_cookie'], 
+                            request.session['clustering_method_cookie'], 
+                            request.session['event_assignment_cookie'], 
+                            request.session['attributes_cookie'], 
+                            int(request.session['minactivity_cookie']), 
+                            int(request.session['minedge_cookie']))
+                    else:
+                        dfg_file_path_list, clustered_dataframes, object_and_cluster = main.main_draw(path_to_file, object_information, 
+                            request.session['object_type_cookie'], 
+                            request.session['clustering_method_cookie'], 
+                            request.session['event_assignment_cookie'], 
+                            request.session['attributes_cookie'])
                     # Remove leading '.' from file paths
                     dfg_file_path_list = [sub[1 : ] for sub in dfg_file_path_list]
 
@@ -102,18 +100,31 @@ def drawpage_view(request):
                 if i.get('object_type') == request.session['object_type_cookie']:
                     for j in range(len(i.get('attributes'))):
                         if 'attributes_cookie' in request.session and i.get('attributes')[j] in request.session['attributes_cookie']:
-                            print(i.get('attributes')[j])
-                            print(request.session['attributes_cookie'])
-                            if i.get('attributes')[j] in request.session['attributes_cookie']:
-                                attribute_dict.update({i.get('attributes')[j] : 'checked'})
+                            attribute_dict.update({i.get('attributes')[j] : 'checked'})
                         else:
                             attribute_dict.update({i.get('attributes')[j] : ''})                    
+    
+    # Keep minactivity
+    if 'minactivity_cookie' in request.session:
+        minactivity = request.session['minactivity_cookie']
+
+    # Keep minedge
+    if 'minedge_cookie' in request.session:
+        minedge = request.session['minedge_cookie']
 
     # Keep clustering_method
-    clustering_method = refresh_clustering_method(request)
+    if 'clustering_method_cookie' in request.session:
+        if request.session['clustering_method_cookie'] == "kmeans":
+            clustering_method = ['checked', '']
+        elif request.session['clustering_method_cookie'] == "hierarchical":
+            clustering_method = ['', 'checked']
 
     # Keep event_assignment
-    event_assignment = refresh_event_assignment(request)
+    if 'event_assignment_cookie' in request.session:
+        if request.session['event_assignment_cookie'] == "all":
+            event_assignment = ['checked', '']
+        elif request.session['event_assignment_cookie'] == "existence":
+            event_assignment = ['', 'checked']
 
     # FOR DEBUGGING: print all cookies
     if 'file_cookie' in request.session:
@@ -122,6 +133,10 @@ def drawpage_view(request):
         print("----->Object Type: " + request.session['object_type_cookie'])
     if 'attributes_cookie' in request.session:
         print("----->Attributes: ".join(request.session['attributes_cookie']))
+    if 'minactivity_cookie' in request.session:
+        print("----->Minactivity: " + request.session['minactivity_cookie'])
+    if 'minactivity_cookie' in request.session:
+        print("----->Minedge: " + request.session['minedge_cookie'])
     if 'clustering_method_cookie' in request.session:
         print("----->Clustering Method: " + request.session['clustering_method_cookie'])
     if 'event_assignment_cookie' in request.session:
@@ -131,34 +146,9 @@ def drawpage_view(request):
         'file_list':file_list,
         'object_type_list':object_type_list,
         'attribute_dict':attribute_dict,
+        'minactivity':minactivity,
+        'minedge':minedge,
         'clustering_method':clustering_method,
         'event_assignment':event_assignment,
         'dfg_file_path_list':dfg_file_path_list
     })
-
-# Helper functions
-def refresh_clustering_method(request):
-    clustering_method = ['', '']
-    if 'clustering_method_cookie' in request.session:
-        if request.session['clustering_method_cookie'] == "kmeans":
-            clustering_method = ['checked', '']
-        elif request.session['clustering_method_cookie'] == "hierarchical":
-            clustering_method = ['', 'checked']
-    return clustering_method
-
-def refresh_event_assignment(request):
-    event_assignment = ['', '']
-    if 'event_assignment_cookie' in request.session:
-        if request.session['event_assignment_cookie'] == "all":
-            event_assignment = ['checked', '']
-        elif request.session['event_assignment_cookie'] == "existence":
-            event_assignment = ['', 'checked']
-    return event_assignment
-
-def refresh_forms(request):
-    file_list = []
-    object_type_list = []
-    attribute_list = []
-    attribute_checked_list = []
-    
-    return file_list, object_type_list, attribute_list, attribute_checked_list
