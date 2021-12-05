@@ -20,7 +20,7 @@ ENV PYTHONUNBUFFERED 1
 RUN pip install --upgrade pip 
 
 # copy whole project to your docker home directory. 
-COPY . $DockerHOME  
+COPY . $DockerHOME
 
 # run this command to install all dependencies  
 RUN pip install -r requirements.txt  
@@ -30,3 +30,10 @@ EXPOSE 8000
 
 # start server 
 CMD [ "python3", "manage.py", "runserver", "0.0.0.0:8000" ]
+
+# Command to build container using docker: 
+# docker build -t image_name .
+
+# Command to start container:
+# docker run image_name
+# or docker run -t -i image_name when user input is needed
