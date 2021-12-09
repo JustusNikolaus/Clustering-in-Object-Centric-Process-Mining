@@ -50,11 +50,11 @@ def drawpage_view(request):
 
             # Call draw
             if 'file_cookie' in request.session and 'object_type_cookie' in request.session and 'attributes_cookie' in request.session and 'clustering_method_cookie' in request.session and 'event_assignment_cookie' in request.session:              
+                # Load Dataframes from tmp_*.csv files
                 clustered_dataframes_list = []
                 for file_path in glob(os.path.join(BASE_DIR, 'media/tmp/tmp_*.csv')):
-                    print(pd.read_csv(file_path))
                     clustered_dataframes_list.append(pd.read_csv(file_path)) 
-                
+
                 dfg_file_path_list = main.draw(clustered_dataframes_list, request.session['object_type_cookie'], request.session['minactivity_cookie'], request.session['minedge_cookie'])
                 #dfg_file_path_list, clustered_dataframes, object_and_cluster = main.main_draw(request.session['file_cookie'], 
                 #    readocel.get_object_types(request.session['file_cookie']), 
