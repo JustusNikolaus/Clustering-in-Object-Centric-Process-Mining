@@ -18,6 +18,7 @@ def draw(clustered_dataframes: list, object_type: str, min_act_freq: int, min_ed
     dfg_filepaths = []
     i = 0
     for clustered_df in clustered_dataframes:
+        clustered_df.type = "succint"
         model = discovery.apply(clustered_df, parameters={"epsilon": 0, "noise_threshold": 0})
         gviz = visualizer.apply(model, parameters={"min_act_freq": min_act_freq, "min_edge_freq": min_edge_freq})
         if i == 0:
@@ -115,7 +116,7 @@ def main_draw(path_to_file: str, object_information: list, object_type: str, clu
 
         # Create a new dataframe with all the event ids 
         clustered_df = event_df.loc[event_df["event_id"].isin(event_ids[0])]
-        clustered_df.type = event_df.type
+        
         # Save dataframe into list of all dataframes
         clustered_dataframes.append(clustered_df)
 
