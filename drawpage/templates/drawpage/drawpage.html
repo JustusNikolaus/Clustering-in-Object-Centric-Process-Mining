@@ -5,98 +5,98 @@
 {% endblock %}
 
 {% block content %}
-    <h2>This is the Drawpage</h2>
-    <p>Please select everything and press "Draw"</p>
+<h2>This is the Drawpage</h2>
+<p>Please select everything and press "Draw"</p>
 
-    <div class="card">
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item">
-                <!--Choose OCEL File Form-->
-                <form action="" id="file_select_form" method="post">
-                    {% csrf_token %}
-                    <label class="form-label">Select OCEL</label>
-                    <div class="input-group">
-                        <select class="form-select" name="file_select" form="file_select_form">
-                            <option selected>{{ file_list.0 }}</option>
-                            {% for file in file_list %}
-                                {% if not file == file_list.0 %}
-                            <option value="{{ file }}">{{ file }}</option>
-                                {% endif %}
-                            {% endfor %}
-                        </select>
-                        <button class="btn btn-outline-secondary" type="submit">Select</button>
-                    </div>
-                </form>
-            </li>
-            <li class="list-group-item">
-                <!--Select object type-->
-                <form action="" id="object_type_select_form" method="post">
-                    {% csrf_token %}
-                    <label class="form-label">Select object type</label>
-                    <div class="input-group">
-                        <select class="form-select" name="object_type_select" form="object_type_select_form">
-                            <option selected>{{ object_type_list.0 }}</option>
-                            {% for object in object_type_list %}
-                                {% if not object == object_type_list.0 %}
-                            <option value="{{ object }}">{{ object }}</option>
-                                {% endif %}
-                            {% endfor %}
-                        </select>
-                        <button class="btn btn-outline-secondary" type="submit">Select</button>
-                    </div>
-                </form>
-            </li>
-            <li class="list-group-item">
-                <!--Select attributes-->
-                <form action="" method="post">
-                    {% csrf_token %}
-                    <fieldset>
-                        <label class="form-label">Select attributes</label>
-                        {% for attribute, checked in attribute_dict.items %}
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="attribute_select" value="{{ attribute }}" {{ checked }}>
-                            <label class="form-check-label">{{ attribute }}</label>
-                        </div>
-                        {% endfor %}
-                        <p></p>
-                        <div>
-                            <button class="btn btn-outline-secondary" type="submit">Select</button>
-                        </div>
-                    </fieldset>
-                </form>
-            </li>
-        </ul>
-    </div>
-
-    <p></p>
-
-    <div class="card">
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">
-              <!--Select Minactivity and minedge-->
-            <form action="" method="post">
+<div class="card">
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+            <!--Choose OCEL File Form-->
+            <form action="" id="file_select_form" method="post">
                 {% csrf_token %}
-                <div class="row">
-                    <div class="col">
-                        <label class="form-label">Minactivity:</label>
-                        <output for="slider-activity" name="result-activity" id="result-activity"></output>
-                        <input id="slider-activity" class="form-range" type="range" name="minactivity_select" min="0" max="5000" step="10" value="{{ minactivity }}">
-                    </div>
-                    <div class="col">
-                        <label class="form-label">Minedge:</label>
-                        <output for="slider-edge" name="result-edge" id="result-edge"></output>
-                        <input id="slider-edge" class="form-range" type="range" name="minedge_select" min="0" max="5000" step="10" value="{{ minedge }}">
-                    </div>
-                    <button class="btn btn-primary" type="submit">Filter</button>
+                <label class="form-label">Select OCEL</label>
+                <div class="input-group">
+                    <select class="form-select" name="file_select" form="file_select_form">
+                        <option selected>{{ file_list.0 }}</option>
+                        {% for file in file_list %}
+                            {% if not file == file_list.0 %}
+                        <option value="{{ file }}">{{ file }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                    <!--<button class="btn btn-outline-secondary" type="submit">Select</button>-->
                 </div>
             </form>
-          </li>
-        </ul>
-    </div>
+        </li>
+        <li class="list-group-item">
+            <!--Select object type-->
+            <form action="" id="object_type_select_form" method="post">
+                {% csrf_token %}
+                <label class="form-label">Select object type</label>
+                <div class="input-group">
+                    <select class="form-select" name="object_type_select" form="object_type_select_form">
+                        <option selected>{{ object_type_list.0 }}</option>
+                        {% for object in object_type_list %}
+                            {% if not object == object_type_list.0 %}
+                        <option value="{{ object }}">{{ object }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                    <!--<button class="btn btn-outline-secondary" type="submit">Select</button>-->
+                </div>
+            </form>
+        </li>
+        <li class="list-group-item">
+            <!--Select attributes-->
+            <form action="" id="attribute_select_form" method="post">
+                {% csrf_token %}
+                <fieldset>
+                    <label class="form-label">Select attributes</label>
+                    {% for attribute, checked in attribute_dict.items %}
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="attribute_select" value="{{ attribute }}" {{ checked }}>
+                        <label class="form-check-label">{{ attribute }}</label>
+                    </div>
+                    {% endfor %}
+                    <p></p>
+                    <!--<div>
+                        <button class="btn btn-outline-secondary" type="submit">Select</button>
+                    </div>-->
+                </fieldset>
+            </form>
+        </li>
+    </ul>
+</div>
+<p></p>
 
-    <p></p>
+<div class="card">
+    <div class="card-header">Set Filters</div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+            <!--Select Minactivity and minedge-->
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col">
+                    <label class="form-label">Minactivity:</label>
+                    <output for="slider-activity" name="result-activity" id="result-activity"></output>
+                    <input id="slider-activity" class="form-range" type="range" name="minactivity_select" min="0" max="5000" step="10" value="{{ minactivity }}">
+                </div>
+                <div class="col">
+                    <label class="form-label">Minedge:</label>
+                    <output for="slider-edge" name="result-edge" id="result-edge"></output>
+                    <input id="slider-edge" class="form-range" type="range" name="minedge_select" min="0" max="5000" step="10" value="{{ minedge }}">
+                </div>
+                <button class="btn btn-primary" type="submit">Filter</button>
+            </div>
+        </form>
+        </li>
+    </ul>
+</div>
+<p></p>
 
-    <!--Select clustering Method and object-->
+<!--Select clustering Method and object-->
+<div class="container">
     <form action="" method="post">
         {% csrf_token %}
         <div class="row g-3">
@@ -133,34 +133,32 @@
             <button class="btn btn-primary" type="submit">Draw</button>
         </div>
     </form>
-    <p></p>
+</div>
+<p></p>
 
-    <!--Draw DFG Clusters-->
-    <div class="container">
-        {% for i in dfg_file_path_list %}
-        <div class="card border-secondary">
-            <div class="card-body">
-                <img src="{{ i }}" class="img-fluid" alt="{{ i }}">
-            </div>
-            <div class="card-footer text-white bg-secondary">
-                <div class="row">
-                    <div class="col card-text">
-                        {{ i }}
-                    </div>
-                    <div class="col text-end">
-                        <a class="btn btn-light text-end" href="{{ i }}" role="button"><i class="bi bi-download"></i></a>
-                    </div>
+<!--Draw DFG Clusters-->
+<div class="container">
+    {% for i in dfg_file_path_list %}
+    <div class="card border-secondary">
+        <div class="card-body">
+            <img src="{{ i }}" class="img-fluid" alt="{{ i }}">
+        </div>
+        <div class="card-footer text-white bg-secondary">
+            <div class="row">
+                <div class="col card-text">
+                    {{ i }}
+                </div>
+                <div class="col text-end">
+                    <a class="btn btn-light text-end" href="{{ i }}" role="button"><i class="bi bi-download"></i></a>
                 </div>
             </div>
         </div>
-        <p></p>
-        {% endfor %}
     </div>
-
-    
+    <p></p>
+    {% endfor %}
 </div>
 
-
+<!-- JS for sliders -->
 <script>
     const slider_activity = document.querySelector("#slider-activity");
     const output_activity = document.querySelector("#result-activity");
@@ -178,11 +176,18 @@
         output_edge.value = this.value;
     });
 </script>
-<!--<img id="theImage" class="img-responsive col-12" src="yourImage.png" style="visibility: hidden;">
+
+<!-- JS for select forms -->
 <script>
-    document.getElementById("showImage").onclick = function(){
-        document.getElementById("theImage").style.visibility = "visible";
+    document.getElementById("file_select_form").onchange = function(){
+        file_select_form.submit();
     }
-</script>-->
+    document.getElementById("object_type_select_form").onchange = function(){
+        object_type_select_form.submit();
+    }
+    document.getElementById("attribute_select_form").onchange = function(){
+        attribute_select_form.submit();
+    }
+</script>
 
 {% endblock %}

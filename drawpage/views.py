@@ -54,23 +54,9 @@ def drawpage_view(request):
                 clustered_dataframes_list = []
                 for file_path in glob(os.path.join(BASE_DIR, 'media/tmp/tmp_*.pkl')):
                     df = pd.read_pickle(file_path)
-                    #df.columns = df.columns.str.strip()
-                    print(df)
                     clustered_dataframes_list.append(df) 
 
-                print("#############################")
-                print(clustered_dataframes_list[0])
-                
                 dfg_file_path_list = main.draw(clustered_dataframes_list, request.session['object_type_cookie'], int(request.session['minactivity_cookie']), int(request.session['minedge_cookie']))
-                #dfg_file_path_list, clustered_dataframes, object_and_cluster = main.main_draw(request.session['file_cookie'], 
-                #    readocel.get_object_types(request.session['file_cookie']), 
-                #    request.session['object_type_cookie'], 
-                #    request.session['clustering_method_cookie'], 
-                #    request.session['event_assignment_cookie'], 
-                #    request.session['attributes_cookie'], 
-                #    int(request.session['minactivity_cookie']), 
-                #    int(request.session['minedge_cookie']))
-
 
                 # Remove leading '.' from file paths
                 dfg_file_path_list = [sub[1 : ] for sub in dfg_file_path_list]
@@ -115,18 +101,10 @@ def drawpage_view(request):
                     
                     # Temporarily store clustered_dataframes
                     i = 0
-                    df1 = ""
                     for df in clustered_dataframes:
-                        if i == 1:
-                            df1 = df
                         output_file = os.path.join(BASE_DIR, 'media/tmp/tmp_' + str(i) + '.pkl')
                         df.to_pickle(output_file)
                         i = i + 1
-                    df2 = pd.read_pickle(os.path.join(BASE_DIR, 'media/tmp/tmp_1.pkl'))
-                    print("++++++++++++++++++++++++++++++")
-                    print(df1)
-                    print("::::::::::::::::::::::::::::::")
-                    print(df2)
 
                     # Remove leading '.' from file paths
                     dfg_file_path_list = [sub[1 : ] for sub in dfg_file_path_list]
