@@ -39,12 +39,14 @@ pickleshare==0.7.5
 Pillow==8.4.0
 plantuml==0.3.0
 
-pm4pymdl==0.0.45
+pm4pymdl
 prompt-toolkit==3.0.21
 ptyprocess==0.7.0
 PuLP==2.1
-pyarrow
+
+
 pydotplus==2.0.2
+pyarrow
 Pygments==2.10.0
 pyparsing==2.4.7
 pyrsistent==0.18.0

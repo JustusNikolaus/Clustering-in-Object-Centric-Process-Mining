@@ -1,9 +1,14 @@
 # Library imports
 from django.shortcuts import render
 import os
+import pandas as pd
+from pathlib import Path
+from glob import glob
 
 # Local imports
 from drawpage import main, readocel
+
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 def drawpage_view(request):
     # Initialize returns
@@ -42,6 +47,27 @@ def drawpage_view(request):
         elif 'minactivity_select' in request.POST and 'minedge_select' in request.POST:
             request.session['minactivity_cookie'] = request.POST['minactivity_select']
             request.session['minedge_cookie'] = request.POST['minedge_select']
+
+            # Call draw
+            if 'file_cookie' in request.session and 'object_type_cookie' in request.session and 'attributes_cookie' in request.session and 'clustering_method_cookie' in request.session and 'event_assignment_cookie' in request.session:              
+                # Load Dataframes from tmp_*.csv files
+                clustered_dataframes_list = []
+                for file_path in glob(os.path.join(BASE_DIR, 'media/tmp/tmp_*.csv')):
+                    clustered_dataframes_list.append(pd.read_csv(file_path)) 
+
+                dfg_file_path_list = main.draw(clustered_dataframes_list, request.session['object_type_cookie'], request.session['minactivity_cookie'], request.session['minedge_cookie'])
+                #dfg_file_path_list, clustered_dataframes, object_and_cluster = main.main_draw(request.session['file_cookie'], 
+                #    readocel.get_object_types(request.session['file_cookie']), 
+                #    request.session['object_type_cookie'], 
+                #    request.session['clustering_method_cookie'], 
+                #    request.session['event_assignment_cookie'], 
+                #    request.session['attributes_cookie'], 
+                #    int(request.session['minactivity_cookie']), 
+                #    int(request.session['minedge_cookie']))
+
+
+                # Remove leading '.' from file paths
+                dfg_file_path_list = [sub[1 : ] for sub in dfg_file_path_list]
         # If draw
         elif 'clustering_method_select' in request.POST and 'event_assignment_select' in request.POST:
             request.session['clustering_method_cookie'] = request.POST['clustering_method_select']
@@ -76,6 +102,18 @@ def drawpage_view(request):
                             request.session['clustering_method_cookie'], 
                             request.session['event_assignment_cookie'], 
                             request.session['attributes_cookie'])
+
+                    # Delete old tmp.csv files
+                    for file in glob(os.path.join(BASE_DIR, 'media/tmp/tmp_*.csv')):
+                        os.remove(file)
+                    
+                    # Temporarily store clustered_dataframes
+                    i = 0
+                    for dataframe in clustered_dataframes:
+                        output_file = os.path.join(BASE_DIR, 'media/tmp/tmp_' + str(i) + '.csv')
+                        dataframe.to_csv(output_file)
+                        i = i + 1
+
                     # Remove leading '.' from file paths
                     dfg_file_path_list = [sub[1 : ] for sub in dfg_file_path_list]
 
@@ -102,8 +140,8 @@ def drawpage_view(request):
                         if 'attributes_cookie' in request.session and i.get('attributes')[j] in request.session['attributes_cookie']:
                             attribute_dict.update({i.get('attributes')[j] : 'checked'})
                         else:
-                            attribute_dict.update({i.get('attributes')[j] : ''})                    
-    
+                            attribute_dict.update({i.get('attributes')[j] : ''})
+
     # Keep minactivity
     if 'minactivity_cookie' in request.session:
         minactivity = request.session['minactivity_cookie']
