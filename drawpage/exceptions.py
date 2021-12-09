@@ -1,4 +1,3 @@
-
 # Foundational class for other exceptions
 class Error(Exception):
     pass
