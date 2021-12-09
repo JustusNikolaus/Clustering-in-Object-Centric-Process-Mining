@@ -43,7 +43,7 @@ pm4pymdl==0.0.45
 prompt-toolkit==3.0.21
 ptyprocess==0.7.0
 PuLP==2.1
-pyarrow==2.0.0
+pyarrow
 pydotplus==2.0.2
 Pygments==2.10.0
 pyparsing==2.4.7

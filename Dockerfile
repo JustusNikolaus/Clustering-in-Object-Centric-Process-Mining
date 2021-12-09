@@ -1,7 +1,7 @@
 # Dockerfile, Image, Container
 
 # base image
-FROM python:3.10.0
+FROM python:3
 
 # work envornment variable
 ENV DockerHOME=/home/app/webapp

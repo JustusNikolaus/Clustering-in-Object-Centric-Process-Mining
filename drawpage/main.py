@@ -13,7 +13,7 @@ from drawpage.distance_techniques import calculate_average_dist_matr
 from drawpage.kmedoids import cluster_kmedoids
 from drawpage.agglomerative import cluster_agglomerative
 
-def draw(clustered_dataframes: list, object_type: str, min_act_freq: int, min_edge_freq: int):
+def draw(clustered_dataframes: list, object_type: str, min_act_freq: int, min_edge_freq: int): 
     dfg_filepaths = []
     i = 0
     for clustered_df in clustered_dataframes:
