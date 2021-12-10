@@ -7,4 +7,91 @@
 {% block content %}
 <h2>This Page serves as the home and help page</h2>
 <p>Please click on 'Import File' to start the process</p>
+
+<h2>User Manual</h2> <br>
+
+{% load static %}
+<img src="{% static '/images/importpage.png' %}" style="width: 70vw; min-width: 140px;" border="5"/>
+
+<p>
+<ul>
+    <li>
+        Click on the Choose Files button (1) and select an OCEL from your computer.
+    </li>
+    <li>
+        Press the „Import Log“ button (2), if the upload of your file(s) was successful you will see it at (3).
+    </li>
+    <li>
+        Then press the „Clustering DFG page“ button (4) to get to the draw page.
+    </li>
+</ul>
+</p>
+
+<br>
+
+{% load static %}
+<img src="{% static '/images/Drawpage1.png' %}" style="width: 70vw; min-width: 140px;" border="5"/>
+
+<p>
+<ul>
+    <li>
+        Select an OCEL from the ones you uploaded before. <br>
+        In case you uploaded multiple ones with the same name, they will automatically get a suffix like the second and third OCEL file in the picture.
+    </li>
+</ul>
+</p>
+
+<br>
+
+{% load static %}
+<img src="{% static '/images/Drawpage2.png' %}" style="width: 70vw; min-width: 140px;" border="5"/>
+
+<p>
+<ul>
+    <li>
+        Then you get to select the object type you want to cluster for. <br>
+        There will be listed all the possible object types from YOUR OCEL, which are therefore not necessarily the same as the ones shown in the example picture.
+    </li>
+</ul>
+</p>
+
+<br>
+
+{% load static %}
+<img src="{% static '/images/Drawpage3.png' %}" style="width: 70vw; min-width: 140px;" border="5"/>
+
+<p>
+<ul>
+    <li>
+        Now you can select the attributes of the chosen object you want to cluster for. <br>
+        You can select one or multiple attributes. <br>
+        If you select more than one the average between these will be used to calculate the result.
+    </li>
+</ul>
+</p>
+
+<br>
+
+{% load static %}
+<img src="{% static '/images/Drawpage4.png' %}" style="width: 70vw; min-width: 140px;" border="5"/>
+
+<p>
+<ul>
+    <li>
+        After that, you can also set filters. <br>
+        You can set the minimum number of activities (1) and the minimal number of edges (2), both in a range of zero to 5000. <br>
+        After you change the number you need to press the „Filter“ button (3).
+    </li>
+    <li>
+        The last step ist to select a clustering method (4) and the method how to assign events to the clusters (5). <br>
+        (Explanation: If you choose „All“ an event is just assigned to a cluster if ALL objects in that event are in that cluster. <br>
+        If you choose „Existence“ an event is assigned to a cluster as soon as AT LEAST ONE object from the event is in the cluster).
+
+    </li>
+    <li>
+        Then press the „Draw“ button (6).
+    </li>
+</ul>
+</p>
+
 {% endblock %}
