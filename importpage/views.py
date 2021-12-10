@@ -35,27 +35,19 @@ def upload_log(request):
             except:
                 response_label = ['danger','Please select a file first']
                 
-        #TODO: delete function
         elif 'delete_log' in request.POST:
             try:
-                if "log_list" not in request.POST:
-                    return HttpResponseRedirect(request.path_info)
-        
-                filename = request.POST["file_list"]
+                if 'log_list' not in request.POST:
+                    file = request.POST['file_select']
+                    os.remove(file)
 
-                eventlogs = [f for f in listdir(event_logs_path) if isfile(join(event_logs_path, f))]
-                
-                eventlogs.remove(filename)
-                file_dir = os.path.join(event_logs_path, filename)
-                os.remove(file_dir)
-                
                 response_label = ['success','Successful delete']
-            except: 
+            except:
                 response_label = ['danger','Please select a file to delete']
     
     ext = ('.xmlocel','.jsonocel')
-    for files in os.listdir('media/'):
-        if files.endswith(ext):
-            file_list.append(files)
+    for file in os.listdir('media/'):
+        if file.endswith(ext):
+            file_list.append(file)
 
-    return render(request, 'importpage/importpage.html', {'response_label':response_label, 'file_list': file_list, 'eventlog_list': eventlogs})
+    return render(request, 'importpage/importpage.html', {'response_label':response_label, 'file_list': file_list})
