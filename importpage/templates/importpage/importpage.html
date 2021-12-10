@@ -14,21 +14,22 @@
         <input id="file" type="file" name="upload_log" class="form-control" multiple/>
         <button type="submit" class="btn btn-primary">Import Log</button>
     </div>
-    <label class="form-label"><p class="text-{{ response_label.0 }}">{{ response_label.1 }}</p></label>
+    <label class="form-label"><p class="text-{{ upload_response_label.0 }}">{{ upload_response_label.1 }}</p></label>
 </form>
 
 <form action="" method="POST">
     {% csrf_token %}
-    <select name="log_list" class="form-select" size="10" multiple> 
-        {% for file in file_list %}
-        <option value="{{ file }} ">{{ file }}</option>
-        {% endfor %}
-    </select>
-    <button name="delete_log" class="btn btn-danger" type="submit">Delete</button>
+    <div class="input-group">
+        <select name="delete_log" class="form-select" size="10" multiple> 
+            {% for file in file_list %}
+            <option value="{{ file }} ">{{ file }}</option>
+            {% endfor %}
+        </select>
+        <button class="btn btn-danger" type="submit"><i class="bi bi-trash-fill"></i></button>
+    </div>
+    <label class="form-label"><p class="text-{{ delete_response_label.0 }}">{{ delete_response_label.1 }}</p></label>
 </form>
 
-<form method="get" action="/draw">
-    <button class="btn btn-primary" type="submit">Clustering DFG page</button>
-</form>
+<a class="btn btn-primary" href="/draw" role="button">Clustering DFG page</a>
 
 {% endblock %}
