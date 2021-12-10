@@ -6,7 +6,7 @@ class Error(Exception):
 # Example would be two unequal lengths of lists that need to be equal in length
 class UnequalListsError(Error):
     # message = the exception message
-    # inequality = the unequal lists 
+    # inequality = the unequal lists
     def __init__(self, inequality, message):
         self.message = message
         self.inequality = inequality

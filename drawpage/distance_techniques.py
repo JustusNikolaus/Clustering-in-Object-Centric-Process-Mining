@@ -258,4 +258,3 @@ def calculate_average_dist_matr(objects: list, attributes: list) -> list:
     print("We divide the summed distance matrix by {} and get the new average distance matrix: ".format(len(distance_matrices)))
     print(avg_distance_matrix)
     return avg_distance_matrix
-    

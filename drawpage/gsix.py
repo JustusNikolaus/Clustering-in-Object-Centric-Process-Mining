@@ -25,7 +25,3 @@ this_data,temp_file = dfg_to_g6(dfg)
 
 #event_df, object_df = ocel_importer.apply(file_path="./media/running-example.jsonocel")
 #model = discovery.apply(event_df, parameters={"epsilon": 0, "noise_threshold": 0})
-
-
-
-
