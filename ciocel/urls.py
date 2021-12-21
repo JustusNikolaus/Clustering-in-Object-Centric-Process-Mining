@@ -22,12 +22,12 @@ from django.conf import settings
 # Local imports
 from homepage.views import homepage_view
 from importpage.views import importpage_view
-from drawpage.views import drawpage_view
+from drawpage.views import DrawpageView
 
 urlpatterns = [
     path('', homepage_view, name="home"),
     path('import/', importpage_view, name="import"),
-    path('draw/', drawpage_view, name="draw"),
+    path('draw/', DrawpageView.as_view(), name="draw"),
     path('admin/', admin.site.urls),
 ]
 

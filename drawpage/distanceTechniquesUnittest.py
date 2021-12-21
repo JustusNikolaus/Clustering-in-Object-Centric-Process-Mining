@@ -1,13 +1,11 @@
-import unittest
-
 # Library imports
+import unittest
 #from django.test import TestCase
 import numpy as np
 
 # Local imports
-from kmedoids import cluster_kmedoids
-from agglomerative import cluster_agglomerative
-from distance_techniques import LevenshteinDistance, BooleanDistance, EuclideanDistance
+from .clustering_techniques import cluster_kmedoids, cluster_agglomerative
+from .distance_techniques import LevenshteinDistance, BooleanDistance, EuclideanDistance
 
 class MyTestCase(unittest.TestCase):
 

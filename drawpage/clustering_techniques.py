@@ -1,12 +1,27 @@
 # Library imports
-import numpy as np
-from sklearn_extra.cluster import KMedoids
-from sklearn.cluster import KMeans
+from sklearn.cluster import AgglomerativeClustering
 from sklearn.metrics import silhouette_score
+from sklearn_extra.cluster import KMedoids
+import numpy as np
 
-# Local imports 
+# Local imports
 from drawpage.distance_techniques import *
 
+# Return: this function returns the cluster labels after hierarchical clustering
+# Input: input a distance matrix
+def cluster_agglomerative(distance_matrix: list) -> list:
+    clustering = AgglomerativeClustering(affinity='precomputed', linkage='single').fit(distance_matrix)
+    return clustering.labels_
+
+#test:
+#matrix = [[0, 2, 2, 3, 3.6, 3.6],
+#[2, 1, 4, 3.6, 3, 5],
+#[2, 4, 0, 3.6, 5, 3],
+#[3, 3.6, 3.6, 0, 2, 2],
+#[3.6, 3, 5, 2, 0, 4],
+#[3.6, 5, 3, 2, 4, 0]]
+
+#cluster_agglomerative(matrix)
 
 # Return: cluster labels after clustering with k-medoids
 # Input:  Two dimensional array of integers that defines a distance matrix

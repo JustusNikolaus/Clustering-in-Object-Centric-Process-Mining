@@ -1,9 +1,7 @@
 # Library imports 
-from numpy import string_
 from pm4pymdl.objects.ocel.importer import importer as ocel_importer
 from pm4pymdl.algo.mvp.utils import succint_mdl_to_exploded_mdl
-from pm4pymdl.visualization.mvp.gen_framework3 import visualizer as visualizer
-import json
+from pm4pymdl.visualization.mvp.gen_framework3 import visualizer
 from pm4pymdl.algo.mvp.gen_framework3 import discovery
 import pandas as pd
 import json
@@ -11,8 +9,7 @@ import json
 # Local imports
 from drawpage.readocel import *
 from drawpage.distance_techniques import calculate_average_dist_matr
-from drawpage.kmedoids import cluster_kmedoids
-from drawpage.agglomerative import cluster_agglomerative
+from drawpage.clustering_techniques import cluster_kmedoids, cluster_agglomerative
 
 def draw(clustered_dataframes: list, object_type: str, min_act_freq: int, min_edge_freq: int): 
     dfg_filepaths = []
@@ -93,7 +90,7 @@ def main_draw(path_to_file: str, object_information: list, object_type: str, clu
                 object_ids_in_cluster.append(obj["object_id"])
         # Save all event ids that are in at least one of the objects of the given cluster
         # Assign all events, that are only in objects from given cluster
-        if event_assignment == "All":
+        if event_assignment == "all":
             # Save all event ids of objects in the cluster
             id_in_cluster = flattened_event_df.loc[flattened_event_df[object_type].isin(object_ids_in_cluster)]['event_id'].unique().tolist()
             # Save all event ids of objects that are not in cluster
@@ -105,7 +102,7 @@ def main_draw(path_to_file: str, object_information: list, object_type: str, clu
             # Append the ones that remain to the list that is used to filter the dataframe
             event_ids.append(id_in_cluster)
         # Assign event if the object from given cluster is inside that event
-        elif event_assignment == "Existence":
+        elif event_assignment == "existence":
             event_ids.append(flattened_event_df.loc[flattened_event_df[object_type].isin(object_ids_in_cluster)]['event_id'].unique().tolist())
         else:
             print("The given event assignment is neither all nor existence.")
