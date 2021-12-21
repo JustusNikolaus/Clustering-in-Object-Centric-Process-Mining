@@ -1,16 +1,23 @@
 # Library imports
 from django.shortcuts import render
+from django.views.generic.base import TemplateView
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 import os
 
-# Create your views here. 
-def importpage_view(request):
-    upload_response_label = []
-    delete_response_label = []
-    file_list = []
 
-    if request.method == 'POST':
+# Create your views here. 
+class ImportpageView(TemplateView):
+
+    template_name = 'importpage.html'
+
+    def get(self, request):
+        return refresh(request, upload_response_label = [], delete_response_label = [])
+
+    def post(self, request):
+        upload_response_label = []
+        delete_response_label = []
+
         if 'upload_log' in request.FILES:
             try:
                 uploaded_file = request.FILES['upload_log']
@@ -32,9 +39,17 @@ def importpage_view(request):
             except:
                 delete_response_label = ['danger','Please select a file to delete']
 
+        return refresh(request, upload_response_label=upload_response_label, delete_response_label=delete_response_label)
+        
+def refresh(request, **kwargs):
+    file_list = []
+
     ext = ('.xmlocel','.jsonocel')
     for file in os.listdir('media/'):
         if file.endswith(ext):
             file_list.append(file)
+ 
+    kwargs_dict = {'file_list': file_list}
+    kwargs_dict.update(kwargs)
 
-    return render(request, 'importpage/importpage.html', {'upload_response_label':upload_response_label, 'delete_response_label':delete_response_label, 'file_list': file_list})
+    return render(request, 'importpage.html', kwargs_dict)
