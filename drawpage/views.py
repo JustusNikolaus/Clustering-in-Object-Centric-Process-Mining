@@ -157,20 +157,20 @@ def drawpage_view(request):
             event_assignment = ['', 'checked']
 
     # FOR DEBUGGING: print all cookies
-    if 'file_cookie' in request.session:
-        print("----->File: " + request.session['file_cookie'])
-    if 'object_type_cookie' in request.session:
-        print("----->Object Type: " + request.session['object_type_cookie'])
-    if 'attributes_cookie' in request.session:
-        print("----->Attributes: ".join(request.session['attributes_cookie']))
-    if 'minactivity_cookie' in request.session:
-        print("----->Minactivity: " + request.session['minactivity_cookie'])
-    if 'minactivity_cookie' in request.session:
-        print("----->Minedge: " + request.session['minedge_cookie'])
-    if 'clustering_method_cookie' in request.session:
-        print("----->Clustering Method: " + request.session['clustering_method_cookie'])
-    if 'event_assignment_cookie' in request.session:
-        print("----->Event assignment: " + request.session['event_assignment_cookie'])
+    #if 'file_cookie' in request.session:
+    #    print("----->File: " + request.session['file_cookie'])
+    #if 'object_type_cookie' in request.session:
+    #    print("----->Object Type: " + request.session['object_type_cookie'])
+    #if 'attributes_cookie' in request.session:
+    #    print("----->Attributes: ".join(request.session['attributes_cookie']))
+    #if 'minactivity_cookie' in request.session:
+    #    print("----->Minactivity: " + request.session['minactivity_cookie'])
+    #if 'minactivity_cookie' in request.session:
+    #    print("----->Minedge: " + request.session['minedge_cookie'])
+    #if 'clustering_method_cookie' in request.session:
+    #    print("----->Clustering Method: " + request.session['clustering_method_cookie'])
+    #if 'event_assignment_cookie' in request.session:
+    #    print("----->Event assignment: " + request.session['event_assignment_cookie'])
 
     return render(request, 'drawpage/drawpage.html', {
         'file_list':file_list,

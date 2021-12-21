@@ -9,9 +9,11 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
+# Library imports
 import os
 from pathlib import Path
+
+# Local imports
 from drawpage.tests_distance_functions import *
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.

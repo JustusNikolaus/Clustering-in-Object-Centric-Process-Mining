@@ -57,7 +57,7 @@ def get_objects(path_to_file: str, object_information: list, object_type: str) -
     # Save all object ids into list
     object_ids = object_df.loc[object_df['object_type'] == object_type].object_id.tolist()
 
-    # Creates a dict with all necessary information about the object 
+    # Creates a dict with all necessary information about the object
     for id in object_ids:
         dict = {
             "object_type": object_type,
@@ -83,6 +83,6 @@ def get_objects(path_to_file: str, object_information: list, object_type: str) -
         dict["attributes"] = attributes_list
         # Append the overall dict into the list of overall dicts
         objects.append(dict)
-    
+
     # Return the dictionary
     return objects

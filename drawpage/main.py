@@ -45,7 +45,7 @@ def main_draw(path_to_file: str, object_information: list, object_type: str, clu
 
     #obj_json = json.loads(objects)
     print(json.dumps(objects, indent=4, sort_keys=True))
-    
+
     # Flatten the event dataframe
     flattened_event_df = succint_mdl_to_exploded_mdl.apply(event_df)
 
@@ -102,7 +102,7 @@ def main_draw(path_to_file: str, object_information: list, object_type: str, clu
             for id_in in id_in_cluster:
                 if id_in in id_notin_cluster:
                     id_in_cluster.remove(id_in) 
-            # Append the ones that remain to the list that is used to filter the dataframe 
+            # Append the ones that remain to the list that is used to filter the dataframe
             event_ids.append(id_in_cluster)
         # Assign event if the object from given cluster is inside that event
         elif event_assignment == "Existence":
@@ -111,12 +111,12 @@ def main_draw(path_to_file: str, object_information: list, object_type: str, clu
             print("The given event assignment is neither all nor existence.")
             print("As default, we do existence")
             event_ids.append(flattened_event_df.loc[flattened_event_df[object_type].isin(object_ids_in_cluster)]['event_id'].unique().tolist())
-        
+
         print("The Event IDs for Cluster {} are {}".format(label,event_ids[0]))
 
-        # Create a new dataframe with all the event ids 
+        # Create a new dataframe with all the event ids
         clustered_df = event_df.loc[event_df["event_id"].isin(event_ids[0])]
-        
+
         # Save dataframe into list of all dataframes
         clustered_dataframes.append(clustered_df)
 
@@ -126,10 +126,4 @@ def main_draw(path_to_file: str, object_information: list, object_type: str, clu
     return dfg_filepaths, clustered_dataframes, object_and_cluster
 
 
-
-
-    
 #main_draw("./media/running-example.jsonocel", get_object_types("./media/running-example.jsonocel"), "customers", "kmeans", "All")
-
-
-

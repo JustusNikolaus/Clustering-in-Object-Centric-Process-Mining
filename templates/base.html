@@ -1,8 +1,8 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <!-- Required meta tags -->
+  <head>
+    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -10,61 +10,62 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}"/>
     <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
 
-    <!-- HTMX -->
-    <script src="https://unpkg.com/htmx.org@1.6.1" integrity="sha384-tvG/2mnCFmGQzYC1Oh3qxQ7CkQ9kMzYjWZSNtrRZygHPDDqottzEJsqS4oUVodhW" crossorigin="anonymous"></script>
-
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.0/font/bootstrap-icons.css">
 
+    <!-- Title -->
     {% block title %}
     {% endblock %}
-</head>
+  </head>
 
-<body>
+  <body>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/">
-      <img src="{% static 'images/PADSLOGO.png' %}" alt="PADS Group" height="60">
-    </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link" href="/">Homepage</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/import">Import File</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/draw">Draw DFG</a>
-        </li>
-      </ul>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">
+          <img src="{% static 'images/PADSLOGO.png' %}" alt="PADS Group" height="60">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'home'%}">Homepage</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'import' %}">Import File</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'draw' %}">Draw DFG</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Content -->
+    <div class="container">
+      {% block content %}
+      {% endblock %}
     </div>
-  </div>
-</nav>
 
-<div class="container">
-  {% block content %}
-  {% endblock %}
-</div>
+    <!-- Footer -->
+    <div class="container position-relative bottom-0">
+      <footer class="d-flex flex-wrap align-items-center py-3 my-4 border-top">
+        <p class="col-md-4 mb-0 text-muted">Clustering in Object Centric Process Mining</p>
 
-<div class="container position-relative bottom-0">
-  <footer class="d-flex flex-wrap align-items-center py-3 my-4 border-top">
-    <p class="col-md-4 mb-0 text-muted">Clustering in Object Centric Process Mining</p>
+        <a href="/" class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+          <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+        </a>
 
-    <a href="/" class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
-      <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
-    </a>
+        <ul class="nav col-md-4 justify-content-end">
+          <li class="nav-item"><a href="https://github.com/Nitroklaus31/Clustering-in-Object-Centric-Process-Mining" class="nav-link px-2 text-muted"><i class="bi bi-github"></i> Github</a></li>
+          <li class="nav-item"><a href="/" class="nav-link px-2 text-muted"><i class="bi bi-question-lg"></i> Help</a></li>
+        </ul>
+      </footer>
+    </div>
 
-    <ul class="nav col-md-4 justify-content-end">
-      <li class="nav-item"><a href="https://github.com/Nitroklaus31/Clustering-in-Object-Centric-Process-Mining" class="nav-link px-2 text-muted"><i class="bi bi-github"></i> Github</a></li>
-      <li class="nav-item"><a href="/" class="nav-link px-2 text-muted"><i class="bi bi-question-lg"></i> Help</a></li>
-    </ul>
-  </footer>
-</div>
-
-</body>
+  </body>
 </html>
