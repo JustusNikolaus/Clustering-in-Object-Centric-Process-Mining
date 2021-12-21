@@ -65,33 +65,7 @@
 </div>
 <p></p>
 
-<div class="card">
-    <div class="card-header">Set Filters</div>
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item">
-            <!--Select Minactivity and minedge-->
-        <form action="" method="post">
-            {% csrf_token %}
-            <div class="row">
-                <div class="col">
-                    <label class="form-label">Minactivity:</label>
-                    <output for="slider-activity" name="result-activity" id="result-activity"></output>
-                    <input id="slider-activity" class="form-range" type="range" name="minactivity_select" min="0" max="5000" step="10" value="{{ minactivity }}">
-                </div>
-                <div class="col">
-                    <label class="form-label">Minedge:</label>
-                    <output for="slider-edge" name="result-edge" id="result-edge"></output>
-                    <input id="slider-edge" class="form-range" type="range" name="minedge_select" min="0" max="5000" step="10" value="{{ minedge }}">
-                </div>
-                <button id="filterButton" class="btn btn-primary" type="submit">
-                    <span id="filterSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden;"></span>
-                    <span class="sr-only">Filter</span>
-                </button>
-            </div>
-        </form>
-        </li>
-    </ul>
-</div>
+
 <p></p>
 
 <!--Select clustering Method and object-->
@@ -131,12 +105,39 @@
             </div>
             <button id="drawButton" class="btn btn-primary btn-lg" type="submit">
                 <span id="drawSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden;"></span>
-                <span class="sr-only">Draw</span>
+                <span class="sr-only">Cluster</span>
             </button>
         </div>
     </form>
 </div>
 <p></p>
+<div class="card">
+    <div class="card-header">Set Filters</div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+            <!--Select Minactivity and minedge-->
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col">
+                    <label class="form-label">Minactivity:</label>
+                    <output for="slider-activity" name="result-activity" id="result-activity"></output>
+                    <input id="slider-activity" class="form-range" type="range" name="minactivity_select" min="0" max="5000" step="10" value="{{ minactivity }}">
+                </div>
+                <div class="col">
+                    <label class="form-label">Minedge:</label>
+                    <output for="slider-edge" name="result-edge" id="result-edge"></output>
+                    <input id="slider-edge" class="form-range" type="range" name="minedge_select" min="0" max="5000" step="10" value="{{ minedge }}">
+                </div>
+                <button id="filterButton" class="btn btn-primary" type="submit">
+                    <span id="filterSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden;"></span>
+                    <span class="sr-only">Filter</span>
+                </button>
+            </div>
+        </form>
+        </li>
+    </ul>
+</div>
 
 <!--Draw DFG Clusters-->
 <div class="container">
