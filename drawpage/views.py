@@ -126,11 +126,10 @@ class DrawpageView(TemplateView):
             )
                                 
 
-        # Delete old tmp.pkl files
+        # Delete old Logs
         Log.objects.all().delete()
 
         # Pickle clustered_dataframes_list
-        print("################################## Pickling ...")
         for i, df in enumerate(clustered_dataframes_list):
             print("################################## Applying discovery ...")
             df.type = "succint"
