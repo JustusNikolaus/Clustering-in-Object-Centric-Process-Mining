@@ -1,6 +1,6 @@
 # Clustering in Object Centric Process Mining
-This is the Repository of team #5 of the SoftwareProjektPraktikum.
-This project is developed during WiSe 21/22 by 5 RWTH Aachen University students.
+This is the repository for team #5 of the SoftwareProjektPraktikum.
+This project was developed during WiSe 21/22 by 5 RWTH Aachen University students and contains a web application that clusters objects within an object-centric event log depending on chosen characteristics then outputs the process model for such clusters.
 
 ## Requirements Overview
 * Requires Python, pip and Graphviz.
