@@ -17,8 +17,8 @@ def cluster_agglomerative(distance_matrix: list) -> list:
 # Input:  Two dimensional array of integers that defines a distance matrix
 def cluster_kmedoids(distance_matrix: list) -> list:
     print("K-Medoids is started with distance matrix: ")
-    for item in distance_matrix:
-        print(item)
+    #for item in distance_matrix:
+    #    print(item)
     opt_n_clusters = len(distance_matrix)
     #Format distance matrix to np.array of type float to avoid error message from silhouette_score
     distance_matrix_as_array = np.asarray(distance_matrix, dtype=float)
@@ -40,8 +40,8 @@ def cluster_kmedoids(distance_matrix: list) -> list:
             if silhouette_score_for_n > max_silhouette_score:
                 max_silhouette_score = silhouette_score_for_n
                 opt_n_clusters = number_of_clusters
-            print("Silhouette average for {} is: {}".format(number_of_clusters, silhouette_score_for_n))
-            print(cluster_labels)
+            #print("Silhouette average for {} is: {}".format(number_of_clusters, silhouette_score_for_n))
+            #print(cluster_labels)
         # Create kmedoids Object with optimal number of clusters
         print("The optimal number of clusters is: {}".format(opt_n_clusters))
         kmedoids = KMedoids(

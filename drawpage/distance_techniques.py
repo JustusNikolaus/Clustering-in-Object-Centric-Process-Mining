@@ -182,8 +182,8 @@ def calculate_average_dist_matr(objects: list, attributes: list) -> list:
                 print("{} is an attribute of type float".format(key))
                 print("We calculate the distance matrix with the Euclidean distance")
                 euclidean = EuclideanDistance(values_euclidean)
-                print("The distance matrix is: ")
-                print(euclidean.get_euclidean_distances(values_euclidean))
+                #print("The distance matrix is: ")
+                #print(euclidean.get_euclidean_distances(values_euclidean))
                 try: 
                     distance_matrices.append(euclidean.get_euclidean_distances(values_euclidean).tolist())
                 except: 
@@ -193,8 +193,8 @@ def calculate_average_dist_matr(objects: list, attributes: list) -> list:
                 print("{} is an attribute of type control-flow".format(key))
                 print("We calculate the distance matrix with the Levenshtein distance")
                 levenshtein = LevenshteinDistance(values_levenshtein)
-                print("The distance matrix is: ")
-                print(levenshtein.get_levenshtein_distances(values_levenshtein))
+                #print("The distance matrix is: ")
+                #print(levenshtein.get_levenshtein_distances(values_levenshtein))
                 try:
                     distance_matrices.append(levenshtein.get_levenshtein_distances(values_levenshtein).tolist())
                 except:
@@ -204,8 +204,8 @@ def calculate_average_dist_matr(objects: list, attributes: list) -> list:
                 print("{} is an attribute of type string".format(key))
                 print("We calculate the distance matrix with the Boolean distance")
                 boolean = BooleanDistance(values_boolean)
-                print("The distance matrix is: ")
-                print(boolean.get_boolean_distances(values_boolean))
+                #print("The distance matrix is: ")
+                #print(boolean.get_boolean_distances(values_boolean))
                 try:
                     distance_matrices.append(boolean.get_boolean_distances(values_boolean).tolist())
                 except:
@@ -213,11 +213,11 @@ def calculate_average_dist_matr(objects: list, attributes: list) -> list:
 
     numpy_distance_matrix = np.array(distance_matrices)
     summed_distance_matrix = numpy_distance_matrix.sum(axis=0)
-    print("The summed array is: ")
-    print(summed_distance_matrix)
+    #print("The summed array is: ")
+    #print(summed_distance_matrix)
 
     avg_distance_matrix = summed_distance_matrix / len(distance_matrices)
 
-    print("We divide the summed distance matrix by {} and get the new average distance matrix: ".format(len(distance_matrices)))
-    print(avg_distance_matrix)
+    #print("We divide the summed distance matrix by {} and get the new average distance matrix: ".format(len(distance_matrices)))
+    #print(avg_distance_matrix)
     return avg_distance_matrix

@@ -2,20 +2,21 @@
 from pm4pymdl.objects.ocel.importer import importer as ocel_importer
 from pm4pymdl.algo.mvp.utils import succint_mdl_to_exploded_mdl
 from pm4pymdl.visualization.mvp.gen_framework3 import visualizer
-from pm4pymdl.algo.mvp.gen_framework3 import discovery
+import pickle
 import pandas as pd
-import json
 
 # Local imports
 from drawpage.readocel import *
 from drawpage.distance_techniques import calculate_average_dist_matr
 from drawpage.clustering_techniques import cluster_kmedoids, cluster_agglomerative
+from .models import Log
 
-def draw(clustered_dataframes: list, object_type: str, min_act_freq: int, min_edge_freq: int): 
+def draw(object_type: str, min_act_freq: int, min_edge_freq: int): 
     dfg_filepaths = []
-    for i, clustered_df in enumerate(clustered_dataframes):
-        clustered_df.type = "succint"
-        model = discovery.apply(clustered_df, parameters={"epsilon": 0, "noise_threshold": 0})
+    models = list(Log.objects.values_list('log_model', flat=True))
+    for i, model in enumerate(models):
+        model = pickle.loads(model)
+        
         gviz = visualizer.apply(model, parameters={"min_act_freq": min_act_freq, "min_edge_freq": min_edge_freq})
         if i == 0:
             path_to_image = "./media/tmp/Frequency-{}-Unclustered-minactivity-{}-minedge-{}.png".format(object_type, min_act_freq, min_edge_freq)
@@ -39,7 +40,7 @@ def main_draw(path_to_file: str, object_information: list, object_type: str, clu
     objects = get_objects(path_to_file, object_information, object_type)
 
     #obj_json = json.loads(objects)
-    print(json.dumps(objects, indent=4, sort_keys=True))
+    #print(json.dumps(objects, indent=4, sort_keys=True))
 
     # Flatten the event dataframe
     flattened_event_df = succint_mdl_to_exploded_mdl.apply(event_df)
@@ -65,10 +66,10 @@ def main_draw(path_to_file: str, object_information: list, object_type: str, clu
     object_and_cluster = []
     # Assign every object the clustered label
     print("\n")
-    print("The result of clustering is: ")
+    #print("The result of clustering is: ")
     for counter, obj in enumerate(objects): 
         obj["cluster"] = cluster_labels[counter]
-        print("{}: {}".format(obj["object_id"], obj["cluster"]))
+        #print("{}: {}".format(obj["object_id"], obj["cluster"]))
         object_and_cluster.append({obj["object_id"]: obj["cluster"]})
 
     #dfg_filepaths = []
@@ -101,7 +102,7 @@ def main_draw(path_to_file: str, object_information: list, object_type: str, clu
             print("As default, we do existence")
             event_ids.append(flattened_event_df.loc[flattened_event_df[object_type].isin(object_ids_in_cluster)]['event_id'].unique().tolist())
 
-        print("The Event IDs for Cluster {} are {}".format(label,event_ids[0]))
+        #print("The Event IDs for Cluster {} are {}".format(label,event_ids[0]))
 
         # Create a new dataframe with all the event ids
         clustered_df = event_df.loc[event_df["event_id"].isin(event_ids[0])]
@@ -109,7 +110,7 @@ def main_draw(path_to_file: str, object_information: list, object_type: str, clu
         # Save dataframe into list of all dataframes
         clustered_dataframes.append(clustered_df)
 
-    dfg_filepaths = draw(clustered_dataframes, object_type, min_act_freq, min_edge_freq)
+    dfg_filepaths = draw(object_type, min_act_freq, min_edge_freq)
 
     # Return the list of all graphviz objects to views.py
     return dfg_filepaths, clustered_dataframes, object_and_cluster

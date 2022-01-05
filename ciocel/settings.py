@@ -14,7 +14,7 @@ import os
 from pathlib import Path
 
 # Local imports
-from drawpage.tests_distance_functions import *
+#
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

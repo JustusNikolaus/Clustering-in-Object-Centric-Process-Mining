@@ -1,10 +1,12 @@
 # Library imports
+from django.http.request import HttpRequest
 from django.shortcuts import render
 from django.views.generic.base import TemplateView
+from pm4pymdl.algo.mvp.gen_framework3 import discovery
 import os
 import pandas as pd
 from pathlib import Path
-from glob import glob
+import pickle
 
 # Local imports
 from drawpage import main, readocel
@@ -30,7 +32,6 @@ class DrawpageView(TemplateView):
         )
 
     def post(self, request, *args, **kwargs):
-        print(Log.objects.all())
         # Initialize returns
         file_list = []
         object_type_list = []
@@ -64,14 +65,8 @@ class DrawpageView(TemplateView):
             request.session['minedge_cookie'] = request.POST['minedge_select']
 
             # Call draw
-            if 'file_cookie' in request.session and 'object_type_cookie' in request.session and 'attributes_cookie' in request.session and 'clustering_method_cookie' in request.session and 'event_assignment_cookie' in request.session:              
-                # Load Dataframes from tmp_*.pkl files
-                clustered_dataframes_list = []
-                for file_path in glob(os.path.join(BASE_DIR, 'media/tmp/tmp_*.pkl')):
-                    df = pd.read_pickle(file_path)
-                    clustered_dataframes_list.append(df)
-
-                dfg_file_path_list = main.draw(clustered_dataframes_list, request.session['object_type_cookie'], int(request.session['minactivity_cookie']), int(request.session['minedge_cookie']))
+            if 'file_cookie' in request.session and 'object_type_cookie' in request.session and 'attributes_cookie' in request.session and 'clustering_method_cookie' in request.session and 'event_assignment_cookie' in request.session:
+                dfg_file_path_list = main.draw(request.session['object_type_cookie'], int(request.session['minactivity_cookie']), int(request.session['minedge_cookie']))
 
                 # Remove leading '.' from file paths
                 dfg_file_path_list = [sub[1 : ] for sub in dfg_file_path_list]
@@ -109,7 +104,7 @@ class DrawpageView(TemplateView):
         object_information = readocel.get_object_types(path_to_file)
 
         if 'minactivity_cookie' in request.session and 'minedge_cookie' in request.session:
-            result, clustered_dataframes, object_and_cluster = main.main_draw(
+            result, clustered_dataframes_list, object_and_cluster = main.main_draw(
                 path_to_file,
                 object_information,
                 request.session['object_type_cookie'],
@@ -121,7 +116,7 @@ class DrawpageView(TemplateView):
             )
 
         else:
-            result, clustered_dataframes, object_and_cluster = main.main_draw(
+            result, clustered_dataframes_list, object_and_cluster = main.main_draw(
                 path_to_file,
                 object_information,
                 request.session['object_type_cookie'],
@@ -132,20 +127,37 @@ class DrawpageView(TemplateView):
                                 
 
         # Delete old tmp.pkl files
-        for file in glob(os.path.join(BASE_DIR, 'media/tmp/tmp_*.pkl')):
-            os.remove(file)
+        Log.objects.all().delete()
 
-        for i, df in enumerate(clustered_dataframes):
-            output_file = os.path.join(BASE_DIR, 'media/tmp/tmp_' + str(i) + '.pkl')
-            df.to_pickle(output_file)
-            Log.objects.create(log_file=output_file, log_name='tmp_' + str(i) + '.pkl')
-                    # Remove leading '.' from file paths
+        # Pickle clustered_dataframes_list
+        print("################################## Pickling ...")
+        for i, df in enumerate(clustered_dataframes_list):
+            print("################################## Applying discovery ...")
+            df.type = "succint"
+            model = discovery.apply(df, parameters={"epsilon": 0, "noise_threshold": 0})
+            Log.objects.create(log=pickle.dumps(df), log_model=pickle.dumps(model), log_name='tmp_' + str(i) + '.pkl')
+        # Remove leading '.' from file paths
         result = [sub[1 : ] for sub in result]
 
         return result
         
-def refresh(request, file_list, object_type_list, attribute_dict, minactivity, minedge, clustering_method, event_assignment, dfg_file_path_list):
+def refresh(request: HttpRequest, file_list: list, object_type_list: list, attribute_dict: dict, minactivity: str, minedge: str, clustering_method: list, event_assignment: list, dfg_file_path_list: list):
+    """Refreshes file_list, object_type_list, attribute_dict, minactivity, minedge, clustering_method, event_assignment and dfg_file_path_list
 
+    Args:
+        request (HttpRequest):
+        file_list ([type]): [description]
+        object_type_list ([type]): [description]
+        attribute_dict ([type]): [description]
+        minactivity ([type]): [description]
+        minedge ([type]): [description]
+        clustering_method ([type]): [description]
+        event_assignment ([type]): [description]
+        dfg_file_path_list ([type]): [description]
+
+    Returns:
+        HttpResponse: A rendered HttpResponse consisting of the inputted HttpRequest and the updated values for the arguments.
+    """
     # Refresh file_list
     ext = ('.xmlocel','.jsonocel')
     for files in os.listdir('media/'):
