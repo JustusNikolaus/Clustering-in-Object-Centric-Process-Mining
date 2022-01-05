@@ -6,7 +6,7 @@ from filecmp import cmp
 class Log(models.Model):
 
     log = models.BinaryField()
-    log_model = models.BinaryField()
+    log_model = models.BinaryField(null=True, default=None)
     log_name = models.CharField(max_length=500)
     #log_image = models.ImageField()
 
