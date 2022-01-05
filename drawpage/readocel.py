@@ -24,9 +24,14 @@ def get_object_types(path_to_file: str) -> list:
             rows_of_obj = object_df.loc[object_df['object_type']==obj]
             # Get all columns that are not null for select object_type
             for (column_name, series) in object_df.iteritems():
-                if column_name != "object_id" and column_name != "object_type":
-                    if len(rows_of_obj.loc[rows_of_obj[column_name].notnull()]) > 0:
-                        attributes.append(column_name)
+                if (
+                    column_name not in ["object_id", "object_type"]
+                    and len(
+                        rows_of_obj.loc[rows_of_obj[column_name].notnull()]
+                    )
+                    > 0
+                ):
+                    attributes.append(column_name)
             # Create a dict that stores the information for given object_type
             ocel_dict = {
                 "object_type": obj,

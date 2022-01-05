@@ -13,8 +13,7 @@ from drawpage.clustering_techniques import cluster_kmedoids, cluster_agglomerati
 
 def draw(clustered_dataframes: list, object_type: str, min_act_freq: int, min_edge_freq: int): 
     dfg_filepaths = []
-    i = 0
-    for clustered_df in clustered_dataframes:
+    for i, clustered_df in enumerate(clustered_dataframes):
         clustered_df.type = "succint"
         model = discovery.apply(clustered_df, parameters={"epsilon": 0, "noise_threshold": 0})
         gviz = visualizer.apply(model, parameters={"min_act_freq": min_act_freq, "min_edge_freq": min_edge_freq})
@@ -24,7 +23,6 @@ def draw(clustered_dataframes: list, object_type: str, min_act_freq: int, min_ed
             path_to_image = "./media/tmp/Frequency-{}-Cluster-{}-minactivity-{}-minedge-{}.png".format(object_type, i, min_act_freq, min_edge_freq)
         visualizer.save(gviz, path_to_image)
         dfg_filepaths.append(path_to_image)
-        i = i + 1
     return dfg_filepaths
 
 # Returns list of all graphviz objects in order to draw the DFGs
@@ -52,42 +50,36 @@ def main_draw(path_to_file: str, object_information: list, object_type: str, clu
     avg_distance_matrix = calculate_average_dist_matr(objects, attributes)
     
     # Cluster based on the selected technique
-    if cluster_type == "kmeans": 
-        print("\n")
-        print("We use K-Medoids for clustering")
-        cluster_labels = cluster_kmedoids(avg_distance_matrix)
-    elif cluster_type == "hierarchical":
+    if cluster_type == "hierarchical":
         print("\n")
         print("We use Hierarchical for clustering")
         cluster_labels = cluster_agglomerative(avg_distance_matrix)
+    elif cluster_type == "kmeans":
+        print("\n")
+        print("We use K-Medoids for clustering")
+        cluster_labels = cluster_kmedoids(avg_distance_matrix)
     else:
         print("The input of the clustering technique is not correct!")
         return
     unique_clusters = list(set(cluster_labels))
-    counter = 0
-
     object_and_cluster = []
     # Assign every object the clustered label
     print("\n")
     print("The result of clustering is: ")
-    for obj in objects: 
+    for counter, obj in enumerate(objects): 
         obj["cluster"] = cluster_labels[counter]
-        counter += 1
         print("{}: {}".format(obj["object_id"], obj["cluster"]))
         object_and_cluster.append({obj["object_id"]: obj["cluster"]})
 
     #dfg_filepaths = []
     # Iterate over every cluster and create the dataframe based on the event ids of each cluster
-    clustered_dataframes = []
-    clustered_dataframes.append(event_df)
-
+    clustered_dataframes = [event_df]
     for label in unique_clusters:
-        object_ids_in_cluster = []
         event_ids = []
-        # Save all object ids that belong to the given cluster
-        for obj in objects:
-            if obj["cluster"] == label:
-                object_ids_in_cluster.append(obj["object_id"])
+        object_ids_in_cluster = [
+            obj["object_id"] for obj in objects if obj["cluster"] == label
+        ]
+
         # Save all event ids that are in at least one of the objects of the given cluster
         # Assign all events, that are only in objects from given cluster
         if event_assignment == "all":

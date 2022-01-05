@@ -13,22 +13,12 @@ def cluster_agglomerative(distance_matrix: list) -> list:
     clustering = AgglomerativeClustering(affinity='precomputed', linkage='single').fit(distance_matrix)
     return clustering.labels_
 
-#test:
-#matrix = [[0, 2, 2, 3, 3.6, 3.6],
-#[2, 1, 4, 3.6, 3, 5],
-#[2, 4, 0, 3.6, 5, 3],
-#[3, 3.6, 3.6, 0, 2, 2],
-#[3.6, 3, 5, 2, 0, 4],
-#[3.6, 5, 3, 2, 4, 0]]
-
-#cluster_agglomerative(matrix)
-
 # Return: cluster labels after clustering with k-medoids
 # Input:  Two dimensional array of integers that defines a distance matrix
 def cluster_kmedoids(distance_matrix: list) -> list:
     print("K-Medoids is started with distance matrix: ")
-    for i in range(len(distance_matrix)):
-        print(distance_matrix[i])
+    for item in distance_matrix:
+        print(item)
     opt_n_clusters = len(distance_matrix)
     #Format distance matrix to np.array of type float to avoid error message from silhouette_score
     distance_matrix_as_array = np.asarray(distance_matrix, dtype=float)
@@ -65,13 +55,4 @@ def cluster_kmedoids(distance_matrix: list) -> list:
     except: 
         print("There was an error in the kmedoids clustering")
     return kmedoids.labels_
-
-# Test k_medoids
-# con_activities = [['eat', 'sleep', 'rave', 'repeat'],
-#                   ['eat', 'sleep', 'rave', 'Not repeat'],
-#                   ['eat', 'sleep', 'Not rave', 'Not repeat'],
-#                   ['eat', 'Not sleep', 'Not rave', 'Not repeat'],
-#                   ['Not eat', 'Not sleep', 'Not rave', 'Not repeat']]
-
-# test = LevenshteinDistance(con_activities).get_levenshtein_distances(con_activities)
-# print(cluster_kmedoids(distance_matrix=test))
+    

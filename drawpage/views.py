@@ -50,18 +50,15 @@ class DrawpageView(TemplateView):
                 del request.session['object_type_cookie']
             if 'attributes_cookie' in request.session:
                 del request.session['attributes_cookie']
-        # If object_type_select_form
         elif 'object_type_select' in request.POST:
             request.session['object_type_cookie'] = request.POST['object_type_select']
 
             # Clear old attribute_cookie
             if 'attributes_cookie' in request.session:
                 del request.session['attributes_cookie']
-        # If attribute_select_form
         elif 'attribute_select' in request.POST:
             # Save attribute_cookie
             request.session['attributes_cookie'] = request.POST.getlist('attribute_select')
-        # If filter
         elif 'minactivity_select' in request.POST and 'minedge_select' in request.POST:
             request.session['minactivity_cookie'] = request.POST['minactivity_select']
             request.session['minedge_cookie'] = request.POST['minedge_select']
@@ -78,7 +75,6 @@ class DrawpageView(TemplateView):
 
                 # Remove leading '.' from file paths
                 dfg_file_path_list = [sub[1 : ] for sub in dfg_file_path_list]
-        # If draw
         elif 'clustering_method_select' in request.POST and 'event_assignment_select' in request.POST:
             request.session['clustering_method_cookie'] = request.POST['clustering_method_select']
             request.session['event_assignment_cookie'] = request.POST['event_assignment_select']
@@ -94,42 +90,8 @@ class DrawpageView(TemplateView):
                 event_assignment = ['', 'checked']
 
             # Call main_draw
-            if 'file_cookie' in request.session and 'object_type_cookie' in request.session and 'attributes_cookie' in request.session:              
-                    path_to_file = 'media/' + request.session['file_cookie']
-                    object_information = readocel.get_object_types(path_to_file)
-
-                    if 'minactivity_cookie' in request.session and 'minedge_cookie' in request.session:
-                        dfg_file_path_list, clustered_dataframes, object_and_cluster = main.main_draw(path_to_file, object_information, 
-                            request.session['object_type_cookie'], 
-                            request.session['clustering_method_cookie'], 
-                            request.session['event_assignment_cookie'], 
-                            request.session['attributes_cookie'], 
-                            int(request.session['minactivity_cookie']), 
-                            int(request.session['minedge_cookie']))
-                    else:
-                        dfg_file_path_list, clustered_dataframes, object_and_cluster = main.main_draw(path_to_file, object_information, 
-                            request.session['object_type_cookie'], 
-                            request.session['clustering_method_cookie'], 
-                            request.session['event_assignment_cookie'], 
-                            request.session['attributes_cookie'])                    
-
-                    # Delete old tmp.pkl files
-                    for file in glob(os.path.join(BASE_DIR, 'media/tmp/tmp_*.pkl')):
-                        os.remove(file)
-                    
-                    # Temporarily store clustered_dataframes
-                    i = 0
-                    for df in clustered_dataframes:
-                        output_file = os.path.join(BASE_DIR, 'media/tmp/tmp_' + str(i) + '.pkl')
-                        df.to_pickle(output_file)
-                        Log.objects.create(log_file=output_file, log_name='tmp_' + str(i) + '.pkl')
-                        i = i + 1
-
-                    
-
-                    # Remove leading '.' from file paths
-                    dfg_file_path_list = [sub[1 : ] for sub in dfg_file_path_list]
-
+            if 'file_cookie' in request.session and 'object_type_cookie' in request.session and 'attributes_cookie' in request.session:      
+                dfg_file_path_list = self._extracted_from_post_67(request)
         return refresh(request, 
             file_list = [],
             object_type_list = object_type_list,
@@ -140,6 +102,47 @@ class DrawpageView(TemplateView):
             event_assignment = event_assignment,
             dfg_file_path_list = dfg_file_path_list,
         )
+
+    # TODO Rename this here and in `post`
+    def _extracted_from_post_67(self, request):
+        path_to_file = 'media/' + request.session['file_cookie']
+        object_information = readocel.get_object_types(path_to_file)
+
+        if 'minactivity_cookie' in request.session and 'minedge_cookie' in request.session:
+            result, clustered_dataframes, object_and_cluster = main.main_draw(
+                path_to_file,
+                object_information,
+                request.session['object_type_cookie'],
+                request.session['clustering_method_cookie'],
+                request.session['event_assignment_cookie'],
+                request.session['attributes_cookie'],
+                int(request.session['minactivity_cookie']),
+                int(request.session['minedge_cookie']),
+            )
+
+        else:
+            result, clustered_dataframes, object_and_cluster = main.main_draw(
+                path_to_file,
+                object_information,
+                request.session['object_type_cookie'],
+                request.session['clustering_method_cookie'],
+                request.session['event_assignment_cookie'],
+                request.session['attributes_cookie'],
+            )
+                                
+
+        # Delete old tmp.pkl files
+        for file in glob(os.path.join(BASE_DIR, 'media/tmp/tmp_*.pkl')):
+            os.remove(file)
+
+        for i, df in enumerate(clustered_dataframes):
+            output_file = os.path.join(BASE_DIR, 'media/tmp/tmp_' + str(i) + '.pkl')
+            df.to_pickle(output_file)
+            Log.objects.create(log_file=output_file, log_name='tmp_' + str(i) + '.pkl')
+                    # Remove leading '.' from file paths
+        result = [sub[1 : ] for sub in result]
+
+        return result
         
 def refresh(request, file_list, object_type_list, attribute_dict, minactivity, minedge, clustering_method, event_assignment, dfg_file_path_list):
 

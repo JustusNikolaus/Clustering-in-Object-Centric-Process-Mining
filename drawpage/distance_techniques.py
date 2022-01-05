@@ -30,10 +30,10 @@ class LevenshteinDistance:
             for given_label, labelled_activity in zip(labels, activities): # for each given label
                 if not isinstance(given_label, str) or not isinstance(labelled_activity, str):
                     raise TypeError # raise an error if one of the values within the passed lists is not a string
-                if given_label not in map.keys():
-                    map[given_label] = labelled_activity # create key and add the corresponding activity
-                else: # if the key is already in the map, then it is a duplicate
+                if given_label in map: # if the key is already in the map, then it is a duplicate
                     raise DuplicatesError(given_label, "Error") # raise an error if they are not unique
+                else:
+                    map[given_label] = labelled_activity # create key and add the corresponding activity
         except UnequalListsError:
             print("The labels and activities do not map one-to-one")
         except DuplicatesError:
@@ -45,17 +45,14 @@ class LevenshteinDistance:
     # Return: alphabet labels for each activity/object within a control flow
     # Input: list = list of activities/objects within a control flow
     def label_activities(self, list: list) -> list:
-        #print(list)
-        activity_labels = [] # array for the unique activity/object labels
         unique_activities = unique_strings(list) # sorting through the input and using only unique strings
         labels_map = {} # dictionary to map out each activity by a corresponding label
         #print(unique_activities)
         labels = string.ascii_letters + string.digits + string.punctuation # alphabet, digit and, punctuation labels
-        label_counter = 0 # counter for traversing through the labels
-        for items in unique_activities:
-            activity_labels.append(labels[label_counter])
-            label_counter += 1
-        return activity_labels
+        return [
+            labels[label_counter]
+            for label_counter, _ in enumerate(unique_activities)
+        ]
 
     # Return: concatenated control flow using the labels from label_activities
     # Input: list = list of control flows
@@ -76,7 +73,7 @@ class LevenshteinDistance:
             for sublist in list: # going through the control flows within the original list
                 control_flow = "" # string for the control flow labels
                 for given_activity in sublist:
-                    if given_activity in list_map_rev.keys():
+                    if given_activity in list_map_rev:
                         control_flow += list_map_rev[given_activity] # adds the character label to the control flow label
                     else:
                         raise KeyError # key corresponding to given_activity not found within the list
@@ -96,27 +93,20 @@ class LevenshteinDistance:
         # The number of inner lists within distances = the number of strings in the first iteration
         try:
             for firstStrings in labelled_list:
-                sub_distances = []
-                # Second pointer, inner loop: traverse each word for each time it is traversed in the outer loop
-                # The number of output integers = the number of strings in the second iteration
-                for secondStrings in labelled_list:
-                    sub_distances.append(levdistance(firstStrings, secondStrings))
+                sub_distances = [
+                    levdistance(firstStrings, secondStrings)
+                    for secondStrings in labelled_list
+                ]
                 distances.append(sub_distances)
             return distances
         except TypeError:
             print("Invalid input for the Levenshtein distance function, please enter a list with control flows")
         except Exception as exception_type:
-            print("An error/exception occured while trying to calculate the Levenshtein distance of type {0}. Arguments:\n{1!r}".format(type(exception_type).__name__, exception_type.args))
-
-
-# Levenshtein test
-#con_activities = [['eating', 'drinking', 'sleeping', 'drinking', 'drinking and sleeping', 'showering', 'eating'],
-#                 ['drinking', 'eating', 'drinking and eating', 'sleeping', 'doing nothing', 'eating', 'drinking and sleeping'],
-#                 ['sleeping', 'drinking', 'eating', 'eating', 'sleeping and eating', 'showering', 'drinking'],
-#                 ['eating', 'drinking', 'sleeping', 'drinking', 'drinking and sleeping', 'eating']]
-
-#test = LevenshteinDistance(con_activities).get_levenshtein_distances(con_activities)
-#print(test)
+            print(
+                'An error/exception occured while trying to calculate the Levenshtein distance of type {0}. Arguments:\n{1!r}'.format(
+                    type(exception_type).__name__, exception_type.args
+                )
+            )
 
 class EuclideanDistance:
 
@@ -139,18 +129,6 @@ class BooleanDistance:
     def __init__(self, list):
         self.list = list
 
-    def flatten_list(self, _2d_list):
-        flat_list = []
-        # Iterate through the outer list
-        for element in _2d_list:
-            if type(element) is list:
-                # If the element is of type list, iterate through the sublist
-                for item in element:
-                    flat_list.append(item)
-            else:
-                flat_list.append(element)
-        return flat_list
-
     # Return: distances[[]] between all pairs of strings in a list of strings
     # Input: list = list of strings
     def get_boolean_distances(self, list: list) -> list:
@@ -171,22 +149,18 @@ class BooleanDistance:
                         sub_distances.append(0)
                 distances.append(sub_distances)
             # This part is to normalise distance matrices with non-zero diagonals into zero diagonals
-            for i in range(0, len(distances)):
+            for i in range(len(distances)):
                 distances[i][i] = 0
         except TypeError:
             print("Invalid input for the Boolean distance function, please enter a list with control flows")
         except Exception as exception_type:
-            print("An error/exception occured while trying to calculate the Boolean distance of type {0}. Arguments:\n{1!r}".format(type(exception_type).__name__, exception_type.args))
+            print(
+                'An error/exception occured while trying to calculate the Boolean distance of type {0}. Arguments:\n{1!r}'.format(
+                    type(exception_type).__name__, exception_type.args
+                )
+            )
+
         return distances
-
-#con_activities = [['eating', 'drinking', 'sleeping', 'drinking', 'drinking and sleeping', 'showering', 'eating'],
-#                 ['drinking', 'eating', 'drinking and eating', 'sleeping', 'doing nothing', 'eating', 'drinking and sleeping'],
-#                 ['sleeping', 'drinking', 'eating', 'eating', 'sleeping and eating', 'showering', 'drinking'],
-#                 ['eating', 'drinking', 'sleeping', 'drinking', 'drinking and sleeping', 'eating']]
-#bool_activites = ['hi', 'hi', 'hello', 'hello', 'hello', 'hi']
-#test = BooleanDistance(bool_activites).get_boolean_distances(bool_activites)
-#print(test)
-
 
 # Return: The average distance matrix for the objects of selected object type
 # Input:  List with all the necessary object information of selected object type
@@ -196,15 +170,14 @@ def calculate_average_dist_matr(objects: list, attributes: list) -> list:
 
     # Iterate over every attribute and calculate the distance matrix with the right technique
     for key, value in objects[0]["attributes"][0].items():
-        if key in attributes or len(attributes) == 0:
+        if key in attributes or not attributes:
             # If the attribute is type float or int, then calculate the Euclidean distance
-            if isinstance(value, float) or isinstance(value, int):
+            if isinstance(value, (float, int)):
                 # Iterate over all objects and save the attribute value into list
                 # Use this list to calculate the distance matrix
                 values_euclidean = []
                 for obj in objects:
-                    val = []
-                    val.append(obj["attributes"][0][key])
+                    val = [obj["attributes"][0][key]]
                     values_euclidean.append(val)
                 print("{} is an attribute of type float".format(key))
                 print("We calculate the distance matrix with the Euclidean distance")
@@ -215,13 +188,8 @@ def calculate_average_dist_matr(objects: list, attributes: list) -> list:
                     distance_matrices.append(euclidean.get_euclidean_distances(values_euclidean).tolist())
                 except: 
                     distance_matrices.append(euclidean.get_euclidean_distances(values_euclidean))
-            # If the attribute is type list, then calculate the Levenshtein distance
             elif isinstance(value, list):
-                values_levenshtein = []
-                # Iterate over all objects and save the attribute value into list
-                # Use this list to calculate the distance matrix
-                for obj in objects:
-                    values_levenshtein.append(obj["attributes"][0][key])
+                values_levenshtein = [obj["attributes"][0][key] for obj in objects]
                 print("{} is an attribute of type control-flow".format(key))
                 print("We calculate the distance matrix with the Levenshtein distance")
                 levenshtein = LevenshteinDistance(values_levenshtein)
@@ -231,13 +199,8 @@ def calculate_average_dist_matr(objects: list, attributes: list) -> list:
                     distance_matrices.append(levenshtein.get_levenshtein_distances(values_levenshtein).tolist())
                 except:
                     distance_matrices.append(levenshtein.get_levenshtein_distances(values_levenshtein))
-            # If the attribute is type string, then calculate the Boolean distance
             elif isinstance(value, str):
-                values_boolean = []
-                # Iterate over all objects and save the attribute value into list
-                # Use this list to calculate the distance matrix
-                for obj in objects:
-                    values_boolean.append(obj["attributes"][0][key])
+                values_boolean = [obj["attributes"][0][key] for obj in objects]
                 print("{} is an attribute of type string".format(key))
                 print("We calculate the distance matrix with the Boolean distance")
                 boolean = BooleanDistance(values_boolean)
@@ -252,7 +215,7 @@ def calculate_average_dist_matr(objects: list, attributes: list) -> list:
     summed_distance_matrix = numpy_distance_matrix.sum(axis=0)
     print("The summed array is: ")
     print(summed_distance_matrix)
-       
+
     avg_distance_matrix = summed_distance_matrix / len(distance_matrices)
 
     print("We divide the summed distance matrix by {} and get the new average distance matrix: ".format(len(distance_matrices)))

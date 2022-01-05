@@ -42,13 +42,9 @@ class ImportpageView(TemplateView):
         return refresh(request, upload_response_label=upload_response_label, delete_response_label=delete_response_label)
         
 def refresh(request, **kwargs):
-    file_list = []
-
     ext = ('.xmlocel','.jsonocel')
-    for file in os.listdir('media/'):
-        if file.endswith(ext):
-            file_list.append(file)
- 
+    file_list = [file for file in os.listdir('media/') if file.endswith(ext)]
+
     kwargs_dict = {'file_list': file_list}
     kwargs_dict.update(kwargs)
 
