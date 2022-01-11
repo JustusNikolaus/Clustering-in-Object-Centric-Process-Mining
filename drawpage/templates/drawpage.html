@@ -10,156 +10,193 @@
 <p>Please select everything and press "Draw"</p>
 
 <div class="card">
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item">
-            <!--Choose OCEL File Form-->
-            <form action="" id="file_select_form" method="post">
+    <div class="card-body bg-light">
+        <!--Select OCEL, object type and attributes-->
+        <div class="card">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <!--Choose OCEL File Form-->
+                    <form action="" id="file_select_form" method="post">
+                        {% csrf_token %}
+                        <label class="form-label">Select OCEL</label>
+                        <div class="input-group">
+                            <select class="form-select" name="file_select" form="file_select_form">
+                                <option selected>{{ file_list.0 }}</option>
+                                {% for file in file_list %}
+                                    {% if not file == file_list.0 %}
+                                <option value="{{ file }}">{{ file }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </form>
+                </li>
+                <li class="list-group-item">
+                    <!--Select object type-->
+                    <form action="" id="object_type_select_form" method="post">
+                        {% csrf_token %}
+                        <label class="form-label">Select object type</label>
+                        <div class="input-group">
+                            <select class="form-select" name="object_type_select" form="object_type_select_form">
+                                <option selected>{{ object_type_list.0 }}</option>
+                                {% for object in object_type_list %}
+                                    {% if not object == object_type_list.0 %}
+                                <option value="{{ object }}">{{ object }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </form>
+                </li>
+                <li class="list-group-item">
+                    <!--Select attributes-->
+                    <form action="" id="attribute_select_form" method="post">
+                        {% csrf_token %}
+                        <fieldset>
+                            <label class="form-label">Select attributes</label>
+                            {% for attribute, checked in attribute_dict.items %}
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="attribute_select" value="{{ attribute }}" {{ checked }}>
+                                <label class="form-check-label">{{ attribute }}</label>
+                            </div>
+                            {% endfor %}
+                            <p></p>
+                        </fieldset>
+                    </form>
+                </li>
+            </ul>
+        </div>
+        <p></p>
+
+        <!--Select clustering Method and object-->
+        <div class="container">
+            <form action="" method="post">
                 {% csrf_token %}
-                <label class="form-label">Select OCEL</label>
-                <div class="input-group">
-                    <select class="form-select" name="file_select" form="file_select_form">
-                        <option selected>{{ file_list.0 }}</option>
-                        {% for file in file_list %}
-                            {% if not file == file_list.0 %}
-                        <option value="{{ file }}">{{ file }}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </div>
-            </form>
-        </li>
-        <li class="list-group-item">
-            <!--Select object type-->
-            <form action="" id="object_type_select_form" method="post">
-                {% csrf_token %}
-                <label class="form-label">Select object type</label>
-                <div class="input-group">
-                    <select class="form-select" name="object_type_select" form="object_type_select_form">
-                        <option selected>{{ object_type_list.0 }}</option>
-                        {% for object in object_type_list %}
-                            {% if not object == object_type_list.0 %}
-                        <option value="{{ object }}">{{ object }}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </div>
-            </form>
-        </li>
-        <li class="list-group-item">
-            <!--Select attributes-->
-            <form action="" id="attribute_select_form" method="post">
-                {% csrf_token %}
-                <fieldset>
-                    <label class="form-label">Select attributes</label>
-                    {% for attribute, checked in attribute_dict.items %}
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="attribute_select" value="{{ attribute }}" {{ checked }}>
-                        <label class="form-check-label">{{ attribute }}</label>
+                <div class="row g-3">
+                    <div class="col">
+                        <label class="form-label">Select Clustering method</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="clustering_method_select" value="kmeans" {{ clustering_method_check.0 }}>
+                            <label class="form-check-label">
+                            K-Means
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="clustering_method_select" value="hierarchical" {{ clustering_method_check.1 }}>
+                            <label class="form-check-label">
+                            Hierarchical
+                            </label>
+                        </div>
                     </div>
-                    {% endfor %}
-                    <p></p>
-                </fieldset>
+                    <div class="col">
+                        <label class="form-label">Select Event assignment</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="event_assignment_select" value="all" {{ event_assignment_check.0 }}>
+                            <label class="form-check-label">
+                                All
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="event_assignment_select" value="existence" {{ event_assignment_check.1 }}>
+                            <label class="form-check-label">
+                                Existence
+                            </label>
+                        </div>
+                    </div>
+                    <button id="drawButton" class="btn btn-primary btn-lg" type="submit">
+                        <span id="drawSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden;"></span>
+                        <span class="sr-only">Cluster</span>
+                    </button>
+                </div>
             </form>
-        </li>
-    </ul>
-</div>
-<p></p>
-
-
-<p></p>
-
-<!--Select clustering Method and object-->
-<div class="container">
-    <form action="" method="post">
-        {% csrf_token %}
-        <div class="row g-3">
-            <div class="col">
-                <label class="form-label">Select Clustering method</label>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="clustering_method_select" value="kmeans" {{ clustering_method.0 }}>
-                    <label class="form-check-label">
-                    K-Means
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="clustering_method_select" value="hierarchical" {{ clustering_method.1 }}>
-                    <label class="form-check-label">
-                    Hierarchical
-                    </label>
-                </div>
-            </div>
-            <div class="col">
-                <label class="form-label">Select Event assignment</label>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="event_assignment_select" value="all" {{ event_assignment.0 }}>
-                    <label class="form-check-label">
-                        All
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="event_assignment_select" value="existence" {{ event_assignment.1 }}>
-                    <label class="form-check-label">
-                        Existence
-                    </label>
-                </div>
-            </div>
-            <button id="drawButton" class="btn btn-primary btn-lg" type="submit">
-                <span id="drawSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden;"></span>
-                <span class="sr-only">Cluster</span>
-            </button>
         </div>
-    </form>
+        <p></p>
+
+        <!--Set Filters-->
+        <div class="card">
+            <div class="card-header">Set Filters</div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <!--Select Minactivity and minedge-->
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col">
+                            <label class="form-label">Minactivity:</label>
+                            <output for="slider-activity" name="result-activity" id="result-activity"></output>
+                            <input id="slider-activity" class="form-range" type="range" name="minactivity_select" min="0" max="5000" step="10" value="{{ minactivity }}">
+                        </div>
+                        <div class="col">
+                            <label class="form-label">Minedge:</label>
+                            <output for="slider-edge" name="result-edge" id="result-edge"></output>
+                            <input id="slider-edge" class="form-range" type="range" name="minedge_select" min="0" max="5000" step="10" value="{{ minedge }}">
+                        </div>
+                        <button id="filterButton" class="btn btn-primary" type="submit">
+                            <span id="filterSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden;"></span>
+                            <span class="sr-only">Filter</span>
+                        </button>
+                    </div>
+                </form>
+                </li>
+            </ul>
+        </div>
+    </div>
 </div>
 <p></p>
+
+<!--DFG Cluster Display-->
+{% for i in dfg_file_path_list %}
 <div class="card">
-    <div class="card-header">Set Filters</div>
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item">
-            <!--Select Minactivity and minedge-->
-        <form action="" method="post">
-            {% csrf_token %}
-            <div class="row">
-                <div class="col">
-                    <label class="form-label">Minactivity:</label>
-                    <output for="slider-activity" name="result-activity" id="result-activity"></output>
-                    <input id="slider-activity" class="form-range" type="range" name="minactivity_select" min="0" max="5000" step="10" value="{{ minactivity }}">
-                </div>
-                <div class="col">
-                    <label class="form-label">Minedge:</label>
-                    <output for="slider-edge" name="result-edge" id="result-edge"></output>
-                    <input id="slider-edge" class="form-range" type="range" name="minedge_select" min="0" max="5000" step="10" value="{{ minedge }}">
-                </div>
-                <button id="filterButton" class="btn btn-primary" type="submit">
-                    <span id="filterSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden;"></span>
-                    <span class="sr-only">Filter</span>
-                </button>
-            </div>
-        </form>
-        </li>
-    </ul>
-</div>
-
-<!--Draw DFG Clusters-->
-<div class="container">
-    {% for i in dfg_file_path_list %}
-    <div class="card border-secondary">
-        <div class="card-body">
-            <img src="{{ i }}" class="img-fluid" alt="{{ i }}">
-        </div>
-        <div class="card-footer text-white bg-secondary">
-            <div class="row">
-                <div class="col card-text">
-                    {{ i }}
-                </div>
-                <div class="col text-end">
-                    <a class="btn btn-light text-end" href="{{ i }}" role="button"><i class="bi bi-download"></i></a>
-                </div>
+    {% if forloop.first %}
+    <div class="card-header text-white bg-secondary">
+        <div class="row">
+            <div class="col card-text">
+                Unclustered
             </div>
         </div>
     </div>
-    <p></p>
-    {% endfor %}
+    {% else %}
+    <div class="card-header text-dark bg-light">
+        <div class="row">
+            <div class="col card-text">
+                Cluster {{ forloop.counter0 }}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="card-body">
+        <img src="{{ i }}" class="img-fluid" alt="{{ i }}">
+    </div>
+
+    {% if forloop.first %}
+    <div class="card-footer text-white bg-secondary">
+        <div class="row">
+            <div class="col card-text">
+                {{ i }}
+            </div>
+            <div class="col text-end">
+                <a class="btn btn-secondary text-end" href="{{ i }}" role="button" download=""><i class="bi bi-download"></i></a>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="card-footer text-dark bg-light">
+        <div class="row">
+            <div class="col card-text">
+                {{ i }}
+            </div>
+            <div class="col text-end">
+                <a class="btn btn-light text-end" href="{{ i }}" role="button" download=""><i class="bi bi-download"></i></a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 </div>
+<p></p>
+{% endfor %}
+
+<a class="btn btn-primary m-2" href="{% url 'pdf'%}"><i class="bi bi-file-earmark-pdf-fill"></i> Create PDF</a>
 
 <!-- JS for sliders -->
 <script>

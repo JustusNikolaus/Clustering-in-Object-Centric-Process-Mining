@@ -4,8 +4,6 @@ from sklearn.metrics import silhouette_score
 from sklearn_extra.cluster import KMedoids
 import numpy as np
 
-# Local imports
-from drawpage.distance_techniques import *
 
 # Return: this function returns the cluster labels after hierarchical clustering
 # Input: input a distance matrix
@@ -52,7 +50,7 @@ def cluster_kmedoids(distance_matrix: list) -> list:
         kmedoids.fit(distance_matrix_as_array)
     except TypeError:
         print("Incorrect type for the kmedoids input; list needed")
-    except: 
+    except:
         print("There was an error in the kmedoids clustering")
     return kmedoids.labels_
     

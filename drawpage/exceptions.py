@@ -18,3 +18,4 @@ class DuplicatesError(Error):
     def __init__(self, key, message):
         self.message = message
         self.key = key
+        

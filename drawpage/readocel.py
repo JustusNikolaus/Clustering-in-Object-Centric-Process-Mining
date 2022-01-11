@@ -1,6 +1,6 @@
 # Library imports
 from pm4pymdl.objects.ocel.importer import importer as ocel_importer
-from pm4pymdl.algo.mvp.utils import succint_mdl_to_exploded_mdl 
+from pm4pymdl.algo.mvp.utils import succint_mdl_to_exploded_mdl
 
 def get_object_attributes(object_information: list, object: str) -> list:
     for obj in object_information:
@@ -8,13 +8,18 @@ def get_object_attributes(object_information: list, object: str) -> list:
             return obj["attributes"]
     return []
 
-
-# Return: dictionary containing the objects of OCEL and its not null attributes
-# Input: path_to_file = Path to selected OCEL file
 def get_object_types(path_to_file: str) -> list:
+    """
+
+    Args:
+        path_to_file (str): Path to selected OCEL file
+
+    Returns:
+        list: dictionary containing the objects of OCEL and its not null attributes
+    """
     object_information = []
     try:
-        event_df, object_df = ocel_importer.apply(path_to_file)
+        _, object_df = ocel_importer.apply(path_to_file)
         # Stores unique values of column 'object_type' into array object_types
         object_types = object_df.object_type.unique()
         # Loop over every object_type
@@ -42,11 +47,17 @@ def get_object_types(path_to_file: str) -> list:
         print("File import failed.")
     return object_information
 
-# Return: A dictionary that contains all the information about the objects of a given type
-# Input:  path_to_file is the filepath for the OCEL
-#         object_information is the dict that contains every unique object type and its attributes
-#         object_type is the selected object type that is clustered
-def get_objects(path_to_file: str, object_information: list, object_type: str) -> dict:
+def get_objects(path_to_file: str, object_information: list, object_type: str):
+    """
+
+    Args:
+        path_to_file (str): the filepath for the OCEL
+        object_information (list): the dict that contains every unique object type and its attributes
+        object_type (str): the selected object type that is clustered
+
+    Returns:
+        dict: A dictionary that contains all the information about the objects of a given type
+    """
 
     # Create a dict for all the object instances
     objects = []

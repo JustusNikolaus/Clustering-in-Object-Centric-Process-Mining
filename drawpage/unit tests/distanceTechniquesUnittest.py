@@ -1,15 +1,12 @@
 # Library imports
 import unittest
-#from django.test import TestCase
 import numpy as np
 
 # Local imports
-from .clustering_techniques import cluster_kmedoids, cluster_agglomerative
-from .distance_techniques import LevenshteinDistance, BooleanDistance, EuclideanDistance
+#from drawpage.clustering_techniques import cluster_kmedoids, cluster_agglomerative
+from drawpage.distance_techniques import LevenshteinDistance, BooleanDistance, EuclideanDistance
 
 class MyTestCase(unittest.TestCase):
-
-
 
     def test_levenshtein(self):
 
@@ -34,8 +31,6 @@ class MyTestCase(unittest.TestCase):
                            'Not repeat']
 
         test_bool = BooleanDistance(bool_activities).get_boolean_distances(bool_activities)
-
-
 
         correct_result = [[0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
                           [0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0],
@@ -62,7 +57,6 @@ class MyTestCase(unittest.TestCase):
 
         test_euclidean= EuclideanDistance(euclidean_activities).get_euclidean_distances(euclidean_activities)
 
-
         correct_result = [[0., 2.23606798, 4.,  5.38516481, 6.32455532],
                         [2.23606798, 0., 2.23606798, 4., 5.38516481],
                          [4.,2.23606798, 0., 2.23606798, 4.],
@@ -70,8 +64,6 @@ class MyTestCase(unittest.TestCase):
                         [6.32455532, 5.38516481, 4., 2.23606798, 0.]]
 
         np.testing.assert_almost_equal(test_euclidean, correct_result)  # add assertion here
-
-
 
 if __name__ == '__main__':
     unittest.main()

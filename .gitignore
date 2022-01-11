@@ -2,7 +2,7 @@
 *.pyc
 
 #Ignore db.sqlite3
-#db.sqlite3
+db.sqlite3
 
 # Ignore contents of media/tmp/ folder
 media/tmp/*

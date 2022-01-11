@@ -17,9 +17,9 @@ def test_distance_functions():
                     ['Not eat', 'Not sleep', 'Not rave', 'Not repeat']]
 
     # List of objects
-    bool_activities = ['Not eat', 'Not sleep', 'Not rave', 'Not repeat', 'eat', 
-                        'Not sleep', 'Not rave', 'Not repeat', 'Not eat', 'Not sleep', 
-                        'Not rave', 'Not repeat', 'eat', 'Not sleep', 'Not rave', 
+    bool_activities = ['Not eat', 'Not sleep', 'Not rave', 'Not repeat', 'eat',
+                        'Not sleep', 'Not rave', 'Not repeat', 'Not eat', 'Not sleep',
+                        'Not rave', 'Not repeat', 'eat', 'Not sleep', 'Not rave',
                         'Not repeat']
 
     # List of datapoints

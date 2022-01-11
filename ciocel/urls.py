@@ -15,19 +15,20 @@ Including another URLconf
 """
 # Library imports
 from django.contrib import admin
-from django.urls import path
+from django.urls import path 
 from django.conf.urls.static import static
 from django.conf import settings
 
 # Local imports
 from homepage.views import homepage_view
 from importpage.views import ImportpageView
-from drawpage.views import DrawpageView
+from drawpage.views import DrawpageView, pdf_create_report
 
 urlpatterns = [
     path('', homepage_view, name="home"),
     path('import/', ImportpageView.as_view(), name="import"),
     path('draw/', DrawpageView.as_view(), name="draw"),
+    path('pdf/', pdf_create_report , name='pdf'),
     path('admin/', admin.site.urls),
 ]
 
