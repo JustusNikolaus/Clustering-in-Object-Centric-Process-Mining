@@ -70,10 +70,10 @@
 
         <!--Select clustering Method and object-->
         <div class="container">
-            <form action="" method="post">
-                {% csrf_token %}
-                <div class="row g-3">
-                    <div class="col">
+            <div class="row g-3">
+                <div class="col">
+                    <form action="" id="clustering_method_select_form" method="post">
+                        {% csrf_token %}
                         <label class="form-label">Select Clustering method</label>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="clustering_method_select" value="kmeans" {{ clustering_method_check.0 }}>
@@ -87,8 +87,11 @@
                             Hierarchical
                             </label>
                         </div>
-                    </div>
-                    <div class="col">
+                    </form>
+                </div>
+                <div class="col">
+                    <form action="" id="event_assignment_select_form" method="post">
+                        {% csrf_token %}
                         <label class="form-label">Select Event assignment</label>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="event_assignment_select" value="all" {{ event_assignment_check.0 }}>
@@ -102,8 +105,13 @@
                                 Existence
                             </label>
                         </div>
-                    </div>
-                    <button id="drawButton" class="btn btn-primary btn-lg" type="submit">
+                    </form>
+                </div>
+            </div>
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="row g-3">
+                    <button id="drawButton" class="btn btn-primary btn-lg" type="submit" name="cluster">
                         <span id="drawSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden;"></span>
                         <span class="sr-only">Cluster</span>
                     </button>
@@ -118,25 +126,33 @@
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">
                     <!--Select Minactivity and minedge-->
-                <form action="" method="post">
-                    {% csrf_token %}
                     <div class="row">
                         <div class="col">
-                            <label class="form-label">Minactivity:</label>
-                            <output for="slider-activity" name="result-activity" id="result-activity"></output>
-                            <input id="slider-activity" class="form-range" type="range" name="minactivity_select" min="0" max="5000" step="10" value="{{ minactivity }}">
+                            <form action="" id="minactivity_select_form" method="post">
+                                {% csrf_token %}
+                                <label class="form-label">Minactivity:</label>
+                                <output for="slider-activity" name="result-activity" id="result-activity"></output>
+                                <input id="slider-activity" class="form-range" type="range" name="minactivity_select" min="0" max="5000" step="1" value="{{ minactivity }}">
+                            </form>
                         </div>
                         <div class="col">
-                            <label class="form-label">Minedge:</label>
-                            <output for="slider-edge" name="result-edge" id="result-edge"></output>
-                            <input id="slider-edge" class="form-range" type="range" name="minedge_select" min="0" max="5000" step="10" value="{{ minedge }}">
+                            <form action="" id="minedge_select_form" method="post">
+                                {% csrf_token %}
+                                <label class="form-label">Minedge:</label>
+                                <output for="slider-edge" name="result-edge" id="result-edge"></output>
+                                <input id="slider-edge" class="form-range" type="range" name="minedge_select" min="0" max="5000" step="1" value="{{ minedge }}">
+                            </form>
                         </div>
-                        <button id="filterButton" class="btn btn-primary" type="submit">
-                            <span id="filterSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden;"></span>
-                            <span class="sr-only">Filter</span>
-                        </button>
                     </div>
-                </form>
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <button id="filterButton" class="btn btn-primary" type="submit" name="filter">
+                                <span id="filterSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden;"></span>
+                                <span class="sr-only">Filter</span>
+                            </button>
+                        </div>
+                    </form>
                 </li>
             </ul>
         </div>
@@ -184,6 +200,7 @@
     {% endif %}
 {% endfor %}
 
+<!-- Create PDF Button -->
 <a class="btn btn-primary m-2" href="{% url 'pdf'%}"><i class="bi bi-file-earmark-pdf-fill"></i> Create PDF</a>
 
 <!-- JS for sliders -->
@@ -215,6 +232,18 @@
     }
     document.getElementById("attribute_select_form").onchange = function(){
         attribute_select_form.submit();
+    }
+    document.getElementById("clustering_method_select_form").onchange = function(){
+        clustering_method_select_form.submit();
+    }
+    document.getElementById("event_assignment_select_form").onchange = function(){
+        event_assignment_select_form.submit();
+    }
+    document.getElementById("minactivity_select_form").onchange = function(){
+        minactivity_select_form.submit();
+    }
+    document.getElementById("minedge_select_form").onchange = function(){
+        minedge_select_form.submit();
     }
 </script>
 

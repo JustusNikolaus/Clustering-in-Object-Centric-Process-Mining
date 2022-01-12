@@ -22,8 +22,6 @@ class DrawpageView(TemplateView):
 
     template_name = 'drawpage.html'
 
-    
-
     def get(self, request, *args, **kwars):
         clear_log()
         return refresh(request,
@@ -54,26 +52,22 @@ class DrawpageView(TemplateView):
         elif 'attribute_select' in request.POST:
             request = self.attribute_select(request)
             clear_log()
-        elif 'minactivity_select' in request.POST and 'minedge_select' in request.POST: # Filter
-            request.session['minactivity_cookie'] = request.POST['minactivity_select']
-            request.session['minedge_cookie'] = request.POST['minedge_select']
-
-            if 'file_cookie' in request.session and 'object_type_cookie' in request.session and 'attributes_cookie' in request.session and 'clustering_method_cookie' in request.session and 'event_assignment_cookie' in request.session:
-                #dfg_file_path_list = main.draw(request.session['object_type_cookie'], int(request.session['minactivity_cookie']), int(request.session['minedge_cookie']))
-                main.draw(request.session['object_type_cookie'], int(request.session['minactivity_cookie']), int(request.session['minedge_cookie']))
-        elif 'clustering_method_select' in request.POST and 'event_assignment_select' in request.POST: # Draw
+        elif 'clustering_method_select' in request.POST:
             request.session['clustering_method_cookie'] = request.POST['clustering_method_select']
+            clear_log()
+        elif 'event_assignment_select' in request.POST:
             request.session['event_assignment_cookie'] = request.POST['event_assignment_select']
-
-            if 'file_cookie' in request.session and 'object_type_cookie' in request.session and 'attributes_cookie' in request.session:
+            clear_log()
+        elif 'cluster' in request.POST: # Cluster Button
+            if 'file_cookie' in request.session and 'object_type_cookie' in request.session and 'attributes_cookie' in request.session and 'clustering_method_cookie' in request.session and 'event_assignment_cookie' in request.session:
                 path_to_file = 'media/' + request.session['file_cookie']
                 object_information = readocel.get_object_types(path_to_file)
 
-                # Delete old Images and Logs
+                # Delete old Images and Clear Log
                 for filename in os.listdir(os.path.join(BASE_DIR, 'media/tmp')):
                     if filename.endswith('.png'):
                         os.remove(os.path.join(BASE_DIR, 'media/tmp/' + filename)) 
-                Log.objects.all().delete()
+                clear_log()
 
                 if 'minactivity_cookie' in request.session and 'minedge_cookie' in request.session:
                     main.main_draw(
@@ -86,7 +80,6 @@ class DrawpageView(TemplateView):
                         int(request.session['minactivity_cookie']),
                         int(request.session['minedge_cookie']),
                     )
-
                 else:
                     main.main_draw(
                         path_to_file,
@@ -96,6 +89,20 @@ class DrawpageView(TemplateView):
                         request.session['event_assignment_cookie'],
                         request.session['attributes_cookie'],
                     )
+            else:
+                # TODO: Validation
+                print("Warning: Clustering failed. Make sure all values are set.")
+        elif 'minactivity_select' in request.POST:
+            request.session['minactivity_cookie'] = request.POST['minactivity_select']
+        elif 'minedge_select' in request.POST:
+            request.session['minedge_cookie'] = request.POST['minedge_select']
+        elif 'filter' in request.POST: # Filter
+            if 'file_cookie' in request.session and 'object_type_cookie' in request.session and 'attributes_cookie' in request.session and 'clustering_method_cookie' in request.session and 'event_assignment_cookie' in request.session and 'minactivity_cookie' in request.session and 'minedge_cookie' in request.session:
+                main.draw(request.session['object_type_cookie'], int(request.session['minactivity_cookie']), int(request.session['minedge_cookie']))
+            else:
+                # TODO: Validation
+                print("Warning: Filtering failed. Make sure all values are set.")
+
 
         return refresh(request,
             file_list = [],
@@ -190,9 +197,6 @@ def refresh(request: HttpRequest, file_list: list, object_type_list: list, attri
             event_assignment_check = ['checked', '']
         elif request.session['event_assignment_cookie'] == "existence":
             event_assignment_check = ['', 'checked']
-
-    print("#############################")
-    print(list(Log.objects.values_list('image', flat=True)))
 
     return render(request, 'drawpage.html', {
         'file_list':file_list,
