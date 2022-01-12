@@ -145,60 +145,43 @@
 <p></p>
 
 <!-- DFG Cluster Display -->
-{% for i in dfg_file_path_list %}
-<div class="card">
-    <!-- Card Header -->
-    {% if forloop.first %}
-    <div class="card-header text-white bg-secondary">
-        <div class="row">
-            <div class="col card-text">
-                Unclustered
+{% for i in log %}
+    {% if i.nodes != 0 %}
+    <div class="card">
+        <!-- Card Header -->
+        {% if forloop.first %}
+        <div class="card-header text-white bg-secondary">
+            <div class="row">
+                <div class="col card-text">
+                    Unclustered
+                </div>
+                <div class="col text-end">
+                    Nodes: {{ i.nodes }} | Edges: {{ i.edges }} <a class="btn btn-secondary text-end" href="/media{{ i.image }}" role="button" download=""><i class="bi bi-download"></i></a>
+                </div>
             </div>
         </div>
-    </div>
-    {% else %}
-    <div class="card-header text-dark bg-light">
-        <div class="row">
-            <div class="col card-text">
-                Cluster {{ forloop.counter0 }}
+        {% else %}
+        <div class="card-header text-dark bg-light">
+            <div class="row">
+                <div class="col card-text">
+                    Cluster {{ forloop.counter0 }}
+                </div>
+                <div class="col text-end">
+                    Nodes: {{ i.nodes }} | Edges: {{ i.edges }} <a class="btn btn-light text-end" href="/media{{ i.image }}" role="button" download=""><i class="bi bi-download"></i></a>
+                </div>
             </div>
         </div>
-    </div>
-    {% endif %}
+        {% endif %}
 
-    <!-- Card Body -->
-    <div class="card-body">
-        <a href="{{ i }}">
-            <img src="{{ i }}" class="img-fluid" alt="{{ i }}">
-        </a>
-    </div>
-
-    <!-- Card Footer -->
-    {% if forloop.first %}
-    <div class="card-footer text-white bg-secondary">
-        <div class="row">
-            <div class="col card-text">
-                {{ i }}
-            </div>
-            <div class="col text-end">
-                <a class="btn btn-secondary text-end" href="{{ i }}" role="button" download=""><i class="bi bi-download"></i></a>
-            </div>
+        <!-- Card Body -->
+        <div class="card-body">
+            <a href="/media{{ i.image }}">
+                <img src="/media{{ i.image }}" class="img-fluid" alt="{{ i.image }}">
+            </a>
         </div>
     </div>
-    {% else %}
-    <div class="card-footer text-dark bg-light">
-        <div class="row">
-            <div class="col card-text">
-                {{ i }}
-            </div>
-            <div class="col text-end">
-                <a class="btn btn-light text-end" href="{{ i }}" role="button" download=""><i class="bi bi-download"></i></a>
-            </div>
-        </div>
-    </div>
+    <p></p>
     {% endif %}
-</div>
-<p></p>
 {% endfor %}
 
 <a class="btn btn-primary m-2" href="{% url 'pdf'%}"><i class="bi bi-file-earmark-pdf-fill"></i> Create PDF</a>

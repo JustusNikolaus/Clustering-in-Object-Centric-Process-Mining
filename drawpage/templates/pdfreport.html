@@ -12,49 +12,61 @@
         <h1>Settings</h1>
 
         <div class="table">
-        <table class="table">
-            <tbody>
-                <tr>
-                    <td>Selected file:</td>
-                    <td>{{ file_name }}</td>
-                </tr>
-                <tr>
-                    <td>Selected object type:</td>
-                    <td>{{ object_type }}</td>
-                </tr>
-                <tr>
-                    <td>Selected attributes:</td>
-                    <td>{% for attr in attributes %} {{ attr }}, {% endfor %}</td>
-                </tr>
-                <tr>
-                    <td>Minactivity:</td>
-                    <td>{{ minactivity }}</td>
-                </tr>
-                <tr>
-                    <td>Minedge:</td>
-                    <td>{{ minedge }}</td>
-                </tr>
-                <tr>
-                    <td>Clustering method:</td>
-                    <td>{{ clustering_method }}</td>
-                </tr>
-                <tr>
-                    <td>Event assignment:</td>
-                    <td>{{ event_assignment }}</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td>Selected file:</td>
+                        <td>{{ file_name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Selected object type:</td>
+                        <td>{{ object_type }}</td>
+                    </tr>
+                    <tr>
+                        <td>Selected attributes:</td>
+                        <td>{% for attr in attributes %} {{ attr }}, {% endfor %}</td>
+                    </tr>
+                    <tr>
+                        <td>Minactivity:</td>
+                        <td>{{ minactivity }}</td>
+                    </tr>
+                    <tr>
+                        <td>Minedge:</td>
+                        <td>{{ minedge }}</td>
+                    </tr>
+                    <tr>
+                        <td>Clustering method:</td>
+                        <td>{{ clustering_method }}</td>
+                    </tr>
+                    <tr>
+                        <td>Event assignment:</td>
+                        <td>{{ event_assignment }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
         <h1>DFGs</h1>
         {% for i in log %}
+        <p>
             {% if forloop.first %}
-                <h3>Unclustered</h3>
-                <img src="http://127.0.0.1:8000/media{{ i.log_image }}" alt="{{ i }}">
+            <table class="table">
+                <tr>
+                    <td><h3>Unclustered</h3></td>
+                    <td align="right">Nodes: {{ i.nodes }} | Edges: {{ i.edges }}</td>
+                </tr>
+            </table>
+            <img src="http://127.0.0.1:8000/media{{ i.image }}" alt="{{ i }}">
             {% else %}
-                <h3>Cluster {{ forloop.counter0 }}</h3>
-                <img src="http://127.0.0.1:8000/media{{ i.log_image }}" alt="{{ i }}">
+            <table class="table">
+                <tr>
+                    <td><h3>Cluster {{ forloop.counter0 }}</h3></td>
+                    <td align="right">Nodes: {{ i.nodes }} | Edges: {{ i.edges }}</td>
+                </tr>
+            </table>
+            <img src="http://127.0.0.1:8000/media{{ i.image }}" alt="{{ i }}">
             {% endif %}
+        </p><br>
         {% endfor %}
     </body>   
 </html>

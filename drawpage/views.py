@@ -14,13 +14,18 @@ from .models import Log
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-class DrawpageView(TemplateView):
+def clear_log():
+     Log.objects.all().delete()
 
-    """ View for the Drawpage """
+class DrawpageView(TemplateView):
+    """View for the Drawpage"""
 
     template_name = 'drawpage.html'
 
+    
+
     def get(self, request, *args, **kwars):
+        clear_log()
         return refresh(request,
             file_list = [],
             object_type_list = [],
@@ -29,7 +34,6 @@ class DrawpageView(TemplateView):
             minedge = '0',
             clustering_method_check = ['', ''],
             event_assignment_check = ['', ''],
-            dfg_file_path_list = [],
         )
 
     def post(self, request, *args, **kwargs):
@@ -40,20 +44,23 @@ class DrawpageView(TemplateView):
         minedge = '0'
         clustering_method_check = ['', '']
         event_assignment_check = ['', '']
-        dfg_file_path_list = []
 
         if 'file_select' in request.POST:
             request = self.file_select(request)
+            clear_log()
         elif 'object_type_select' in request.POST:
             request = self.object_type_select(request)
+            clear_log()
         elif 'attribute_select' in request.POST:
             request = self.attribute_select(request)
+            clear_log()
         elif 'minactivity_select' in request.POST and 'minedge_select' in request.POST: # Filter
             request.session['minactivity_cookie'] = request.POST['minactivity_select']
             request.session['minedge_cookie'] = request.POST['minedge_select']
 
             if 'file_cookie' in request.session and 'object_type_cookie' in request.session and 'attributes_cookie' in request.session and 'clustering_method_cookie' in request.session and 'event_assignment_cookie' in request.session:
-                dfg_file_path_list = main.draw(request.session['object_type_cookie'], int(request.session['minactivity_cookie']), int(request.session['minedge_cookie']))
+                #dfg_file_path_list = main.draw(request.session['object_type_cookie'], int(request.session['minactivity_cookie']), int(request.session['minedge_cookie']))
+                main.draw(request.session['object_type_cookie'], int(request.session['minactivity_cookie']), int(request.session['minedge_cookie']))
         elif 'clustering_method_select' in request.POST and 'event_assignment_select' in request.POST: # Draw
             request.session['clustering_method_cookie'] = request.POST['clustering_method_select']
             request.session['event_assignment_cookie'] = request.POST['event_assignment_select']
@@ -69,7 +76,7 @@ class DrawpageView(TemplateView):
                 Log.objects.all().delete()
 
                 if 'minactivity_cookie' in request.session and 'minedge_cookie' in request.session:
-                    dfg_file_path_list, _, _ = main.main_draw(
+                    main.main_draw(
                         path_to_file,
                         object_information,
                         request.session['object_type_cookie'],
@@ -81,7 +88,7 @@ class DrawpageView(TemplateView):
                     )
 
                 else:
-                    dfg_file_path_list, _, _ = main.main_draw(
+                    main.main_draw(
                         path_to_file,
                         object_information,
                         request.session['object_type_cookie'],
@@ -98,7 +105,6 @@ class DrawpageView(TemplateView):
             minedge = minedge,
             clustering_method_check = clustering_method_check,
             event_assignment_check = event_assignment_check,
-            dfg_file_path_list = dfg_file_path_list,
         )
 
     def file_select(self, request):
@@ -123,9 +129,8 @@ class DrawpageView(TemplateView):
         request.session['attributes_cookie'] = request.POST.getlist('attribute_select')
         return request
 
-def refresh(request: HttpRequest, file_list: list, object_type_list: list, attribute_dict: dict, minactivity: str, minedge: str, clustering_method_check: list, event_assignment_check: list, dfg_file_path_list: list):
-    """
-    Refreshes all attribute values and returns them as a rendered HttpResponse
+def refresh(request: HttpRequest, file_list: list, object_type_list: list, attribute_dict: dict, minactivity: str, minedge: str, clustering_method_check: list, event_assignment_check: list):
+    """Refreshes all attribute values and returns them as a rendered HttpResponse
 
     Args:
         request (HttpRequest):
@@ -136,7 +141,6 @@ def refresh(request: HttpRequest, file_list: list, object_type_list: list, attri
         minedge (str): the minimum edge frequency to display
         clustering_method_check (list): the selected clustering method. Can be either 'hierarchical' or 'kmeans'
         event_assignment_check (list): the selected method of event assignment. Can either be 'all' or 'existence'
-        dfg_file_path_list (list): a list containing the filepaths to all current image files displaying DFGs
 
     Returns:
         HttpResponse: a rendered HttpResponse consisting of the inputted HttpRequest and the updated values for the arguments.
@@ -187,6 +191,9 @@ def refresh(request: HttpRequest, file_list: list, object_type_list: list, attri
         elif request.session['event_assignment_cookie'] == "existence":
             event_assignment_check = ['', 'checked']
 
+    print("#############################")
+    print(list(Log.objects.values_list('image', flat=True)))
+
     return render(request, 'drawpage.html', {
         'file_list':file_list,
         'object_type_list':object_type_list,
@@ -195,7 +202,7 @@ def refresh(request: HttpRequest, file_list: list, object_type_list: list, attri
         'minedge':minedge,
         'clustering_method_check':clustering_method_check,
         'event_assignment_check':event_assignment_check,
-        'dfg_file_path_list':dfg_file_path_list
+        'log':Log.objects.all()
     })
 
 def pdf_create_report(request):

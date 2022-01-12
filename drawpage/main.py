@@ -19,32 +19,19 @@ def draw(object_type: str, min_act_freq: int, min_edge_freq: int):
         object_type (str): the object type for which to cluster
         min_act_freq (int): Minimum frequency of activity to display. Defaults to 0.
         min_edge_freq (int): Minimum frequency of edges to display. Defaults to 0.
-
-    Returns:
-        dfg_filepaths (list): A list containing the filepaths to all created .png files
     """
-    dfg_filepath_list = []
     models = list(Log.objects.values_list('log_model', flat=True))
     for i, model in enumerate(models):
         model = pickle.loads(model)
         gviz = visualizer.apply(model, parameters={"min_act_freq": min_act_freq, "min_edge_freq": min_edge_freq})
         
-        nodes = get_node_count(gviz) 
-        edges = get_edge_count(gviz)
+        if i == 0:
+            path_to_image = "./media/tmp/Frequency-{}-Unclustered-minactivity-{}-minedge-{}.png".format(object_type, min_act_freq, min_edge_freq)
+        else:
+            path_to_image = "./media/tmp/Frequency-{}-Cluster-{}-minactivity-{}-minedge-{}.png".format(object_type, i, min_act_freq, min_edge_freq)
+        visualizer.save(gviz, path_to_image)
+        Log.objects.filter(name="tmp_" + str(i) + ".pkl").update(image=path_to_image[7:], nodes=get_node_count(gviz), edges=get_edge_count(gviz))
 
-        # Only create picture if DFG is not empty
-        if nodes != 0 and edges != 0: 
-            if i == 0:
-                path_to_image = "./media/tmp/Frequency-{}-Unclustered-minactivity-{}-minedge-{}.png".format(object_type, min_act_freq, min_edge_freq)
-            else:
-                path_to_image = "./media/tmp/Frequency-{}-Cluster-{}-minactivity-{}-minedge-{}.png".format(object_type, i, min_act_freq, min_edge_freq)
-            visualizer.save(gviz, path_to_image)
-            dfg_filepath_list.append(path_to_image)
-            Log.objects.filter(log_name="tmp_" + str(i) + ".pkl").update(log_image=path_to_image[7:])
-
-    # Remove leading '.' from file paths
-    dfg_filepath_list = [sub[1 : ] for sub in dfg_filepath_list]
-    return dfg_filepath_list
 
 def get_node_count(gviz):
     """Get number of nodes in a Digraph
@@ -57,7 +44,7 @@ def get_node_count(gviz):
     """
     nodes = 0
     for line in list(gviz):
-        if not re.search("\".*\" \-> \".*\" \[.*\]", line) and re.search("\".*\" \[.*", line): # Edge ( "_" -> "_" [_] )
+        if not re.search("\".*\" \-> \".*\" \[.*\]", line) and re.search("\".*\" \[.*", line): # Node ( "_" [_ )
             nodes = nodes + 1
     return nodes
 
@@ -77,7 +64,7 @@ def get_edge_count(gviz):
     return edges
 
 
-def main_draw(path_to_file: str, object_information: list, object_type: str, cluster_type: str, event_assignment: str, attributes: list, min_act_freq = 0, min_edge_freq = 0) -> list:
+def main_draw(path_to_file: str, object_information: list, object_type: str, cluster_type: str, event_assignment: str, attributes: list, min_act_freq = 0, min_edge_freq = 0):
     """[summary]
 
     Args:
@@ -164,12 +151,8 @@ def main_draw(path_to_file: str, object_information: list, object_type: str, clu
     for i, df in enumerate(clustered_dataframes_list):
         df.type = "succint"
         model = discovery.apply(df, parameters={"epsilon": 0, "noise_threshold": 0})
-        Log.objects.create(log=pickle.dumps(df), log_model=pickle.dumps(model), log_name='tmp_' + str(i) + '.pkl')
+        Log.objects.create(log=pickle.dumps(df), log_model=pickle.dumps(model), name='tmp_' + str(i) + '.pkl')
 
-    dfg_filepath_list = draw(object_type, min_act_freq, min_edge_freq)
-
-    # Return the list of all graphviz objects to views.py
-    return dfg_filepath_list, clustered_dataframes_list, object_and_cluster
-
+    draw(object_type, min_act_freq, min_edge_freq)
 
 #main_draw("./media/running-example.jsonocel", get_object_types("./media/running-example.jsonocel"), "customers", "kmeans", "All")

@@ -6,8 +6,10 @@ class Log(models.Model):
 
     log = models.BinaryField()
     log_model = models.BinaryField(null=True, default=None)
-    log_name = models.CharField(max_length=500)
-    log_image = models.ImageField(null=True, default=None)
+    name = models.CharField(max_length=500)
+    image = models.ImageField(null=True, default=None)
+    nodes = models.IntegerField(default=0)
+    edges = models.IntegerField(default=0)
 
     def __str__(self):
-        return self.log_name
+        return self.name
