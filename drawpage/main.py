@@ -4,6 +4,7 @@ from pm4pymdl.algo.mvp.utils import succint_mdl_to_exploded_mdl
 from pm4pymdl.algo.mvp.gen_framework3 import discovery
 from pm4pymdl.visualization.mvp.gen_framework3 import visualizer
 import pickle
+import re
 
 # Local imports
 from drawpage.readocel import *
@@ -12,8 +13,7 @@ from drawpage.clustering_techniques import cluster_kmedoids, cluster_agglomerati
 from .models import Log
 
 def draw(object_type: str, min_act_freq: int, min_edge_freq: int): 
-    """
-    Creates .png files visualizing the DFGs. Also saves these files in /media/tmp/ and associates them with the Log model
+    """Creates .png files visualizing the DFGs. Also saves these files in /media/tmp/ and associates them with the Log model
 
     Args:
         object_type (str): the object type for which to cluster
@@ -28,20 +28,57 @@ def draw(object_type: str, min_act_freq: int, min_edge_freq: int):
     for i, model in enumerate(models):
         model = pickle.loads(model)
         gviz = visualizer.apply(model, parameters={"min_act_freq": min_act_freq, "min_edge_freq": min_edge_freq})
-        if i == 0:
-            path_to_image = "./media/tmp/Frequency-{}-Unclustered-minactivity-{}-minedge-{}.png".format(object_type, min_act_freq, min_edge_freq)
-        else:
-            path_to_image = "./media/tmp/Frequency-{}-Cluster-{}-minactivity-{}-minedge-{}.png".format(object_type, i, min_act_freq, min_edge_freq)
-        visualizer.save(gviz, path_to_image)
-        dfg_filepath_list.append(path_to_image)
-        Log.objects.filter(log_name="tmp_" + str(i) + ".pkl").update(log_image=path_to_image[7:])
+        
+        nodes = get_node_count(gviz) 
+        edges = get_edge_count(gviz)
+
+        # Only create picture if DFG is not empty
+        if nodes != 0 and edges != 0: 
+            if i == 0:
+                path_to_image = "./media/tmp/Frequency-{}-Unclustered-minactivity-{}-minedge-{}.png".format(object_type, min_act_freq, min_edge_freq)
+            else:
+                path_to_image = "./media/tmp/Frequency-{}-Cluster-{}-minactivity-{}-minedge-{}.png".format(object_type, i, min_act_freq, min_edge_freq)
+            visualizer.save(gviz, path_to_image)
+            dfg_filepath_list.append(path_to_image)
+            Log.objects.filter(log_name="tmp_" + str(i) + ".pkl").update(log_image=path_to_image[7:])
 
     # Remove leading '.' from file paths
     dfg_filepath_list = [sub[1 : ] for sub in dfg_filepath_list]
     return dfg_filepath_list
 
-def main_draw(path_to_file: str, object_information: list, object_type: str, cluster_type: str, event_assignment: str, attributes: list, min_act_freq = 0, min_edge_freq = 0) -> list:
+def get_node_count(gviz):
+    """Get number of nodes in a Digraph
+
+    Args:
+        gviz (graphviz.graphs.Digraph): Digraph
+
+    Returns:
+        int: Number of nodes
     """
+    nodes = 0
+    for line in list(gviz):
+        if not re.search("\".*\" \-> \".*\" \[.*\]", line) and re.search("\".*\" \[.*", line): # Edge ( "_" -> "_" [_] )
+            nodes = nodes + 1
+    return nodes
+
+def get_edge_count(gviz):
+    """Get number of edges in a Digraph
+
+    Args:
+        gviz (graphviz.graphs.Digraph): Digraph
+
+    Returns:
+        int: Number of edges
+    """
+    edges = 0
+    for line in list(gviz):
+        if re.search("\".*\" \-> \".*\" \[.*\]", line): # Edge ( "_" -> "_" [_] )
+            edges = edges + 1
+    return edges
+
+
+def main_draw(path_to_file: str, object_information: list, object_type: str, cluster_type: str, event_assignment: str, attributes: list, min_act_freq = 0, min_edge_freq = 0) -> list:
+    """[summary]
 
     Args:
         path_to_file (str): path to the file of the ocel
@@ -95,9 +132,7 @@ def main_draw(path_to_file: str, object_information: list, object_type: str, clu
     clustered_dataframes_list = [event_df]
     for label in unique_clusters:
         event_ids = []
-        object_ids_in_cluster = [
-            obj["object_id"] for obj in objects if obj["cluster"] == label
-        ]
+        object_ids_in_cluster = [ obj["object_id"] for obj in objects if obj["cluster"] == label ]
 
         # Save all event ids that are in at least one of the objects of the given cluster
         # Assign all events, that are only in objects from given cluster

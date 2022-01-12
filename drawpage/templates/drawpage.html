@@ -144,9 +144,10 @@
 </div>
 <p></p>
 
-<!--DFG Cluster Display-->
+<!-- DFG Cluster Display -->
 {% for i in dfg_file_path_list %}
 <div class="card">
+    <!-- Card Header -->
     {% if forloop.first %}
     <div class="card-header text-white bg-secondary">
         <div class="row">
@@ -165,12 +166,14 @@
     </div>
     {% endif %}
 
+    <!-- Card Body -->
     <div class="card-body">
         <a href="{{ i }}">
             <img src="{{ i }}" class="img-fluid" alt="{{ i }}">
         </a>
     </div>
 
+    <!-- Card Footer -->
     {% if forloop.first %}
     <div class="card-footer text-white bg-secondary">
         <div class="row">
