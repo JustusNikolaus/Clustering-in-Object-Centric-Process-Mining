@@ -166,7 +166,9 @@
     {% endif %}
 
     <div class="card-body">
-        <img src="{{ i }}" class="img-fluid" alt="{{ i }}">
+        <a href="{{ i }}">
+            <img src="{{ i }}" class="img-fluid" alt="{{ i }}">
+        </a>
     </div>
 
     {% if forloop.first %}
