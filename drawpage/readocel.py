@@ -69,30 +69,7 @@ def get_ocel_summary(path_to_file: str) -> dict:
     }
     return dict
 
-def validate_ocel_xml(input_path: str, validation_path: str, parameters=None):
-    """
-
-    Args:
-        input_path (str): Path to selected OCEL file
-        validation_path (str): Path to the xml schema used for validation
-
-    Returns:
-        bool: if the input is valid
-    """
-    import lxml
-
-    if not pkgutil.find_loader("lxml"):
-        raise Exception("please install lxml in order to validate an XMLOCEL file.")
-
-    if parameters is None:
-        parameters = {}
-
-    xml_file = lxml.etree.parse(input_path)
-    xml_validator = lxml.etree.XMLSchema(file=validation_path)
-    is_valid = xml_validator.validate(xml_file)
-    return is_valid
-
-def validate_ocel_jsonocel(input_path: str, validation_path, parameters=None):
+def validate_ocel_jsonocel(input_path: str, parameters=None):
     """
 
     Args:
@@ -112,30 +89,16 @@ def validate_ocel_jsonocel(input_path: str, validation_path, parameters=None):
     if parameters is None:
         parameters = {}
 
-    schema_content = json.load(open(validation_path, "rb"))
+    schema_content = json.load(open("./media/validation/schema.json", "rb"))
     try:
         file_content = json.load(open(input_path, "rb"))
         validate(instance=file_content, schema=schema_content)
         return True
     except jsonschema.exceptions.ValidationError as err:
+        print(err)
         return False
     except json.decoder.JSONDecodeError as err:
-        return False
-
-def validate_ocel(path_to_file: str) -> bool:
-    """
-
-    Args:
-        path_to_file (str): Path to selected OCEL file
-
-    Returns:
-        bool: if the input is valid
-    """
-    if path_to_file.endswith("lxml"):
-        return validate_ocel_xml(input_path=path_to_file, validation_path="./media/validation/schema.xml")
-    elif path_to_file.endswith("jsonocel"):
-        return validate_ocel_jsonocel(input_path=path_to_file, validation_path="./media/validation/schema.json")
-    else:
+        print(err)
         return False
 
 def get_objects(path_to_file: str, object_information: list, object_type: str):

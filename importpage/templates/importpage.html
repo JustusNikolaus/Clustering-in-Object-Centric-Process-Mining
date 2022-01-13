@@ -13,9 +13,19 @@
     {% csrf_token %}
     <div class="input-group">
         <input id="file" type="file" name="upload_log" class="form-control" multiple/>
-        <button type="submit" class="btn btn-primary">Import Log</button>
+        <button type="submit" class="btn btn-primary" id="importButton">Import Log</button>
     </div>
-    <label class="form-label"><p class="text-{{ upload_response_label.0 }}">{{ upload_response_label.1 }}</p></label>
+    <p>
+        <span id="validateSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden;"></span>
+        <span id="validateSpinnerLabel" class="sr-only"> </span>
+    </p>
+    <!--Alert Upload-->
+    {% if upload_response_label %}
+    <div class="alert alert-{{ upload_response_label.0 }} alert-dismissible fade show" role="alert">
+        <i class="bi bi-{{ upload_response_label.2 }}"></i> {{ upload_response_label.1 }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
 </form>
 
 <form action="" method="POST">
@@ -28,9 +38,24 @@
         </select>
         <button class="btn btn-danger" type="submit"><i class="bi bi-trash-fill"></i></button>
     </div>
-    <label class="form-label"><p class="text-{{ delete_response_label.0 }}">{{ delete_response_label.1 }}</p></label>
+    <p></p>
+    <!--Alert Delete-->
+    {% if delete_response_label %}
+    <div class="alert alert-{{ delete_response_label.0 }} alert-dismissible fade show" role="alert">
+        <i class="bi bi-{{ delete_response_label.2 }}"></i> {{ delete_response_label.1 }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
 </form>
 
 <a class="btn btn-primary" href="{% url 'draw' %}" role="button">Clustering DFG page</a>
+
+<!-- JS for Loading animations -->
+<script>
+    document.getElementById("importButton").onclick = function(){
+        document.getElementById("validateSpinner").style.visibility = "visible";
+        document.getElementById("validateSpinnerLabel").textContent="Validating";
+    }
+</script>
 
 {% endblock %}
