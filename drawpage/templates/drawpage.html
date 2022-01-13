@@ -9,13 +9,14 @@
 <h2>This is the Drawpage</h2>
 <p>Please select everything and press "Draw"</p>
 
+
 <div class="card">
     <div class="card-body bg-light">
         <!--Select OCEL, object type and attributes-->
         <div class="card">
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">
-                    <!--Choose OCEL File Form-->
+                    <!-- Choose OCEL File Form -->
                     <form action="" id="file_select_form" method="post">
                         {% csrf_token %}
                         <label class="form-label">Select OCEL</label>
@@ -30,6 +31,15 @@
                             </select>
                         </div>
                     </form>
+                    <!-- Summary Badges -->
+                    {% for key, value in summary.items %} 
+                        {% if forloop.counter0 < 3 %}
+                            <span class="badge bg-primary">
+                                {{key}} 
+                                <span class="badge rounded-pill bg-light text-dark">{{value}}</span>
+                            </span>
+                        {% endif %}
+                    {% endfor %}
                 </li>
                 <li class="list-group-item">
                     <!--Select object type-->

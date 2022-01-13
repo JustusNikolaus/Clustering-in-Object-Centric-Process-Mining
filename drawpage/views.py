@@ -158,8 +158,15 @@ def refresh(request: HttpRequest, file_list: list, object_type_list: list, attri
         if files.endswith(ext):
             file_list.append(files)
 
+    summary = {}
+
     if 'file_cookie' in request.session:
         file_list.insert(0, request.session['file_cookie'])
+
+        try:
+            summary = readocel.get_ocel_summary("media/" + request.session['file_cookie'])
+        except:
+            summary = {'[Error: Could not create summary for ' + request.session['file_cookie'] + ']':''}
 
         # Refresh object_type_list
         ocel_object_dict_list = readocel.get_object_types('media/' + request.session['file_cookie'])
@@ -206,6 +213,7 @@ def refresh(request: HttpRequest, file_list: list, object_type_list: list, attri
         'minedge':minedge,
         'clustering_method_check':clustering_method_check,
         'event_assignment_check':event_assignment_check,
+        'summary':summary,
         'log':Log.objects.all()
     })
 

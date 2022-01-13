@@ -1,6 +1,8 @@
 # Library imports
 from pm4pymdl.objects.ocel.importer import importer as ocel_importer
 from pm4pymdl.algo.mvp.utils import succint_mdl_to_exploded_mdl
+import pm4py
+import pkgutil
 
 def get_object_attributes(object_information: list, object: str) -> list:
     for obj in object_information:
@@ -46,6 +48,95 @@ def get_object_types(path_to_file: str) -> list:
     except:
         print("File import failed.")
     return object_information
+
+def get_ocel_summary(path_to_file: str) -> dict:
+    """
+
+    Args:
+        path_to_file (str): Path to selected OCEL file
+
+    Returns:
+        list: dictionary containing a basic summary of the ocel
+    """
+    ocel = pm4py.read_ocel(path_to_file)
+    dict = {
+        "Number of events": len(ocel.events),
+        "Number of objects": len(ocel.objects),
+        "Number of activities": ocel.events[ocel.event_activity].nunique(),
+        "Number of object_types": ocel.objects[ocel.object_type_column].nunique(),
+        "Number of activities_occurences": str(ocel.events[ocel.event_activity].value_counts().to_dict()),
+        "Number of object_occurences": str(ocel.objects[ocel.object_type_column].value_counts().to_dict())
+    }
+    return dict
+
+def validate_ocel_xml(input_path: str, validation_path: str, parameters=None):
+    """
+
+    Args:
+        input_path (str): Path to selected OCEL file
+        validation_path (str): Path to the xml schema used for validation
+
+    Returns:
+        bool: if the input is valid
+    """
+    import lxml
+
+    if not pkgutil.find_loader("lxml"):
+        raise Exception("please install lxml in order to validate an XMLOCEL file.")
+
+    if parameters is None:
+        parameters = {}
+
+    xml_file = lxml.etree.parse(input_path)
+    xml_validator = lxml.etree.XMLSchema(file=validation_path)
+    is_valid = xml_validator.validate(xml_file)
+    return is_valid
+
+def validate_ocel_jsonocel(input_path: str, validation_path, parameters=None):
+    """
+
+    Args:
+        input_path (str): Path to selected OCEL file
+        validation_path (str): Path to the json schema used for validation
+
+    Returns:
+        bool: if the input is valid
+    """
+    if not pkgutil.find_loader("jsonschema"):
+        raise Exception("please install jsonschema in order to validate a JSONOCEL file.")
+
+    import json
+    import jsonschema
+    from jsonschema import validate
+
+    if parameters is None:
+        parameters = {}
+
+    schema_content = json.load(open(validation_path, "rb"))
+    try:
+        file_content = json.load(open(input_path, "rb"))
+        validate(instance=file_content, schema=schema_content)
+        return True
+    except jsonschema.exceptions.ValidationError as err:
+        return False
+    except json.decoder.JSONDecodeError as err:
+        return False
+
+def validate_ocel(path_to_file: str) -> bool:
+    """
+
+    Args:
+        path_to_file (str): Path to selected OCEL file
+
+    Returns:
+        bool: if the input is valid
+    """
+    if path_to_file.endswith("lxml"):
+        return validate_ocel_xml(input_path=path_to_file, validation_path="./media/validation/schema.xml")
+    elif path_to_file.endswith("jsonocel"):
+        return validate_ocel_jsonocel(input_path=path_to_file, validation_path="./media/validation/schema.json")
+    else:
+        return False
 
 def get_objects(path_to_file: str, object_information: list, object_type: str):
     """
