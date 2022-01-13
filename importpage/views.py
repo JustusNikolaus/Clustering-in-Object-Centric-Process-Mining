@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.views.generic.base import TemplateView
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
+from drawpage.readocel import validate_ocel as validation
 import os
 
 
