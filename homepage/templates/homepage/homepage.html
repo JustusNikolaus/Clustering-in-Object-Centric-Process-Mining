@@ -6,91 +6,144 @@
 {% endblock %}
 
 {% block content %}
-<h2>This Page serves as the home and help page</h2>
-<p>Please click on 'Import File' to start the process</p>
-
-<h2>User Manual</h2> <br>
-
-<img src="{% static '/images/importpage1.png' %}" style="width: 70vw; min-width: 140px;" border="5"/>
-
-<p>
+<hr style="border:2px solid gray">
+</hr>
+<h1 id="clustering-in-object-centric-process-mining-user-manual">Clustering in Object Centric Process Mining: User Manual</h1>
+<hr style="border:2px solid gray">
+</hr>
+<h2 id="project-initiation">Project Initiation</h2>
+<h3 id="requirements-overview">Requirements Overview</h3>
+<hr style="border:1px solid gray" width="25%">
+</hr>
 <ul>
-    <li>
-        Click on the Choose Files button (1) and select an OCEL from your computer.
-    </li>
-    <li>
-        Press the „Import Log“ button (2), if the upload of your file(s) was successful you will see it at (3).
-    </li>
-    <li>
-        Then press the „Clustering DFG page“ button (4) to get to the draw page.
-    </li>
-    <li>
-        You can also delete files by clicking on them and then pressing the „Delete“ button above button (4).
-    </li>
+<li>Requires Python, pip and Graphviz.</li>
+<li>Requires Docker for the creation of a container, which may be downloaded here: https://docs.docker.com/docker-for-windows/install/.</li>
 </ul>
-</p>
-
-<br>
-
-<img src="{% static '/images/Drawpage1.png' %}" style="width: 70vw; min-width: 140px;" border="5"/>
-
-<p>
+<h3 id="initialisation">Initialisation</h3>
+<hr style="border:1px solid gray" width="25%">
+</hr>
 <ul>
-    <li>
-        Select an OCEL from the ones you uploaded before. <br>
-        In case you uploaded multiple ones with the same name, they will automatically get a suffix like the second and third OCEL file in the picture.
-    </li>
+<li>Firstly, clone the project from https://github.com/Justus-Nitroklaus/Clustering-in-Object-Centric-Process-Mining.git.</li>
+<li>After cloning to your local, run the command <code>pip install -r requirements.txt</code> to download all requirements.</li>
 </ul>
-</p>
-
-<br>
-
-<img src="{% static '/images/Drawpage2.png' %}" style="width: 70vw; min-width: 140px;" border="5"/>
-
-<p>
+<h3 id="running-without-a-container">Running without a Container</h3>
+<hr style="border:1px solid gray" width="25%">
+</hr>
 <ul>
-    <li>
-        Then you get to select the object type you want to cluster for. <br>
-        There will be listed all the possible object types from YOUR OCEL, which are therefore not necessarily the same as the ones shown in the example picture.
-    </li>
+<li>Run the command <code>python manage.py runserver</code> in the project directory in order to run the development server at <code>http://127.0.0.1:8000/</code>.</li>
+<li>Type <code>http://127.0.0.1:8000/</code> into your browser and you should be able to run the project.</li>
 </ul>
-</p>
-
-<br>
-
-<img src="{% static '/images/Drawpage3.png' %}" style="width: 70vw; min-width: 140px;" border="5"/>
-
-<p>
+<h3 id="creating-running-a-docker-container">Creating &amp; Running a Docker Container</h3>
+<hr style="border:1px solid gray" width="33%">
+</hr>
 <ul>
-    <li>
-        Now you can select the attributes of the chosen object you want to cluster for. <br>
-        You can select one or multiple attributes. <br>
-        If you select more than one the average between these will be used to calculate the result.
-    </li>
+<li>Run the command <code>docker build . -t [image_name]</code> with <code>[image_name]</code> being whatever name you want to give the image. For example: <code>docker build . -t ciocel_one</code>. This should build a Docker image with the passed name.</li>
+<li>Run the Docker container that you have created using the command <code>docker run -d -p 8000:8000 [image_name]</code>, while replacing <code>[image_name]</code> with the name you have previously given the image. That should run the container in detached mode and port it to your local host; <code>http://127.0.0.1:8000/</code>.</li>
+<li>Type <code>http://127.0.0.1:8000/</code> into your browser and you should be able to run the project.</li>
 </ul>
-</p>
-
-<br>
-
-<img src="{% static '/images/Drawpage4.png' %}" style="width: 70vw; min-width: 140px;" border="5"/>
-
-<p>
+<hr style="border:2px solid gray">
+</hr>
+<h2 id="understanding-the-application-layout">Understanding the Application Layout</h2>
+<p><img src="{% static 'images/HomePage_Navi.png' %}" title="Home page and the navigation bar" style="width: 70vw; min-width: 140px;" border="5"/></p>
 <ul>
-    <li>
-        After that, you can also set filters. <br>
-        You can set the minimum number of activities (1) and the minimal number of edges (2), both in a range of zero to 5000. <br>
-        After you change the number you need to press the „Filter“ button (3).
-    </li>
-    <li>
-        The last step ist to select a clustering method (4) and the method how to assign events to the clusters (5). <br>
-        (Explanation: If you choose „All“ an event is just assigned to a cluster if ALL objects in that event are in that cluster. <br>
-        If you choose „Existence“ an event is assigned to a cluster as soon as AT LEAST ONE object from the event is in the cluster).
-
-    </li>
-    <li>
-        Then press the „Draw“ button (6).
-    </li>
+<li>The home page, like all other pages, includes a navigation bar at the top.</li>
+<li>The navigation bar includes three pages: the home page, which you are currently on, the file import page, and the DFG drawing page.</li>
+<li>To begin, click on “Import File”, which should land you in the file import page.</li>
 </ul>
-</p>
+<hr style="border:2px solid gray">
+</hr>
+<h2 id="uploading-an-object-centric-event-log">Uploading an Object-Centric Event Log</h2>
+<p><img src="{% static 'images/ImportPage_Main.png' %}" title="Import page layout" style="width: 70vw; min-width: 140px;" border="5"/></p>
+<ul>
+<li>After you have landed in the file import page, this should be your view; here you will see a functionality to upload event logs, a storage of all previously imported event logs, and a button that brings you to the DFG drawing page.</li>
+</ul>
+<p><img src="{% static 'images/ImportPage_Upload.png' %}" title="Import page file upload" style="width: 70vw; min-width: 140px;" border="5"/></p>
+<ul>
+<li>Using the browse button, you can pick and then upload OCEL-standard files formatted as XML or JSON.</li>
+<li>After selecting your files, you are able to see the names and directories of the selected files.</li>
+<li>After making sure that you have selected the files you want to work with, press the “Import Log” button. That shoud upload your files to the database for use.</li>
+</ul>
+<p><img src="{% static 'images/ImportPage_Storage.png' %}" title="Import page stored event logs" style="width: 70vw; min-width: 140px;" border="5"/></p>
+<ul>
+<li>In the storage view, you are able to view which files you have previously uploaded.</li>
+<li>The selected file is highlighted in grey, and can even be removed from the saved files.</li>
+</ul>
+<hr style="border:2px solid gray">
+</hr>
+<h2 id="deleting-an-event-log">Deleting an Event Log</h2>
+<p><img src="{% static 'images/ImportPage_Deleting.png' %}" title="Import page event log deletion" style="width: 70vw; min-width: 140px;" border="5"/></p>
+<ul>
+<li>Should you ever want to remove an event log from the system, simply head to the storage, select the event log, then press on the red delete button.</li>
+</ul>
+<hr style="border:2px solid gray">
+</hr>
+<h2 id="generating-clusters-and-a-process-model-for-the-object-centric-event-log">Generating Clusters and a Process Model for the Object-Centric Event Log</h2>
+<h3 id="going-from-the-import-page-to-the-draw-page">Going from the Import Page to the Draw Page</h3>
+<hr style="border:1px solid gray" width="50%">
+</hr>
+<p><img src="{% static 'images/ImportPage_Drawing.png' %}" title="Import page process model drawing" style="width: 70vw; min-width: 140px;" border="5"/></p>
+<ul>
+<li>In order to start creating clusters and viewing the cluster process models, press on the “Cluster DFG page” button. That button should lead you to the drawing page.</li>
+</ul>
+<h3 id="drawing-the-clusters-and-the-main-process-model">Drawing the Clusters and the Main Process Model</h3>
+<hr style="border:1px solid gray" width="50%">
+</hr>
+<h4 id="event-log-selection">Event Log Selection</h4>
+<hr style="border:1px solid gray" width="25%">
+</hr>
+<p><img src="{% static 'images/Drawpage_Log.png' %}" title="Draw page event log selection" style="width: 70vw; min-width: 140px;" border="5"/></p>
+<ul>
+<li>Having landed in the draw page, you are now able to simply press on the dropdown menu and select one of your previously uploaded event logs.</li>
+</ul>
+<h4 id="object-type-selection">Object Type Selection</h4>
+<hr style="border:1px solid gray" width="25%">
+</hr>
+<p><img src="{% static 'images/Drawpage_Object.png' %}" title="Draw page object selection" style="width: 70vw; min-width: 140px;" border="5"/></p>
+<ul>
+<li>Following the selection of an event log, you are able to select an object type by pressing on the dropdown menu right below it.</li>
+</ul>
+<h4 id="selecting-the-objects-attributes">Selecting the Object’s Attributes</h4>
+<hr style="border:1px solid gray" width="25%">
+</hr>
+<p><img src="{% static 'images/Drawpage_Attributes.png' %}" title="Draw page object attributes selection" style="width: 70vw; min-width: 140px;" border="5"/></p>
+<ul>
+<li>By click on the boxes, you are able to select one or more object attributes that you would like your clusters to be centered around.</li>
+</ul>
+<h4 id="filtering-your-selections">Filtering your Selections</h4>
+<hr style="border:1px solid gray" width="25%">
+</hr>
+<ul>
+<li>You can set the minimum number of activities (1) and the minimal number of edges (2), both in a range of zero to 5000.</li>
+<li>After the filters have been set, you need to press the “Filter” button (3).</li>
+<li>Filtering of a cluster can be done repeatedly, even after the creation of a cluster. Just make sure to change the ranges and then press the “Filter” button.</li>
+</ul>
+<p><img src="{% static 'images/Drawpage_Filters.png' %}" title="Draw page event log filters selection" style="width: 70vw; min-width: 140px;" border="5"/></p>
+<h4 id="selecting-a-clustering-method">Selecting a Clustering Method</h4>
+<hr style="border:1px solid gray" width="25%">
+</hr>
+<p><img src="{% static 'images/Drawpage_Filters.png' %}" title="Draw page event log filters selection" style="width: 70vw; min-width: 140px;" border="5"/></p>
+<ul>
+<li>The last step ist to select a clustering method (4) and the method how to assign events to the clusters (5).</li>
+<li>If you choose “All” event assignment, an event is just assigned to a cluster if ALL objects in that event are in that cluster.</li>
+<li>If you choose “Existence” event assignment, an event is assigned to a cluster as soon as AT LEAST ONE object from the event is in the cluster</li>
+</ul>
+<h4 id="drawing-the-process-model-dfgs">Drawing the Process Model DFGs</h4>
+<hr style="border:1px solid gray" width="25%">
+</hr>
+<p><img src="{% static 'images/Drawpage_Filters.png' %}" title="Draw page event log filters selection" style="width: 70vw; min-width: 140px;" border="5"/></p>
+<ul>
+<li>Simply press the “Draw” button!</li>
+</ul>
+<hr style="border:2px solid gray">
+</hr>
+<h2 id="exporting-the-clustered-unclustered-process-models">Exporting the Clustered &amp; Unclustered Process Models</h2>
+<p><img src="{% static '/images/Drawpage_Export.png' %}" title="Draw page exporting results" style="width: 70vw; min-width: 140px;" border="5"/></p>
+<ul>
+<li>Following the drawing of the DFGs, you are able to see both the main, unclustered process model at the top (named “Unclustered”), as well as all cluster process models below that (named “Cluster n” with n denoting a simple enumeration).</li>
+<li>You can download the DFG for each process model separately as a PNG by using the download button right below the DFG on the right hand corner.</li>
+<li>If you would like, you also have the possibility of downloading the whole thing, including all DFGs, as a PDF by simply clicking the “Create PDF” button at the very bottom.</li>
+</ul>
+<hr style="border:2px solid gray">
+</hr>
 
 {% endblock %}
