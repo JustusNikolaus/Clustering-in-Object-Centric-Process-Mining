@@ -224,6 +224,7 @@ def pdf_create_report(request):
     context = {}
     if 'file_cookie' in request.session:
         context['file_name'] = request.session['file_cookie']
+        context['summary'] = readocel.get_ocel_summary("media/" + request.session['file_cookie'])
     if 'object_type_cookie' in request.session:
         context['object_type'] = request.session['object_type_cookie']
     if 'attributes_cookie' in request.session:
@@ -240,7 +241,6 @@ def pdf_create_report(request):
         context['clustering_method'] = request.session['clustering_method_cookie']
     if 'event_assignment_cookie' in request.session:
         context['event_assignment'] = request.session['event_assignment_cookie']
-    context['summary'] = readocel.get_ocel_summary("media/" + request.session['file_cookie'])
     context['log'] = Log.objects.all()
 
     # Create a Django response object, and specify content_type as pdf
