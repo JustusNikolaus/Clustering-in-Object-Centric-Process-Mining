@@ -245,7 +245,7 @@ def pdf_create_report(request):
 
     # Create a Django response object, and specify content_type as pdf
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="report.pdf"'
+    response["Content-Disposition"] = "attachment; filename=" + os.path.basename(template_path)
     # find the template and render it.
     template = get_template(template_path)
     html = template.render(context)
