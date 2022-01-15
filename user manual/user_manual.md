@@ -85,37 +85,22 @@
 #### Event Log Selection
 <hr style="border:1px solid gray" width="25%"> </hr>
 
-![](./Drawpage_Log.png "Draw page event log selection")
+![](./DrawPage_Main.png "Draw page event log selection")
 
 * Having landed in the draw page, you are now able to simply press on the dropdown menu and select one of your previously uploaded event logs.
 
 #### Object Type Selection
 <hr style="border:1px solid gray" width="25%"> </hr>
 
-![](./Drawpage_Object.png "Draw page object selection")
-
 * Following the selection of an event log, you are able to select an object type by pressing on the dropdown menu right below it.
 
 #### Selecting the Object's Attributes
 <hr style="border:1px solid gray" width="25%"> </hr>
 
-![](./Drawpage_Attributes.png "Draw page object attributes selection")
-
 * By click on the boxes, you are able to select one or more object attributes that you would like your clusters to be centered around.
-
-#### Filtering your Selections
-<hr style="border:1px solid gray" width="25%"> </hr>
-
-* You can set the minimum number of activities (1) and the minimal number of edges (2), both in a range of zero to 5000.
-* After the filters have been set, you need to press the "Filter" button (3).
-* Filtering of a cluster can be done repeatedly, even after the creation of a cluster. Just make sure to change the ranges and then press the "Filter" button.
-
-![](./Drawpage_Filters.png "Draw page event log filters selection")
 
 #### Selecting a Clustering Method
 <hr style="border:1px solid gray" width="25%"> </hr>
-
-![](./Drawpage_Filters.png "Draw page event log filters selection")
 
 * The last step ist to select a clustering method (4) and the method how to assign events to the clusters (5).
 * If you choose "All" event assignment, an event is just assigned to a cluster if ALL objects in that event are in that cluster.
@@ -124,9 +109,16 @@
 #### Drawing the Process Model DFGs
 <hr style="border:1px solid gray" width="25%"> </hr>
 
-![](./Drawpage_Filters.png "Draw page event log filters selection")
+* Simply press the "Cluster" button!
 
-* Simply press the "Draw" button!
+#### Filtering your Selections
+<hr style="border:1px solid gray" width="25%"> </hr>
+
+* You can set the minimum number of activities (1) and the minimal number of edges (2), both in a range of zero to 5000.
+* After the filters have been set, you need to press the "Filter" button (3).
+* Filtering of a cluster can be done repeatedly, even after the creation of a cluster. Just make sure to change the ranges and then press the "Filter" button.
+
+![](./Drawpage_Filtering.png "Draw page event log filters selection")
 
 <hr style="border:2px solid gray"> </hr>
 
