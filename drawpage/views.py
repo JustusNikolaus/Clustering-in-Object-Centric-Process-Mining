@@ -1,4 +1,5 @@
 # Library imports
+from fileinput import filename
 from django.http.request import HttpRequest
 from django.shortcuts import render
 from django.views.generic.base import TemplateView
@@ -23,7 +24,6 @@ class DrawpageView(TemplateView):
     template_name = 'drawpage.html'
 
     def get(self, request, *args, **kwars):
-        clear_log()
         return refresh(request,
             file_list = [],
             object_type_list = [],
@@ -223,7 +223,7 @@ def pdf_create_report(request):
 
     context = {}
     if 'file_cookie' in request.session:
-        context['file_name'] = request.session['file_cookie']
+        context['file_name'] = filename = request.session['file_cookie']
         context['summary'] = readocel.get_ocel_summary("media/" + request.session['file_cookie'])
     if 'object_type_cookie' in request.session:
         context['object_type'] = request.session['object_type_cookie']
@@ -245,7 +245,7 @@ def pdf_create_report(request):
 
     # Create a Django response object, and specify content_type as pdf
     response = HttpResponse(content_type='application/pdf')
-    response["Content-Disposition"] = "attachment; filename=" + os.path.basename(template_path)
+    response["Content-Disposition"] = "attachment; filename=" + os.path.basename(filename) + ".pdf"
     # find the template and render it.
     template = get_template(template_path)
     html = template.render(context)
