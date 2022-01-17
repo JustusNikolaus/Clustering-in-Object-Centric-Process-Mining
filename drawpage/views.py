@@ -220,6 +220,7 @@ def refresh(request: HttpRequest, file_list: list, object_type_list: list, attri
 def pdf_create_report(request):
     
     template_path = 'pdfreport.html'
+    filename = 'report'
 
     context = {}
     if 'file_cookie' in request.session:
